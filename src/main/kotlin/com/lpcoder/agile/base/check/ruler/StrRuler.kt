@@ -11,12 +11,8 @@ import com.lpcoder.agile.base.util.StringUtil.isNotEmpty
  * @date: Created in 18-7-12
  */
 object StrRuler {
-    fun notNull() = notNull(STR_NOT_NULL_FAIL.code, STR_NOT_NULL_FAIL.desc)
-    fun notNull(code: Long, desc: String) = Ruler.ofNotNull<String?>(code, desc)
-    fun empty() = empty(STR_EMPTY_FAIL.code, STR_EMPTY_FAIL.desc)
-    fun empty(code: Long, desc: String) = Ruler.of(code, desc, ::isEmpty)
-    fun notEmpty() = notEmpty(STR_NOT_EMPTY_FAIL.code, STR_NOT_EMPTY_FAIL.desc)
-    fun notEmpty(code: Long, desc: String) = Ruler.of(code, desc, ::isNotEmpty)
-    fun lengthEq(norm: Int) = lengthEq(norm, STR_LENGTH_EQ_FAIL.code, STR_LENGTH_EQ_FAIL.desc)
-    fun lengthEq(norm: Int, code: Long, desc: String) = Ruler.of(norm, code, desc, ::isLengthEq)
+    fun notNull(code: Long = STR_NOT_NULL_FAIL.code, desc: String = STR_NOT_NULL_FAIL.desc) = Ruler.ofNotNull<String?>(code, desc)
+    fun empty(code: Long = STR_EMPTY_FAIL.code, desc: String = STR_EMPTY_FAIL.desc) = Ruler.of(code, desc, ::isEmpty)
+    fun notEmpty(code: Long = STR_NOT_EMPTY_FAIL.code, desc: String = STR_NOT_EMPTY_FAIL.desc) = Ruler.of(code, desc, ::isNotEmpty)
+    fun lengthEq(norm: Int, code: Long = STR_LENGTH_EQ_FAIL.code, desc: String = STR_LENGTH_EQ_FAIL.desc) = Ruler.of(norm, code, desc, ::isLengthEq)
 }
