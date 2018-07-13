@@ -6,7 +6,7 @@ package com.lpcoder.agile.base.check
  * @date: Created in 18-7-11
  */
 
-class Ruler<T>(val verifier: (T) -> Unit) {
+class Ruler<T>(val check: (T) -> Unit) {
 
     /**
      * 或操作
@@ -14,9 +14,9 @@ class Ruler<T>(val verifier: (T) -> Unit) {
     fun or(vararg rulers: Ruler<T>): Ruler<T> {
         return Ruler { checkTarget: T ->
             try {
-                this.verifier(checkTarget)
+                this.check(checkTarget)
             } catch (e: CheckException) {
-                rulers.forEach { it.verifier(checkTarget) }
+                rulers.forEach { it.check(checkTarget) }
             }
 
         }
@@ -59,7 +59,15 @@ class Ruler<T>(val verifier: (T) -> Unit) {
          */
         @SafeVarargs
         fun <T> ofAll(vararg rulers: Ruler<T>): Ruler<T> {
-            return Ruler { checkTarget: T -> rulers.forEach { it.verifier(checkTarget) } }
+            return ofAll(rulers.toList())
+        }
+
+        /**
+         * Ruler整合
+         */
+        @SafeVarargs
+        fun <T> ofAll(rulers: Collection<Ruler<T>>): Ruler<T> {
+            return Ruler { checkTarget: T -> rulers.forEach { it.check(checkTarget) } }
         }
 
     }
