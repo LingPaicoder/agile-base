@@ -1,7 +1,6 @@
-package com.lpcoder.agile.base
+package com.lpcoder.agile.base.check
 
 import com.lpcoder.agile.base.check.*
-import com.lpcoder.agile.base.check.ruler.StrRuler
 import com.lpcoder.agile.base.check.ruler.StrRuler.empty
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull

@@ -7,14 +7,14 @@ import org.apache.commons.lang3.ArrayUtils
  * @date: Created in 18-7-12
  */
 object ArrayUtil {
-    fun isNotEmpty(target: Array<Any?>?) = ArrayUtils.isNotEmpty(target)
-    fun isLengthEq(target: Array<Any?>?, norm: Int) = target!!.size == norm
-    fun isLengthGt(target: Array<Any?>?, norm: Int) = target!!.size > norm
-    fun isLengthGte(target: Array<Any?>?, norm: Int) = target!!.size >= norm
-    fun isLengthLt(target: Array<Any?>?, norm: Int) = target!!.size < norm
-    fun isLengthLte(target: Array<Any?>?, norm: Int) = target!!.size <= norm
-    fun isContainsNull(target: Array<Any?>?) = ArrayUtils.contains(target, null)
-    fun isNotContainsNull(target: Array<Any?>?) = !isContainsNull(target)
-    fun isContainsDup(target: Array<Any?>?) = target!!.toCollection(HashSet()).size != target.size
-    fun isNotContainsDup(target: Array<Any?>?) = !isContainsDup(target)
+    fun isNotEmpty(target: Array<*>?) = ArrayUtils.isNotEmpty(target)
+    fun isLengthEq(target: Array<*>?, norm: Int) = target!!.size == norm
+    fun isLengthGt(target: Array<*>?, norm: Int) = target!!.size > norm
+    fun isLengthGte(target: Array<*>?, norm: Int) = target!!.size >= norm
+    fun isLengthLt(target: Array<*>?, norm: Int) = target!!.size < norm
+    fun isLengthLte(target: Array<*>?, norm: Int) = target!!.size <= norm
+    fun isContainsNull(target: Array<*>?) = ArrayUtils.contains(target, null)
+    fun isNotContainsNull(target: Array<*>?) = !isContainsNull(target)
+    fun isContainsDup(target: Array<*>?) = target!!.toCollection(HashSet()).size != target.size
+    fun isNotContainsDup(target: Array<*>?) = !isContainsDup(target)
 }

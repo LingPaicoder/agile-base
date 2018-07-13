@@ -21,6 +21,14 @@ infix fun <T> Pair<T, String>.must(ruler: Ruler<T>) {
     check(this.first, this.second, ruler)
 }
 
+infix fun <T> T.must(rulers: Collection<Ruler<T>>) {
+    check(this, "", Ruler.ofAll(rulers))
+}
+
+infix fun <T> T.must(ruler: Ruler<T>) {
+    check(this, "", ruler)
+}
+
 infix fun <T> T.alias(alias: String) = Pair(this, alias)
 
 fun <T> be(vararg rulers: Ruler<T>) = Ruler.ofAll(rulers.toList())
