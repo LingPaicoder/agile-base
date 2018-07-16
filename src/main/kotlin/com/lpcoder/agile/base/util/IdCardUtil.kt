@@ -4,6 +4,7 @@ import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.IntRuler.eq
+import com.lpcoder.agile.base.check.ruler.StrRuler
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
@@ -28,37 +29,33 @@ object IdCardUtil {
     private val POWER = intArrayOf(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)
 
     /**
-     * 受加权因子影响后
+     * 前17位受加权因子影响的和与11取模后的值与第18位值的映射
      */
-
-    /**
-     * 最低年限
-     */
-    private val MIN_YEAR = 1930
+    private val POWER_TO_LAST = mapOf(10 to '2', 9 to '3', 8 to '4', 7 to '5', 6 to '6', 5 to '7', 4 to '8', 3 to '9', 2 to 'x', 1 to '0', 0 to '1')
 
     /**
      * 验证身份证是否合法
      */
-    fun validateIdCard(idCard: String?): Boolean {
-        try {
-            idCard must be(notNull(), notEmpty(), lengthEq(ID_CARD_LENGTH))
-            val idCardFrontPart = idCard?.substring(0, ID_CARD_LENGTH - 1)
-            idCardFrontPart must be(num())
+    fun validate(idCard: String?): Boolean =
+            try {
+                idCard must be(notNull(), notEmpty(), lengthEq(ID_CARD_LENGTH))
+                val idCardFrontPart = idCard!!.substring(0, ID_CARD_LENGTH - 1)
+                idCardFrontPart must be(num())
+                val lastCharStr = POWER_TO_LAST[getPowerSum(convertCharArrToIntArr(idCardFrontPart.toCharArray())) % 11]
+                lastCharStr!!.toInt() must eq(idCard.last().toInt())
+                true
+            } catch (e: CheckException) {
+                false
+            }
 
-        } catch (e: CheckException) {
-
-        }
-        return false
-    }
+    private fun convertCharArrToIntArr(cArr: CharArray): IntArray = cArr.toList().stream().map { (it + "").toInt() }.collect(Collectors.toList()).toIntArray()
 
     /**
      * 将身份证的每位和对应位的加权因子相乘之后，再得到和值
      */
-    private fun getPowerSum(iArr: Array<Int>): Int {
+    private fun getPowerSum(iArr: IntArray): Int {
         iArr.size must eq(POWER.size)
-        return iArr.indices.toList().stream()
-                .map { iArr[it] * POWER[it] }
-                .reduce { it, i -> it + i }.get()
+        return iArr.indices.toList().stream().map { iArr[it] * POWER[it] }.reduce { it, i -> it + i }.get()
     }
 
 }
