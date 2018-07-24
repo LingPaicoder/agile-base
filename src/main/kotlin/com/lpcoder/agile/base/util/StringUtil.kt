@@ -12,7 +12,7 @@ object StringUtil {
     fun isLengthEq(target: String?, norm: Int) = target?.length == norm
     fun isEq(target: String?, norm: String) = norm == target
     fun isPhone(target: String?) = Regex("[1][3456789]\\d{9}").matches(target!!)
-    fun isNum(target: String?) = Regex("\\d+").matches(target!!)
+    fun isDigit(target: String?) = Regex("\\d+").matches(target!!)
     fun isStandardDate(target: String?) = Regex("\\d{4}-\\d{1,2}-\\d{1,2}").matches(target!!)
     fun isStandardDatetime(target: String?) = Regex("\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}").matches(target!!)
     fun isEmail(target: String?) = Regex("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$").matches(target!!)
