@@ -2,12 +2,12 @@ package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckResultCodeEnum.*
 import com.lpcoder.agile.base.check.Ruler
-import com.lpcoder.agile.base.util.StringUtil
 import com.lpcoder.agile.base.util.StringUtil.isEmpty
 import com.lpcoder.agile.base.util.StringUtil.isEq
 import com.lpcoder.agile.base.util.StringUtil.isLengthEq
 import com.lpcoder.agile.base.util.StringUtil.isNotEmpty
 import com.lpcoder.agile.base.util.StringUtil.isNum
+import com.lpcoder.agile.base.util.StringUtil.isIdCard
 
 /**
  * @author: liurenpeng
@@ -20,4 +20,5 @@ object StrRuler {
     fun lengthEq(norm: Int, code: Long = STR_LENGTH_EQ_FAIL.code, desc: String = STR_LENGTH_EQ_FAIL.desc) = Ruler.of(norm, code, desc, ::isLengthEq)
     fun eq(norm: String, code: Long = STR_EQ_FAIL.code, desc: String = STR_EQ_FAIL.desc) = Ruler.of(norm, code, desc, ::isEq)
     fun num(code: Long = STR_NUM_FAIL.code, desc: String = STR_NUM_FAIL.desc) = Ruler.of(code, desc, ::isNum)
+    fun idCard(code: Long = STR_NUM_FAIL.code, desc: String = STR_NUM_FAIL.desc) = Ruler.of(code, desc, ::isIdCard)
 }

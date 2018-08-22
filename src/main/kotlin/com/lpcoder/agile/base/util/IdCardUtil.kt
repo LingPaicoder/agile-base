@@ -4,11 +4,12 @@ import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.IntRuler.eq
-import com.lpcoder.agile.base.check.ruler.StrRuler
+import com.lpcoder.agile.base.check.ruler.StrRuler.idCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
 import com.lpcoder.agile.base.check.ruler.StrRuler.num
+import java.util.*
 import java.util.stream.Collectors
 
 /**
@@ -36,10 +37,10 @@ object IdCardUtil {
     /**
      * 验证身份证是否合法
      */
-    fun validate(idCard: String?): Boolean =
+    fun validate(idCard: String): Boolean =
             try {
                 idCard must be(notNull(), notEmpty(), lengthEq(ID_CARD_LENGTH))
-                val idCardFrontPart = idCard!!.substring(0, ID_CARD_LENGTH - 1)
+                val idCardFrontPart = idCard.substring(0, ID_CARD_LENGTH - 1)
                 idCardFrontPart must be(num())
                 val lastCharStr = POWER_TO_LAST[getPowerSum(convertCharArrToIntArr(idCardFrontPart.toCharArray())) % 11]
                 lastCharStr!!.toInt() must eq(idCard.last().toInt())
@@ -48,6 +49,20 @@ object IdCardUtil {
                 false
             }
 
+    /**
+     * 根据身份编号获取年龄
+     */
+    fun getAge(idCard: String): Int = getVal(idCard, { Calendar.getInstance().get(Calendar.YEAR) - idCard.substring(6, 10).toInt() })
+
+
+    private fun <R> getVal(idCard: String, supplier: () -> R): R {
+        idCard must be(idCard())
+        return supplier()
+    }
+
+    /**
+     * 将Char数组转为Int数组,例如['1','2','3']转成[1,2,3]
+     */
     private fun convertCharArrToIntArr(cArr: CharArray): IntArray = cArr.toList().stream().map { (it + "").toInt() }.collect(Collectors.toList()).toIntArray()
 
     /**
