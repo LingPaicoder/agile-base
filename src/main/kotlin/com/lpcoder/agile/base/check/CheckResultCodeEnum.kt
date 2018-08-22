@@ -137,5 +137,15 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     DOUBLE_GTE_FAIL(-21003L, "必须大于或等于%f"),
     DOUBLE_LT_FAIL(-21004L, "必须小于%f"),
     DOUBLE_LTE_FAIL(-21005L, "必须小于或等于%f"),
-    DOUBLE_NOT_NULL_FAIL(-21006L, "不能为Null");
+    DOUBLE_NOT_NULL_FAIL(-21006L, "不能为Null"),
+
+    /**
+     * char
+     */
+    CHAR_EQ_FAIL(-22001L, "必须等于%f"),
+    CHAR_GT_FAIL(-22002L, "必须大于%f"),
+    CHAR_GTE_FAIL(-22003L, "必须大于或等于%f"),
+    CHAR_LT_FAIL(-22004L, "必须小于%f"),
+    CHAR_LTE_FAIL(-22005L, "必须小于或等于%f"),
+    CHAR_NOT_NULL_FAIL(-22006L, "不能为Null");
 }
