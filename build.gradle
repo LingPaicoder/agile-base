@@ -21,6 +21,8 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.apache.commons:commons-lang3:3.5"
+    compile "dom4j:dom4j:1.6.1"
+    testCompile "junit:junit:4.12"
 }
 
 compileKotlin {

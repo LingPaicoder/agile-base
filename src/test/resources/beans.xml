@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="customService"
+          class="com.lpcoder.agile.base.bean.service.CustomService">
+    </bean>
+</beans>
+
+
