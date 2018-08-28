@@ -7,6 +7,7 @@ import com.lpcoder.agile.base.check.ruler.CharRuler.eq
 import com.lpcoder.agile.base.check.ruler.IntRuler
 import com.lpcoder.agile.base.check.ruler.StrRuler.idCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.beDigit
+import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
@@ -41,7 +42,7 @@ object IdCardUtil {
     fun validate(idCard: String): Boolean =
             try {
                 idCard must be(notNull(), notEmpty(), lengthEq(ID_CARD_LENGTH))
-                val front17Part = idCard!!.substring(0, ID_CARD_LENGTH - 1)
+                val front17Part = idCard.substring(0, ID_CARD_LENGTH - 1)
                 front17Part must beDigit
                 val lastChar = getLastCharByFront17Part(front17Part)
                 lastChar must eq(idCard.last())
@@ -53,27 +54,27 @@ object IdCardUtil {
     /**
      * 根据身份编号获取年龄
      */
-    fun getAge(idCard: String): Int = getVal(idCard, { Calendar.getInstance().get(Calendar.YEAR) - idCard.substring(6, 10).toInt() })
-
-
-    private fun <R> getVal(idCard: String, supplier: () -> R): R {
-        idCard must be(idCard())
-        return supplier()
+    fun getAge(idCard: String): Int {
+        idCard must beIdCard
+        return Calendar.getInstance().get(Calendar.YEAR) - idCard.substring(6, 10).toInt()
     }
 
     /**
      * 将Char数组转为Int数组,例如['1','2','3']转成[1,2,3]
      */
-    private fun convertCharArrToIntArr(cArr: CharArray): IntArray = cArr.toList().stream().map { (it + "").toInt() }.collect(Collectors.toList()).toIntArray()
+    private fun convertCharArrToIntArr(cArr: CharArray): IntArray =
+            cArr.toList().stream().map { (it + "").toInt() }
+                    .collect(Collectors.toList()).toIntArray()
 
-    private fun getLastCharByFront17Part(front17Part: String) = POWER_TO_LAST[getPowerSum(convertCharArrToIntArr(front17Part.toCharArray())) % 11]
+    private fun getLastCharByFront17Part(front17Part: String) =
+            POWER_TO_LAST[getPowerSum(convertCharArrToIntArr(front17Part.toCharArray())) % 11]
 
     /**
      * 将身份证的每位和对应位的加权因子相乘之后，再得到和值
      */
     private fun getPowerSum(iArr: IntArray): Int {
         iArr.size must IntRuler.eq(POWER.size)
-        return iArr.indices.toList().stream().map { iArr[it] * POWER[it] }.reduce { it, i -> it + i }.get()
+        return iArr.indices.toList().stream()
+                .map { iArr[it] * POWER[it] }.reduce { it, i -> it + i }.get()
     }
-
 }

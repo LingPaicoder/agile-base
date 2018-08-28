@@ -15,6 +15,7 @@ import com.lpcoder.agile.base.util.StringUtil.isIdCard
  */
 object StrRuler {
     val beDigit = digit()
+    val beIdCard = idCard()
 
     fun notNull(code: Long = STR_NOT_NULL_FAIL.code, desc: String = STR_NOT_NULL_FAIL.desc) = Ruler.ofNotNull<String?>(code, desc)
     fun empty(code: Long = STR_EMPTY_FAIL.code, desc: String = STR_EMPTY_FAIL.desc) = Ruler.of(code, desc, ::isEmpty)
