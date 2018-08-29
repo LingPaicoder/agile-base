@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.util
 
+import org.apache.commons.lang3.StringUtils
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
@@ -13,6 +14,8 @@ class IdCardUtilTest {
     fun testValidate() {
         assertEquals(true, IdCardUtil.validate(cnIdCard))
         assertEquals(currentYear - 1966, IdCardUtil.getAge(cnIdCard))
+        assertEquals("1966-08-27", IdCardUtil.getStandardBirthDay(cnIdCard))
+        assertEquals("19660827", IdCardUtil.getNoHyphenBirthDay(cnIdCard))
         /*assertEquals(GenderEnum.WOMAN, IdCardUtil.getGenderByIdCard(cnIdCard))
         assertEquals("1966-08-27", IdCardUtil.getStandardBirthByIdCard(cnIdCard))
         assertEquals("19660827", IdCardUtil.getNoHyphenBirthByIdCard(cnIdCard))
@@ -24,5 +27,15 @@ class IdCardUtilTest {
         assertEquals("丙午", IdCardUtil.getChineseEraById(cnIdCard))
         assertEquals("吉林", IdCardUtil.getProvinceByIdCard(cnIdCard))*/
     }
+
+    @Test
+    fun test() {
+        // todo: why is "[Ljava.lang.String;@ee7d9f1" but not "ab"
+        println(join("a", "b"))
+        println(StringUtils.join("a", "b"))
+    }
+
+    fun join(vararg targets: String): String = StringUtils.join(targets)
+
 
 }

@@ -11,6 +11,7 @@ import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
+import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.stream.Collectors
 
@@ -57,6 +58,23 @@ object IdCardUtil {
     fun getAge(idCard: String): Int {
         idCard must beIdCard
         return Calendar.getInstance().get(Calendar.YEAR) - idCard.substring(6, 10).toInt()
+    }
+
+    /**
+     * 根据身份编号获取生日 yyyy-MM-dd
+     */
+    fun getStandardBirthDay(idCard: String): String? {
+        val birth = getNoHyphenBirthDay(idCard)
+        return StringUtils.join(birth.substring(0, 4), "-", birth.substring(4, 6),
+                "-", birth.substring(6, 8))
+    }
+
+    /**
+     * 根据身份编号获取生日 yyyyMMdd
+     */
+    fun getNoHyphenBirthDay(idCard: String): String {
+        idCard must beIdCard
+        return idCard.substring(6, 14)
     }
 
     /**
