@@ -11,6 +11,8 @@ import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
+import com.lpcoder.agile.base.enumeration.GenderEnum
+import com.lpcoder.agile.base.enumeration.ProvinceEnum
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.stream.Collectors
@@ -53,7 +55,7 @@ object IdCardUtil {
             }
 
     /**
-     * 根据身份编号获取年龄
+     * 获取年龄
      */
     fun getAge(idCard: String): Int {
         idCard must beIdCard
@@ -61,7 +63,7 @@ object IdCardUtil {
     }
 
     /**
-     * 根据身份编号获取生日 yyyy-MM-dd
+     * 获取生日 yyyy-MM-dd
      */
     fun getStandardBirthDay(idCard: String): String? {
         val birth = getNoHyphenBirthDay(idCard)
@@ -70,11 +72,54 @@ object IdCardUtil {
     }
 
     /**
-     * 根据身份编号获取生日 yyyyMMdd
+     * 获取生日 yyyyMMdd
      */
     fun getNoHyphenBirthDay(idCard: String): String {
         idCard must beIdCard
         return idCard.substring(6, 14)
+    }
+
+    /**
+     * 获取生日年 yyyy
+     */
+    fun getBirthYear(idCard: String): Int {
+        idCard must beIdCard
+        return idCard.substring(6, 10).toInt()
+    }
+
+    /**
+     * 获取生日月 MM
+     */
+    fun getBirthMonth(idCard: String): Int {
+        idCard must beIdCard
+        return idCard.substring(10, 12).toInt()
+    }
+
+    /**
+     * 获取生日天 dd
+     */
+    fun getBirthDate(idCard: String): Int {
+        idCard must beIdCard
+        return idCard.substring(12, 14).toInt()
+    }
+
+    /**
+     * 获取性别
+     */
+    fun getGender(idCard: String): GenderEnum {
+        idCard must beIdCard
+        if ((idCard.substring(16, 17).toInt()) % 2 == 0) {
+            return GenderEnum.WOMAN
+        }
+        return GenderEnum.MAN
+    }
+
+    /**
+     * 获取户籍省份
+     */
+    fun getProvince(idCard: String): ProvinceEnum {
+        idCard must beIdCard
+        return ProvinceEnum.getByCode(idCard.substring(0, 2).toInt())
     }
 
     /**
