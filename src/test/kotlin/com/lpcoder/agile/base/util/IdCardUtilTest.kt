@@ -37,7 +37,7 @@ class IdCardUtilTest {
         println(StringUtils.join("a", "b"))
     }
 
-    fun join(vararg targets: String): String = StringUtils.join(targets)
+    private fun join(vararg targets: String): String = StringUtils.join(targets)
 
 
 }
