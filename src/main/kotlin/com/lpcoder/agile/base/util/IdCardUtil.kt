@@ -11,6 +11,8 @@ import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
+import com.lpcoder.agile.base.enumeration.ChineseZodiacEnum
+import com.lpcoder.agile.base.enumeration.ConstellationEnum
 import com.lpcoder.agile.base.enumeration.GenderEnum
 import com.lpcoder.agile.base.enumeration.ProvinceEnum
 import org.apache.commons.lang3.StringUtils
@@ -120,6 +122,34 @@ object IdCardUtil {
     fun getProvince(idCard: String): ProvinceEnum {
         idCard must beIdCard
         return ProvinceEnum.getByCode(idCard.substring(0, 2).toInt())
+    }
+
+    /**
+     * 获取星座
+     */
+    fun getConstellation(idCard: String): ConstellationEnum {
+        idCard must beIdCard
+        return ConstellationEnum.getByMonthAndDay(getBirthMonth(idCard), getBirthDate(idCard))
+    }
+
+    /**
+     * 获取生肖
+     */
+    fun getChineseZodiac(idCard: String): ChineseZodiacEnum {
+        idCard must beIdCard
+        val index = (getBirthYear(idCard) - 3) % 12
+        return enumValues<ChineseZodiacEnum>().first { zodiac -> zodiac.ordinal == index }
+    }
+
+    /**
+     * 获取天干地支
+     */
+    fun getChineseEra(idCard: String): String {
+        idCard must beIdCard
+        val sTG = arrayOf("癸", "甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "任")
+        val sDZ = arrayOf("亥", "子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌")
+        return StringUtils.join(sTG[(getBirthYear(idCard) - 3) % 10],
+                sDZ[(getBirthYear(idCard) - 3) % 12])
     }
 
     /**

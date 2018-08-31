@@ -1,5 +1,7 @@
 package com.lpcoder.agile.base.util
 
+import com.lpcoder.agile.base.enumeration.ChineseZodiacEnum
+import com.lpcoder.agile.base.enumeration.ConstellationEnum
 import com.lpcoder.agile.base.enumeration.GenderEnum
 import com.lpcoder.agile.base.enumeration.ProvinceEnum
 import org.apache.commons.lang3.StringUtils
@@ -23,11 +25,9 @@ class IdCardUtilTest {
         assertEquals(27, IdCardUtil.getBirthDate(cnIdCard))
         assertEquals(GenderEnum.WOMAN, IdCardUtil.getGender(cnIdCard))
         assertEquals(ProvinceEnum.JI_LIN, IdCardUtil.getProvince(cnIdCard))
-        /*
-        assertEquals("处女座", IdCardUtil.getConstellationById(cnIdCard))
-        assertEquals("马", IdCardUtil.getZodiacById(cnIdCard))
-        assertEquals("丙午", IdCardUtil.getChineseEraById(cnIdCard))
-        */
+        assertEquals(ConstellationEnum.VIRGO, IdCardUtil.getConstellation(cnIdCard))
+        assertEquals(ChineseZodiacEnum.HORSE, IdCardUtil.getChineseZodiac(cnIdCard))
+        assertEquals("丙午", IdCardUtil.getChineseEra(cnIdCard))
     }
 
     @Test
