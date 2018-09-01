@@ -6,9 +6,10 @@ package com.lpcoder.agile.base.check
  */
 enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
-     * object
+     * any
      */
-    OBJ_NOT_NULL_FAIL(-10000L, "不能为Null"),
+    ANY_NOT_NULL_FAIL(-10000L, "不能为Null"),
+    ANY_NULL_FAIL(-10001L, "必须为Null"),
 
     /**
      * string
@@ -30,6 +31,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     STR_URL_FAIL(-11014L, "必须符合URL规则"),
     STR_ALL_LETTER_FAIL(-11015L, "必须符合全字母规则"),
     STR_EMPTY_FAIL(-11016L, "必须为空"),
+    STR_NULL_FAIL(-11017L, "必须为Null"),
 
     /**
      * date
@@ -40,6 +42,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     DATE_BEFORE_FAIL(-12003L, "必须早于%tc(时间戳:%tQ)"),
     DATE_BEFORE_OR_EQ_FAIL(-12004L, "必须早于或等于%tc(时间戳:%tQ)"),
     DATE_NOT_NULL_FAIL(-12005L, "不能为Null"),
+    DATE_NULL_FAIL(-12006L, "必须为Null"),
 
     /**
      * array
@@ -53,6 +56,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     ARR_NOT_CONTAINS_NULL_FAIL(-13006L, "中不能有空值"),
     ARR_NOT_CONTAINS_DUP_FAIL(-13007L, "中不能有重复值"),
     ARR_NOT_NULL_FAIL(-13008L, "不能为Null"),
+    ARR_NULL_FAIL(-13009L, "必须为Null"),
 
     /**
      * collection
@@ -66,6 +70,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     COLL_NOT_CONTAINS_NULL_FAIL(-14006L, "中不能有空值"),
     COLL_NOT_CONTAINS_DUP_FAIL(-14007L, "中不能有重复值"),
     COLL_NOT_NULL_FAIL(-14008L, "不能为Null"),
+    COLL_NULL_FAIL(-14009L, "必须为Null"),
 
     /**
      * map
@@ -78,10 +83,12 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     MAP_SIZE_LTE_FAIL(-15005L, "的长度必须小于或等于%d"),
     MAP_KEY_NOT_CONTAINS_NULL_FAIL(-15006L, "中不能有空值"),
     MAP_NOT_NULL_FAIL(-15007L, "不能为Null"),
+    MAP_NULL_FAIL(-15008L, "必须为Null"),
 
     /**
      * byte
      */
+    BYTE_NULL_FAIL(-16000L, "必须为Null"),
     BYTE_EQ_FAIL(-16001L, "必须等于%d"),
     BYTE_GT_FAIL(-16002L, "必须大于%d"),
     BYTE_GTE_FAIL(-16003L, "必须大于或等于%d"),
@@ -92,6 +99,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * short
      */
+    SHORT_NULL_FAIL(-17000L, "必须为Null"),
     SHORT_EQ_FAIL(-17001L, "必须等于%d"),
     SHORT_GT_FAIL(-17002L, "必须大于%d"),
     SHORT_GTE_FAIL(-17003L, "必须大于或等于%d"),
@@ -102,6 +110,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * int
      */
+    INT_NULL_FAIL(-18000L, "必须为Null"),
     INT_EQ_FAIL(-18001L, "必须等于%d"),
     INT_GT_FAIL(-18002L, "必须大于%d"),
     INT_GTE_FAIL(-18003L, "必须大于或等于%d"),
@@ -112,6 +121,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * long
      */
+    LONG_NULL_FAIL(-19000L, "必须为Null"),
     LONG_EQ_FAIL(-19001L, "必须等于%d"),
     LONG_GT_FAIL(-19002L, "必须大于%d"),
     LONG_GTE_FAIL(-19003L, "必须大于或等于%d"),
@@ -122,6 +132,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * float
      */
+    FLOAT_NULL_FAIL(-20000L, "必须为Null"),
     FLOAT_EQ_FAIL(-20001L, "必须等于%f"),
     FLOAT_GT_FAIL(-20002L, "必须大于%f"),
     FLOAT_GTE_FAIL(-20003L, "必须大于或等于%f"),
@@ -132,6 +143,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * double
      */
+    DOUBLE_NULL_FAIL(-21000L, "必须为Null"),
     DOUBLE_EQ_FAIL(-21001L, "必须等于%f"),
     DOUBLE_GT_FAIL(-21002L, "必须大于%f"),
     DOUBLE_GTE_FAIL(-21003L, "必须大于或等于%f"),
@@ -142,6 +154,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * char
      */
+    CHAR_NULL_FAIL(-22000L, "必须为Null"),
     CHAR_EQ_FAIL(-22001L, "必须等于%f"),
     CHAR_GT_FAIL(-22002L, "必须大于%f"),
     CHAR_GTE_FAIL(-22003L, "必须大于或等于%f"),
