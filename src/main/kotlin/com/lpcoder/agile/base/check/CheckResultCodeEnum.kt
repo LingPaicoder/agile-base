@@ -1,5 +1,7 @@
 package com.lpcoder.agile.base.check
 
+import com.lpcoder.agile.base.util.DateUtil
+
 /**
  * @author: liurenpeng
  * @date: Created in 18-7-11
@@ -36,11 +38,11 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     /**
      * date
      */
-    DATE_EQ_FAIL(-12000L, "必须是%tc(时间戳:%tQ)"),
-    DATE_AFTER_FAIL(-12001L, "必须晚于%tc(时间戳:%tQ)"),
-    DATE_AFTER_OR_EQ_FAIL(-12002L, "必须晚于或等于%tc(时间戳:%tQ)"),
-    DATE_BEFORE_FAIL(-12003L, "必须早于%tc(时间戳:%tQ)"),
-    DATE_BEFORE_OR_EQ_FAIL(-12004L, "必须早于或等于%tc(时间戳:%tQ)"),
+    DATE_EQ_FAIL(-12000L, "必须是%tc"),
+    DATE_AFTER_FAIL(-12001L, "必须晚于%tc"),
+    DATE_AFTER_OR_EQ_FAIL(-12002L, "必须晚于或等于%tc"),
+    DATE_BEFORE_FAIL(-12003L, "必须早于%tc"),
+    DATE_BEFORE_OR_EQ_FAIL(-12004L, "必须早于或等于%tc"),
     DATE_NOT_NULL_FAIL(-12005L, "不能为Null"),
     DATE_NULL_FAIL(-12006L, "必须为Null"),
 
