@@ -28,7 +28,7 @@ class Ruler<T>(val check: (T) -> Unit) {
          */
         fun <T> of(failCode: Long, failDesc: String, primaryVerifier: (T) -> Boolean): Ruler<T> {
             return Ruler { checkTarget: T ->
-                if (null != checkTarget && !primaryVerifier(checkTarget)) {
+                if (!primaryVerifier(checkTarget)) {
                     throw CheckException(failCode, failDesc)
                 }
             }
@@ -39,7 +39,7 @@ class Ruler<T>(val check: (T) -> Unit) {
          */
         fun <T, N> of(norm: N, failCode: Long, failDesc: String, primary: (T, N) -> Boolean): Ruler<T> {
             return Ruler { checkTarget: T ->
-                if (null != checkTarget && !primary(checkTarget, norm)) {
+                if (!primary(checkTarget, norm)) {
                     throw CheckException(failCode, String.format(failDesc, norm))
                 }
             }
@@ -50,6 +50,15 @@ class Ruler<T>(val check: (T) -> Unit) {
          */
         fun <T> ofNotNull(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
             if (null == checkTarget) {
+                throw CheckException(failCode, failDesc)
+            }
+        }
+
+        /**
+         * null-Ruler
+         */
+        fun <T> ofNull(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
+            if (null != checkTarget) {
                 throw CheckException(failCode, failDesc)
             }
         }
