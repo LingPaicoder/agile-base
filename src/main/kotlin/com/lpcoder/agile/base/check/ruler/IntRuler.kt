@@ -13,10 +13,27 @@ import com.lpcoder.agile.base.util.NumberUtil.isLte
  * @date: Created in 18-7-13
  */
 object IntRuler {
-    fun notNull(code: Long = INT_NOT_NULL_FAIL.code, desc: String = INT_NOT_NULL_FAIL.desc) = Ruler.ofNotNull<Int?>(code, desc)
-    fun eq(norm: Int, code: Long = INT_EQ_FAIL.code, desc: String = INT_EQ_FAIL.desc) = Ruler.of(norm, code, desc, ::isEq)
-    fun gt(norm: Int, code: Long = INT_GT_FAIL.code, desc: String = INT_GT_FAIL.desc) = Ruler.of(norm, code, desc, ::isGt)
-    fun gte(norm: Int, code: Long = INT_GTE_FAIL.code, desc: String = INT_GTE_FAIL.desc) = Ruler.of(norm, code, desc, ::isGte)
-    fun lt(norm: Int, code: Long = INT_LT_FAIL.code, desc: String = INT_LT_FAIL.desc) = Ruler.of(norm, code, desc, ::isLt)
-    fun lte(norm: Int, code: Long = INT_LTE_FAIL.code, desc: String = INT_LTE_FAIL.desc) = Ruler.of(norm, code, desc, ::isLte)
+    val notNull = notNull()
+    val nullVal = nullVal()
+
+    fun nullVal(code: Long = INT_NULL_FAIL.code, desc: String = INT_NULL_FAIL.desc)
+            = Ruler.ofNull<Int?>(code, desc)
+
+    fun notNull(code: Long = INT_NOT_NULL_FAIL.code, desc: String = INT_NOT_NULL_FAIL.desc)
+            = Ruler.ofNotNull<Int?>(code, desc)
+
+    fun eq(norm: Int, code: Long = INT_EQ_FAIL.code, desc: String = INT_EQ_FAIL.desc)
+            = Ruler.of(norm, code, desc, ::isEq)
+
+    fun gt(norm: Int, code: Long = INT_GT_FAIL.code, desc: String = INT_GT_FAIL.desc)
+            = Ruler.of(norm, code, desc, ::isGt)
+
+    fun gte(norm: Int, code: Long = INT_GTE_FAIL.code, desc: String = INT_GTE_FAIL.desc)
+            = Ruler.of(norm, code, desc, ::isGte)
+
+    fun lt(norm: Int, code: Long = INT_LT_FAIL.code, desc: String = INT_LT_FAIL.desc)
+            = Ruler.of(norm, code, desc, ::isLt)
+
+    fun lte(norm: Int, code: Long = INT_LTE_FAIL.code, desc: String = INT_LTE_FAIL.desc)
+            = Ruler.of(norm, code, desc, ::isLte)
 }
