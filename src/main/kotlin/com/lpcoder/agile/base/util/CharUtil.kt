@@ -6,6 +6,10 @@ package com.lpcoder.agile.base.util
  */
 object CharUtil {
 
-    fun isEq(target: Char?, norm: Char) = norm == target
+    fun isEq(target: Char?, norm: Char?) = norm!! == target!!
+    fun isGt(target: Char?, norm: Char?) = target!! > norm!!
+    fun isGte(target: Char?, norm: Char?) = target!! >= norm!!
+    fun isLt(target: Char?, norm: Char?) = target!! < norm!!
+    fun isLte(target: Char?, norm: Char?) = target!! <= norm!!
 
 }
