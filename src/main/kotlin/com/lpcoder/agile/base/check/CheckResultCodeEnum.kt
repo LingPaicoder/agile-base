@@ -28,7 +28,7 @@ enum class CheckResultCodeEnum(val code: Long, val desc: String) {
     STR_PHONE_FAIL(-11009L, "必须符合手机号格式"),
     STR_STANDARD_DATE_FAIL(-11010L, "必须符合yyyy-MM-dd格式"),
     STR_STANDARD_DATETIME_FAIL(-11011L, "必须符合yyyy-MM-dd HH:mm:ss格式"),
-    STR_NUM_FAIL(-11012L, "必须符合数字格式"),
+    STR_DIGIT_FAIL(-11012L, "必须符合数字格式"),
     STR_NOT_NULL_FAIL(-11013L, "不能为Null"),
     STR_URL_FAIL(-11014L, "必须符合URL规则"),
     STR_ALL_LETTER_FAIL(-11015L, "必须符合全字母规则"),
