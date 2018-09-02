@@ -1,8 +1,7 @@
 package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckException
-import com.lpcoder.agile.base.check.be
-import com.lpcoder.agile.base.check.check
+import com.lpcoder.agile.base.check.doCheck
 import com.lpcoder.agile.base.check.ruler.AnyRuler.beNotNull
 import com.lpcoder.agile.base.check.ruler.AnyRuler.beNullVal
 import com.lpcoder.agile.base.check.must
@@ -22,7 +21,7 @@ class AnyRulerTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-10001, desc=any必须为Null")
         any = Any()
-        check(any, "any", beNullVal)
+        doCheck(any, "any", beNullVal)
     }
 
     @Test
@@ -33,7 +32,7 @@ class AnyRulerTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-10000, desc=any不能为Null")
         any = null
-        check(any, "any", beNotNull)
+        doCheck(any, "any", beNotNull)
     }
 
 }

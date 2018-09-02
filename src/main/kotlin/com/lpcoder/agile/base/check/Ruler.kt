@@ -37,9 +37,9 @@ class Ruler<T>(val check: (T) -> Unit) {
         /**
          * oneNorm-Ruler
          */
-        fun <T, N> of(norm: N, failCode: Long, failDesc: String, primary: (T, N) -> Boolean): Ruler<T> {
+        fun <T, N> of(norm: N, failCode: Long, failDesc: String, primaryVerifier: (T, N) -> Boolean): Ruler<T> {
             return Ruler { checkTarget: T ->
-                if (!primary(checkTarget, norm)) {
+                if (!primaryVerifier(checkTarget, norm)) {
                     throw CheckException(failCode, String.format(failDesc, norm))
                 }
             }

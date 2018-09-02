@@ -5,7 +5,11 @@ package com.lpcoder.agile.base.check
  * @date: Created in 18-7-11
  */
 
-fun <T> check(target: T, description: String, vararg rulers: Ruler<T>) {
+fun <T> doCheck(target: T, vararg rulers: Ruler<T>) {
+    doCheck(target, "", Ruler.ofAll(rulers.toList()))
+}
+
+fun <T> doCheck(target: T, description: String, vararg rulers: Ruler<T>) {
     try {
         rulers.forEach { it.check(target) }
     } catch (e: CheckException) {
@@ -14,19 +18,19 @@ fun <T> check(target: T, description: String, vararg rulers: Ruler<T>) {
 }
 
 infix fun <T> Pair<T, String>.must(rulers: Collection<Ruler<T>>) {
-    check(this.first, this.second, Ruler.ofAll(rulers))
+    doCheck(this.first, this.second, Ruler.ofAll(rulers))
 }
 
 infix fun <T> Pair<T, String>.must(ruler: Ruler<T>) {
-    check(this.first, this.second, ruler)
+    doCheck(this.first, this.second, ruler)
 }
 
 infix fun <T> T.must(rulers: Collection<Ruler<T>>) {
-    check(this, "", Ruler.ofAll(rulers))
+    doCheck(this, Ruler.ofAll(rulers))
 }
 
 infix fun <T> T.must(ruler: Ruler<T>) {
-    check(this, "", ruler)
+    doCheck(this, ruler)
 }
 
 infix fun <T> T.alias(alias: String) = Pair(this, alias)
