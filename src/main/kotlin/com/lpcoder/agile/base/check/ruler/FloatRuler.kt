@@ -9,7 +9,7 @@ object FloatRuler {
     val nullVal = nullVal()
 
     fun nullVal(code: Long = FLOAT_NULL_FAIL.code, desc: String = FLOAT_NULL_FAIL.desc)
-            = Ruler.ofNull<Float?>(code, desc)
+            = Ruler.ofNullVal<Float?>(code, desc)
 
     fun notNull(code: Long = FLOAT_NOT_NULL_FAIL.code, desc: String = FLOAT_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Float?>(code, desc)

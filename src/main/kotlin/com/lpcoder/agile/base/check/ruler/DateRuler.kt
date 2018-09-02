@@ -14,7 +14,7 @@ object DateRuler {
     val notNull = notNull()
 
     fun nullVal(code: Long = DATE_NULL_FAIL.code, desc: String = DATE_NULL_FAIL.desc)
-            = Ruler.ofNull<Date?>(code, desc)
+            = Ruler.ofNullVal<Date?>(code, desc)
 
     fun notNull(code: Long = DATE_NOT_NULL_FAIL.code, desc: String = DATE_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Date?>(code, desc)

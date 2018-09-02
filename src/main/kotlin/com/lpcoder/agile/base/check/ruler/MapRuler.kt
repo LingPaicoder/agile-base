@@ -17,7 +17,7 @@ object MapRuler {
     val keyNotContainsNull = keyNotContainsNull()
 
     fun nullVal(code: Long = MAP_NULL_FAIL.code, desc: String = MAP_NULL_FAIL.desc)
-            = Ruler.ofNull<Map<*, *>?>(code, desc)
+            = Ruler.ofNullVal<Map<*, *>?>(code, desc)
 
     fun notNull(code: Long = MAP_NOT_NULL_FAIL.code, desc: String = MAP_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Map<*, *>?>(code, desc)

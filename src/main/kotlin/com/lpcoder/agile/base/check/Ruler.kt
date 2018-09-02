@@ -46,7 +46,7 @@ class Ruler<T>(val check: (T) -> Unit) {
         }
 
         /**
-         * notNull-Ruler
+         * beNotNull-Ruler
          */
         fun <T> ofNotNull(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
             if (null == checkTarget) {
@@ -55,9 +55,9 @@ class Ruler<T>(val check: (T) -> Unit) {
         }
 
         /**
-         * null-Ruler
+         * beNullVal-Ruler
          */
-        fun <T> ofNull(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
+        fun <T> ofNullVal(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
             if (null != checkTarget) {
                 throw CheckException(failCode, failDesc)
             }

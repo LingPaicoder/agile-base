@@ -9,7 +9,7 @@ object DoubleRuler {
     val nullVal = nullVal()
 
     fun nullVal(code: Long = DOUBLE_NULL_FAIL.code, desc: String = DOUBLE_NULL_FAIL.desc)
-            = Ruler.ofNull<Double?>(code, desc)
+            = Ruler.ofNullVal<Double?>(code, desc)
 
     fun notNull(code: Long = DOUBLE_NOT_NULL_FAIL.code, desc: String = DOUBLE_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Double?>(code, desc)

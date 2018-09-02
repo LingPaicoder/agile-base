@@ -17,7 +17,7 @@ object LongRuler {
     val nullVal = nullVal()
 
     fun nullVal(code: Long = LONG_NULL_FAIL.code, desc: String = LONG_NULL_FAIL.desc)
-            = Ruler.ofNull<Long?>(code, desc)
+            = Ruler.ofNullVal<Long?>(code, desc)
 
     fun notNull(code: Long = LONG_NOT_NULL_FAIL.code, desc: String = LONG_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Long?>(code, desc)

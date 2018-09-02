@@ -17,7 +17,7 @@ object IntRuler {
     val nullVal = nullVal()
 
     fun nullVal(code: Long = INT_NULL_FAIL.code, desc: String = INT_NULL_FAIL.desc)
-            = Ruler.ofNull<Int?>(code, desc)
+            = Ruler.ofNullVal<Int?>(code, desc)
 
     fun notNull(code: Long = INT_NOT_NULL_FAIL.code, desc: String = INT_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Int?>(code, desc)

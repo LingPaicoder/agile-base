@@ -39,7 +39,7 @@ object StrRuler {
     val beDigit = digit()
 
     fun nullVal(code: Long = STR_NULL_FAIL.code, desc: String = STR_NULL_FAIL.desc)
-            = Ruler.ofNull<String?>(code, desc)
+            = Ruler.ofNullVal<String?>(code, desc)
 
     fun notNull(code: Long = STR_NOT_NULL_FAIL.code, desc: String = STR_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<String?>(code, desc)

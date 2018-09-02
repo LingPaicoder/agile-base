@@ -19,7 +19,7 @@ object CollRuler {
     val notContainsDup = notContainsDup()
 
     fun nullVal(code: Long = COLL_NULL_FAIL.code, desc: String = COLL_NULL_FAIL.desc)
-            = Ruler.ofNull<Collection<*>?>(code, desc)
+            = Ruler.ofNullVal<Collection<*>?>(code, desc)
 
     fun notNull(code: Long = COLL_NOT_NULL_FAIL.code, desc: String = COLL_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Collection<*>?>(code, desc)

@@ -9,7 +9,7 @@ object ByteRuler {
     val nullVal = nullVal()
 
     fun nullVal(code: Long = BYTE_NULL_FAIL.code, desc: String = BYTE_NULL_FAIL.desc)
-            = Ruler.ofNull<Byte?>(code, desc)
+            = Ruler.ofNullVal<Byte?>(code, desc)
 
     fun notNull(code: Long = BYTE_NOT_NULL_FAIL.code, desc: String = BYTE_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Byte?>(code, desc)

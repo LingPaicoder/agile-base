@@ -17,7 +17,7 @@ object ShortRuler {
     val nullVal = nullVal()
 
     fun nullVal(code: Long = SHORT_NULL_FAIL.code, desc: String = SHORT_NULL_FAIL.desc)
-            = Ruler.ofNull<Short?>(code, desc)
+            = Ruler.ofNullVal<Short?>(code, desc)
 
     fun notNull(code: Long = SHORT_NOT_NULL_FAIL.code, desc: String = SHORT_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Short?>(code, desc)
