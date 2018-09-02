@@ -4,17 +4,16 @@ import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.CollRuler.notContainsDup
-import com.lpcoder.agile.base.check.ruler.CollRuler.notContainsNull
-import com.lpcoder.agile.base.check.ruler.CollRuler.notEmpty
-import com.lpcoder.agile.base.check.ruler.CollRuler.notNull
-import com.lpcoder.agile.base.check.ruler.CollRuler.nullVal
+import com.lpcoder.agile.base.check.ruler.CollRuler.beNotContainsDup
+import com.lpcoder.agile.base.check.ruler.CollRuler.beNotContainsNull
+import com.lpcoder.agile.base.check.ruler.CollRuler.beNotEmpty
+import com.lpcoder.agile.base.check.ruler.CollRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.CollRuler.beNullVal
 import com.lpcoder.agile.base.check.ruler.CollRuler.sizeEq
 import com.lpcoder.agile.base.check.ruler.CollRuler.sizeGt
 import com.lpcoder.agile.base.check.ruler.CollRuler.sizeGte
 import com.lpcoder.agile.base.check.ruler.CollRuler.sizeLt
 import com.lpcoder.agile.base.check.ruler.CollRuler.sizeLte
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -29,56 +28,56 @@ class CollRulerTest {
     @Test
     fun nullValTest() {
         var list: Collection<*>? = null
-        list must be(nullVal)
+        list must beNullVal
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-14009, desc=list必须为Null")
         list = signers
-        list alias "list" must be(nullVal)
+        list alias "list" must beNullVal
     }
 
     @Test
     fun notNullTest() {
         var list: Collection<*>? = signers
-        list must notNull
+        list must beNotNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-14008, desc=list不能为Null")
         list = null
-        list alias "list" must notNull
+        list alias "list" must beNotNull
     }
 
     @Test
     fun notEmptyTest() {
         var list: Collection<*>? = signers
-        list must notEmpty
+        list must beNotEmpty
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-14000, desc=list不能为空")
         list = emptyList<String>()
-        list alias "list" must notEmpty
+        list alias "list" must beNotEmpty
     }
 
     @Test
     fun notContainsNullTest() {
         var list: Collection<*>? = signers
-        list must notContainsNull
+        list must beNotContainsNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-14006, desc=list中不能有空值")
         list = listOf("a", null)
-        list alias "list" must notContainsNull
+        list alias "list" must beNotContainsNull
     }
 
     @Test
     fun notContainsDupTest() {
         var list: Collection<*>? = signers
-        list must notContainsDup
+        list must beNotContainsDup
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-14007, desc=list中不能有重复值")
         list = listOf("a", "a")
-        list alias "list" must notContainsDup
+        list alias "list" must beNotContainsDup
     }
 
     @Test

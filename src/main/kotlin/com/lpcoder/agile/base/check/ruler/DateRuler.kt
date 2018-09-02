@@ -10,8 +10,8 @@ import com.lpcoder.agile.base.util.DateUtil.isEq
 import java.util.*
 
 object DateRuler {
-    val nullVal = nullVal()
-    val notNull = notNull()
+    val beNullVal = nullVal()
+    val beNotNull = notNull()
 
     fun nullVal(code: Long = DATE_NULL_FAIL.code, desc: String = DATE_NULL_FAIL.desc)
             = Ruler.ofNullVal<Date?>(code, desc)

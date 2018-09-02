@@ -9,8 +9,8 @@ import com.lpcoder.agile.base.check.ruler.ByteRuler.gt
 import com.lpcoder.agile.base.check.ruler.ByteRuler.gte
 import com.lpcoder.agile.base.check.ruler.ByteRuler.lt
 import com.lpcoder.agile.base.check.ruler.ByteRuler.lte
-import com.lpcoder.agile.base.check.ruler.ByteRuler.notNull
-import com.lpcoder.agile.base.check.ruler.ByteRuler.nullVal
+import com.lpcoder.agile.base.check.ruler.ByteRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.ByteRuler.beNullVal
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -24,23 +24,23 @@ class ByteRulerTest {
     @Test
     fun nullValTest() {
         var num: Byte? = null
-        num must be(nullVal)
+        num must beNullVal
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-16000, desc=num必须为Null")
         num = 1
-        num alias "num" must be(nullVal)
+        num alias "num" must beNullVal
     }
 
     @Test
     fun notNullTest() {
         var num: Byte? = 1
-        num must notNull
+        num must beNotNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-16006, desc=num不能为Null")
         num = null
-        num alias "num" must notNull
+        num alias "num" must beNotNull
     }
 
     @Test

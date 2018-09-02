@@ -12,11 +12,11 @@ import com.lpcoder.agile.base.util.CollectionUtil.isSizeLt
 import com.lpcoder.agile.base.util.CollectionUtil.isSizeLte
 
 object CollRuler {
-    val nullVal = nullVal()
-    val notNull = notNull()
-    val notEmpty = notEmpty()
-    val notContainsNull = notContainsNull()
-    val notContainsDup = notContainsDup()
+    val beNullVal = nullVal()
+    val beNotNull = notNull()
+    val beNotEmpty = notEmpty()
+    val beNotContainsNull = notContainsNull()
+    val beNotContainsDup = notContainsDup()
 
     fun nullVal(code: Long = COLL_NULL_FAIL.code, desc: String = COLL_NULL_FAIL.desc)
             = Ruler.ofNullVal<Collection<*>?>(code, desc)

@@ -15,12 +15,12 @@ fun main(args: Array<String>) {
     println(CharUtil.isGte('2','2'))
     println(CharUtil.isEq('2','1'))
     /*val username = "lrp"
-    check(username, "姓名", notNull(), lengthEq(4))
-    Pair(username, "姓名") must be(notNull(), lengthEq(4))
-    username alias "姓名" must be(notNull(), lengthEq(4))
+    check(username, "姓名", beNotNull(), lengthEq(4))
+    Pair(username, "姓名") must be(beNotNull(), lengthEq(4))
+    username alias "姓名" must be(beNotNull(), lengthEq(4))
 
-    username alias "姓名" must notNull()
+    username alias "姓名" must beNotNull()
     username alias "姓名" must empty().or(lengthEq(4))
-    val be_a_name = Ruler.ofAll(notNull(), lengthEq(4))
+    val be_a_name = Ruler.ofAll(beNotNull(), lengthEq(4))
     username alias "姓名" must be_a_name*/
 }

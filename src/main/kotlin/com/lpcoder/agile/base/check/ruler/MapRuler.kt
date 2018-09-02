@@ -11,10 +11,10 @@ import com.lpcoder.agile.base.util.MapUtil.isSizeLt
 import com.lpcoder.agile.base.util.MapUtil.isSizeLte
 
 object MapRuler {
-    val nullVal = nullVal()
-    val notNull = notNull()
-    val notEmpty = notEmpty()
-    val keyNotContainsNull = keyNotContainsNull()
+    val beNullVal = nullVal()
+    val beNotNull = notNull()
+    val beNotEmpty = notEmpty()
+    val beKeyNotContainsNull = keyNotContainsNull()
 
     fun nullVal(code: Long = MAP_NULL_FAIL.code, desc: String = MAP_NULL_FAIL.desc)
             = Ruler.ofNullVal<Map<*, *>?>(code, desc)

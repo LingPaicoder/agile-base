@@ -9,13 +9,11 @@ import com.lpcoder.agile.base.check.ruler.DateRuler.afterOrEq
 import com.lpcoder.agile.base.check.ruler.DateRuler.before
 import com.lpcoder.agile.base.check.ruler.DateRuler.beforeOrEq
 import com.lpcoder.agile.base.check.ruler.DateRuler.eq
-import com.lpcoder.agile.base.check.ruler.DateRuler.notNull
-import com.lpcoder.agile.base.check.ruler.DateRuler.nullVal
-import com.lpcoder.agile.base.util.DateUtil
+import com.lpcoder.agile.base.check.ruler.DateRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.DateRuler.beNullVal
 import com.lpcoder.agile.base.util.DateUtil.getDateByDateStr
 import org.junit.Test
 
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.rules.ExpectedException
 import java.util.*
@@ -29,23 +27,23 @@ class DateRulerTest {
     @Test
     fun nullValTest() {
         var time: Date? = null
-        time must be(nullVal)
+        time must beNullVal
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-12006, desc=time必须为Null")
         time = birthDay
-        time alias "time" must be(nullVal)
+        time alias "time" must beNullVal
     }
 
     @Test
     fun notNullTest() {
         var time: Date? = birthDay
-        time must notNull
+        time must beNotNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-12005, desc=time不能为Null")
         time = null
-        time alias "time" must notNull
+        time alias "time" must beNotNull
     }
 
     @Test

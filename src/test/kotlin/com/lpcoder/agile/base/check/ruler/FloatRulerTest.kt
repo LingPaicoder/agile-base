@@ -9,8 +9,8 @@ import com.lpcoder.agile.base.check.ruler.FloatRuler.gt
 import com.lpcoder.agile.base.check.ruler.FloatRuler.gte
 import com.lpcoder.agile.base.check.ruler.FloatRuler.lt
 import com.lpcoder.agile.base.check.ruler.FloatRuler.lte
-import com.lpcoder.agile.base.check.ruler.FloatRuler.notNull
-import com.lpcoder.agile.base.check.ruler.FloatRuler.nullVal
+import com.lpcoder.agile.base.check.ruler.FloatRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.FloatRuler.beNullVal
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -25,23 +25,23 @@ class FloatRulerTest {
     @Test
     fun nullValTest() {
         var num: Float? = null
-        num must be(nullVal)
+        num must beNullVal
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-20000, desc=num必须为Null")
         num = 1.0F
-        num alias "num" must be(nullVal)
+        num alias "num" must beNullVal
     }
 
     @Test
     fun notNullTest() {
         var num: Float? = 1.0F
-        num must notNull
+        num must beNotNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-20006, desc=num不能为Null")
         num = null
-        num alias "num" must notNull
+        num alias "num" must beNotNull
     }
 
     @Test

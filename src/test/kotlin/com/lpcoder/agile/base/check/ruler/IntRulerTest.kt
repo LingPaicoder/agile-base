@@ -9,8 +9,8 @@ import com.lpcoder.agile.base.check.ruler.IntRuler.gt
 import com.lpcoder.agile.base.check.ruler.IntRuler.gte
 import com.lpcoder.agile.base.check.ruler.IntRuler.lt
 import com.lpcoder.agile.base.check.ruler.IntRuler.lte
-import com.lpcoder.agile.base.check.ruler.IntRuler.notNull
-import com.lpcoder.agile.base.check.ruler.IntRuler.nullVal
+import com.lpcoder.agile.base.check.ruler.IntRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.IntRuler.beNullVal
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -25,23 +25,23 @@ class IntRulerTest {
     @Test
     fun nullValTest() {
         var num: Int? = null
-        num must be(nullVal)
+        num must beNullVal
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-18000, desc=num必须为Null")
         num = 1
-        num alias "num" must be(nullVal)
+        num alias "num" must beNullVal
     }
 
     @Test
     fun notNullTest() {
         var num: Int? = 1
-        num must notNull
+        num must beNotNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-18006, desc=num不能为Null")
         num = null
-        num alias "num" must notNull
+        num alias "num" must beNotNull
     }
 
     @Test

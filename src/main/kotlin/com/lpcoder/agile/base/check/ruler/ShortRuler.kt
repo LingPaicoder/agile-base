@@ -13,8 +13,8 @@ import com.lpcoder.agile.base.util.NumberUtil.isLte
  * @date: Created in 18-7-13
  */
 object ShortRuler {
-    val notNull = notNull()
-    val nullVal = nullVal()
+    val beNotNull = notNull()
+    val beNullVal = nullVal()
 
     fun nullVal(code: Long = SHORT_NULL_FAIL.code, desc: String = SHORT_NULL_FAIL.desc)
             = Ruler.ofNullVal<Short?>(code, desc)

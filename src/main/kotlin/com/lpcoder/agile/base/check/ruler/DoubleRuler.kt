@@ -5,8 +5,8 @@ import com.lpcoder.agile.base.check.Ruler
 import com.lpcoder.agile.base.util.NumberUtil
 
 object DoubleRuler {
-    val notNull = notNull()
-    val nullVal = nullVal()
+    val beNotNull = notNull()
+    val beNullVal = nullVal()
 
     fun nullVal(code: Long = DOUBLE_NULL_FAIL.code, desc: String = DOUBLE_NULL_FAIL.desc)
             = Ruler.ofNullVal<Double?>(code, desc)

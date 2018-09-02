@@ -2,7 +2,7 @@ package com.lpcoder.agile.base.util
 
 import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.DateRuler.notNull
+import com.lpcoder.agile.base.check.ruler.DateRuler.beNotNull
 import com.lpcoder.agile.base.check.ruler.IntRuler.gte
 import com.lpcoder.agile.base.check.ruler.IntRuler.lte
 import com.lpcoder.agile.base.constant.STANDARD_DATETIME_FORMAT
@@ -58,7 +58,7 @@ object DateUtil {
      * 获取日期对应的星期
      */
     fun getWeek(date: Date): WeekEnum {
-        date must notNull
+        date must beNotNull
         val calender = Calendar.getInstance()
         calender.time = date
         return WeekEnum.getByCode(calender.get(Calendar.DAY_OF_WEEK))

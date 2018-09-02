@@ -4,10 +4,10 @@ import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.MapRuler.keyNotContainsNull
-import com.lpcoder.agile.base.check.ruler.MapRuler.notEmpty
-import com.lpcoder.agile.base.check.ruler.MapRuler.notNull
-import com.lpcoder.agile.base.check.ruler.MapRuler.nullVal
+import com.lpcoder.agile.base.check.ruler.MapRuler.beKeyNotContainsNull
+import com.lpcoder.agile.base.check.ruler.MapRuler.beNotEmpty
+import com.lpcoder.agile.base.check.ruler.MapRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.MapRuler.beNullVal
 import com.lpcoder.agile.base.check.ruler.MapRuler.sizeEq
 import com.lpcoder.agile.base.check.ruler.MapRuler.sizeGt
 import com.lpcoder.agile.base.check.ruler.MapRuler.sizeGte
@@ -27,45 +27,45 @@ class MapRulerTest {
     @Test
     fun nullValTest() {
         var temp: Map<*, *>? = null
-        temp must be(nullVal)
+        temp must beNullVal
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-15008, desc=temp必须为Null")
         temp = map
-        temp alias "temp" must be(nullVal)
+        temp alias "temp" must beNullVal
     }
 
     @Test
     fun notNullTest() {
         var temp: Map<*, *>? = map
-        temp must notNull
+        temp must beNotNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-15007, desc=temp不能为Null")
         temp = null
-        temp alias "temp" must notNull
+        temp alias "temp" must beNotNull
     }
 
     @Test
     fun notEmptyTest() {
         var temp: Map<*, *>? = map
-        temp must notEmpty
+        temp must beNotEmpty
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-15000, desc=temp不能为空")
         temp = emptyMap<String, String>()
-        temp alias "temp" must notEmpty
+        temp alias "temp" must beNotEmpty
     }
 
     @Test
     fun keyNotContainsNullTest() {
         var temp: Map<*, *>? = map
-        temp must keyNotContainsNull
+        temp must beKeyNotContainsNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-15006, desc=temp中不能有空值")
         temp = mapOf(null to "null", "1" to "one")
-        temp alias "temp" must keyNotContainsNull
+        temp alias "temp" must beKeyNotContainsNull
     }
 
     @Test
