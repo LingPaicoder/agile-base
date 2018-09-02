@@ -5,7 +5,6 @@ import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.CharRuler.eq
 import com.lpcoder.agile.base.check.ruler.IntRuler
-import com.lpcoder.agile.base.check.ruler.StrRuler.idCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.beDigit
 import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq

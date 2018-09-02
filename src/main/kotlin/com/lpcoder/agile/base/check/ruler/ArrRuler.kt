@@ -16,6 +16,19 @@ import com.lpcoder.agile.base.util.ArrayUtil.isNotEmpty
  * @date: Created in 18-7-12
  */
 object ArrRuler {
+
+    val beNullVal = nullVal()
+    val beNotNull = notNull()
+    val beNotEmpty = notEmpty()
+    val beNotContainsNull = notContainsNull()
+    val beNotContainsDup = notContainsDup()
+
+    fun nullVal(code: Long = ARR_NULL_FAIL.code, desc: String = ARR_NULL_FAIL.desc)
+            = Ruler.ofNullVal<Array<*>?>(code, desc)
+
+    fun notNull(code: Long = ARR_NOT_NULL_FAIL.code, desc: String = ARR_NOT_NULL_FAIL.desc)
+            = Ruler.ofNotNull<Array<*>?>(code, desc)
+
     fun notEmpty(code: Long = ARR_NOT_EMPTY_FAIL.code, desc: String = ARR_NOT_EMPTY_FAIL.desc)
             = Ruler.of(code, desc, ::isNotEmpty)
 
