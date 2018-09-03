@@ -2,6 +2,7 @@ package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckResultCodeEnum.*
 import com.lpcoder.agile.base.check.Ruler
+import com.lpcoder.agile.base.check.and
 import com.lpcoder.agile.base.util.StringUtil.isLengthGt
 import com.lpcoder.agile.base.util.StringUtil.isLengthGte
 import com.lpcoder.agile.base.util.StringUtil.isLengthLt
@@ -45,50 +46,50 @@ object StrRuler {
             = Ruler.ofNotNull<String?>(code, desc)
 
     fun empty(code: Long = STR_EMPTY_FAIL.code, desc: String = STR_EMPTY_FAIL.desc)
-            = Ruler.of(code, desc, ::isEmpty)
+            = beNotNull and Ruler.of(code, desc, ::isEmpty)
 
     fun notEmpty(code: Long = STR_NOT_EMPTY_FAIL.code, desc: String = STR_NOT_EMPTY_FAIL.desc)
-            = Ruler.of(code, desc, ::isNotEmpty)
+            = beNotNull and Ruler.of(code, desc, ::isNotEmpty)
 
     fun lengthEq(norm: Int, code: Long = STR_LENGTH_EQ_FAIL.code, desc: String = STR_LENGTH_EQ_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLengthEq)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLengthEq)
 
     fun lengthGt(norm: Int, code: Long = STR_LENGTH_GT_FAIL.code, desc: String = STR_LENGTH_GT_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLengthGt)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLengthGt)
 
     fun lengthGte(norm: Int, code: Long = STR_LENGTH_GTE_FAIL.code, desc: String = STR_LENGTH_GTE_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLengthGte)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLengthGte)
 
     fun lengthLt(norm: Int, code: Long = STR_LENGTH_LT_FAIL.code, desc: String = STR_LENGTH_LT_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLengthLt)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLengthLt)
 
     fun lengthLte(norm: Int, code: Long = STR_LENGTH_LTE_FAIL.code, desc: String = STR_LENGTH_LTE_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLengthLte)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLengthLte)
 
     fun eq(norm: String, code: Long = STR_EQ_FAIL.code, desc: String = STR_EQ_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isEq)
+            = beNotNull and Ruler.of(norm, code, desc, ::isEq)
 
     fun idCard(code: Long = STR_ID_CARD_FAIL.code, desc: String = STR_ID_CARD_FAIL.desc)
-            = Ruler.of(code, desc, ::isIdCard)
+            = beNotNull and Ruler.of(code, desc, ::isIdCard)
 
     fun email(code: Long = STR_EMAIL_FAIL.code, desc: String = STR_EMAIL_FAIL.desc)
-            = Ruler.of(code, desc, ::isEmail)
+            = beNotNull and Ruler.of(code, desc, ::isEmail)
 
     fun phone(code: Long = STR_PHONE_FAIL.code, desc: String = STR_PHONE_FAIL.desc)
-            = Ruler.of(code, desc, ::isPhone)
+            = beNotNull and Ruler.of(code, desc, ::isPhone)
 
     fun standardDate(code: Long = STR_STANDARD_DATE_FAIL.code, desc: String = STR_STANDARD_DATE_FAIL.desc)
-            = Ruler.of(code, desc, ::isStandardDate)
+            = beNotNull and Ruler.of(code, desc, ::isStandardDate)
 
     fun standardDatetime(code: Long = STR_STANDARD_DATETIME_FAIL.code, desc: String = STR_STANDARD_DATETIME_FAIL.desc)
-            = Ruler.of(code, desc, ::isStandardDatetime)
+            = beNotNull and Ruler.of(code, desc, ::isStandardDatetime)
 
     fun url(code: Long = STR_URL_FAIL.code, desc: String = STR_URL_FAIL.desc)
-            = Ruler.of(code, desc, ::isUrl)
+            = beNotNull and Ruler.of(code, desc, ::isUrl)
 
     fun allLetter(code: Long = STR_ALL_LETTER_FAIL.code, desc: String = STR_ALL_LETTER_FAIL.desc)
-            = Ruler.of(code, desc, ::isAllLetter)
+            = beNotNull and Ruler.of(code, desc, ::isAllLetter)
 
     fun digit(code: Long = STR_DIGIT_FAIL.code, desc: String = STR_DIGIT_FAIL.desc)
-            = Ruler.of(code, desc, ::isDigit)
+            = beNotNull and Ruler.of(code, desc, ::isDigit)
 }

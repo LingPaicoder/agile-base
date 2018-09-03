@@ -31,11 +31,18 @@ object DateUtil {
     fun getDateByDateTimeStr(dateStr: String) = parseDate(dateStr, STANDARD_DATETIME_FORMAT)
     fun parseDate(dateStr: String, format: String) = DateUtils.parseDate(dateStr, format)
 
-    fun isEq(target: Date?, norm: Date?) = target!!.time == norm!!.time
-    fun isAfter(target: Date?, norm: Date?) = target!!.time > norm!!.time
-    fun isAfterOrEq(target: Date?, norm: Date?) = target!!.time >= norm!!.time
-    fun isBefore(target: Date?, norm: Date?) = target!!.time < norm!!.time
-    fun isBeforeOrEq(target: Date?, norm: Date?) = target!!.time <= norm!!.time
+    fun isEq(target: Date?, norm: Date?) = target == norm
+    fun isAfter(target: Date?, norm: Date) =
+            if (null == target) false else target.time > norm.time
+
+    fun isAfterOrEq(target: Date?, norm: Date) =
+            if (null == target) false else target.time >= norm.time
+
+    fun isBefore(target: Date?, norm: Date) =
+            if (null == target) false else target.time < norm.time
+
+    fun isBeforeOrEq(target: Date?, norm: Date) =
+            if (null == target) false else target.time <= norm.time
 
     /**
      * 获取当月天数

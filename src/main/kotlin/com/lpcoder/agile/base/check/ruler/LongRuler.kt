@@ -2,6 +2,7 @@ package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckResultCodeEnum.*
 import com.lpcoder.agile.base.check.Ruler
+import com.lpcoder.agile.base.check.and
 import com.lpcoder.agile.base.util.NumberUtil.isEq
 import com.lpcoder.agile.base.util.NumberUtil.isGt
 import com.lpcoder.agile.base.util.NumberUtil.isGte
@@ -23,17 +24,17 @@ object LongRuler {
             = Ruler.ofNotNull<Long?>(code, desc)
 
     fun eq(norm: Long, code: Long = LONG_EQ_FAIL.code, desc: String = LONG_EQ_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isEq)
+            = beNotNull and Ruler.of(norm, code, desc, ::isEq)
 
     fun gt(norm: Long, code: Long = LONG_GT_FAIL.code, desc: String = LONG_GT_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isGt)
+            = beNotNull and Ruler.of(norm, code, desc, ::isGt)
 
     fun gte(norm: Long, code: Long = LONG_GTE_FAIL.code, desc: String = LONG_GTE_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isGte)
+            = beNotNull and Ruler.of(norm, code, desc, ::isGte)
 
     fun lt(norm: Long, code: Long = LONG_LT_FAIL.code, desc: String = LONG_LT_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLt)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLt)
 
     fun lte(norm: Long, code: Long = LONG_LTE_FAIL.code, desc: String = LONG_LTE_FAIL.desc)
-            = Ruler.of(norm, code, desc, ::isLte)
+            = beNotNull and Ruler.of(norm, code, desc, ::isLte)
 }

@@ -37,3 +37,5 @@ infix fun <T> T.alias(alias: String) = Pair(this, alias)
 
 fun <T> be(vararg rulers: Ruler<T>) = Ruler.ofAll(rulers.toList())
 
+infix fun <T> Ruler<T>.and(ruler: Ruler<T>) = Ruler.ofAll(this, ruler)
+

@@ -1,18 +1,11 @@
 package com.lpcoder.agile.base.util
 
-import com.lpcoder.agile.base.check.CheckException
-import com.lpcoder.agile.base.check.be
-import com.lpcoder.agile.base.check.doCheck
-import com.lpcoder.agile.base.check.must
+import com.lpcoder.agile.base.check.*
 import com.lpcoder.agile.base.check.ruler.CharRuler.eq
 import com.lpcoder.agile.base.check.ruler.IntRuler
 import com.lpcoder.agile.base.check.ruler.StrRuler.beDigit
 import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
-import com.lpcoder.agile.base.check.ruler.StrRuler.beNotEmpty
-import com.lpcoder.agile.base.check.ruler.StrRuler.beNotNull
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthEq
-import com.lpcoder.agile.base.check.ruler.StrRuler.notEmpty
-import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
 import com.lpcoder.agile.base.enumeration.ChineseZodiacEnum
 import com.lpcoder.agile.base.enumeration.ConstellationEnum
 import com.lpcoder.agile.base.enumeration.GenderEnum
@@ -48,7 +41,7 @@ object IdCardUtil {
      */
     fun validate(idCard: String): Boolean =
             try {
-                doCheck(idCard, lengthEq(ID_CARD_LENGTH))
+                idCard must lengthEq(ID_CARD_LENGTH)
                 val front17Part = idCard.substring(0, ID_CARD_LENGTH - 1)
                 front17Part must beDigit
                 val lastChar = getLastCharByFront17Part(front17Part)
