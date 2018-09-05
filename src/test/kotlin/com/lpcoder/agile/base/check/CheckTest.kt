@@ -1,5 +1,8 @@
 package com.lpcoder.agile.base.check
 
+import com.lpcoder.agile.base.check.ruler.AnyRuler
+import com.lpcoder.agile.base.check.ruler.IntRuler
+import com.lpcoder.agile.base.check.ruler.IntRuler.lte
 import com.lpcoder.agile.base.check.ruler.StrRuler.beEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.beNotEmpty
@@ -133,24 +136,19 @@ class CheckTest {
     /**
      * 为实体类不同操作封装个性化规则/自定义规则
      */
-    /*@Test
+    @Test
     fun testEntity() {
-        val customAddRuler = Ruler.of<>(){ custom ->
-            CheckUtil.check(custom, "商家", ObjRuler.notNull())
-                    .check(custom.getCustomId(), "商家Id", notEmpty())
-                    .check(custom.getName(), "商家姓名", notEmpty())
-                    .check(custom.getAge(), "商家年龄", IntRuler.lte(60))
+        val customAddRuler = Ruler { custom: Custom? ->
+            doCheck(custom, "商家", AnyRuler.beNotNull)
+            custom?.customId alias "商家Id" must beNotEmpty
+            custom?.name alias "商家姓名" must beNotEmpty
+            custom?.age alias "商家年龄" must lte(60)
         }
 
-        val custom = Custom()
-        custom.setCustomId("123")
-        custom.setName("张三")
-        custom.setAge(80)
+        val custom = Custom("123", "张三", 80)
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-18005, desc=商家年龄必须小于或等于60")
-        CheckUtil.check(custom, "", customAddRuler)
-
-    }*/
-
+        custom must be(customAddRuler)
+    }
 }

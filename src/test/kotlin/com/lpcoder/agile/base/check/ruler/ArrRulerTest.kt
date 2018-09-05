@@ -2,7 +2,6 @@ package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
-import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.ArrRuler.beNotContainsDup
 import com.lpcoder.agile.base.check.ruler.ArrRuler.beNotContainsNull
@@ -14,7 +13,6 @@ import com.lpcoder.agile.base.check.ruler.ArrRuler.lengthGt
 import com.lpcoder.agile.base.check.ruler.ArrRuler.lengthGte
 import com.lpcoder.agile.base.check.ruler.ArrRuler.lengthLt
 import com.lpcoder.agile.base.check.ruler.ArrRuler.lengthLte
-import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
