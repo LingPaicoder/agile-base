@@ -2,7 +2,6 @@ package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
-import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.CharRuler.beNotNull
 import com.lpcoder.agile.base.check.ruler.CharRuler.beNullVal
@@ -11,8 +10,6 @@ import com.lpcoder.agile.base.check.ruler.CharRuler.gt
 import com.lpcoder.agile.base.check.ruler.CharRuler.gte
 import com.lpcoder.agile.base.check.ruler.CharRuler.lt
 import com.lpcoder.agile.base.check.ruler.CharRuler.lte
-import com.lpcoder.agile.base.check.ruler.CharRuler.notNull
-import com.lpcoder.agile.base.check.ruler.CharRuler.nullVal
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException

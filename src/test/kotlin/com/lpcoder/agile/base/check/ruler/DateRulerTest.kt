@@ -2,7 +2,6 @@ package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
-import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.DateRuler.after
 import com.lpcoder.agile.base.check.ruler.DateRuler.afterOrEq

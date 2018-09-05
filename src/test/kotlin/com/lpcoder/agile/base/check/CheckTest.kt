@@ -1,16 +1,13 @@
 package com.lpcoder.agile.base.check
 
 import com.lpcoder.agile.base.check.ruler.AnyRuler
-import com.lpcoder.agile.base.check.ruler.IntRuler
 import com.lpcoder.agile.base.check.ruler.IntRuler.lte
 import com.lpcoder.agile.base.check.ruler.StrRuler.beEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.beIdCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.beNotEmpty
 import com.lpcoder.agile.base.check.ruler.StrRuler.beNullVal
-import com.lpcoder.agile.base.check.ruler.StrRuler.idCard
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthGte
 import com.lpcoder.agile.base.check.ruler.StrRuler.lengthLte
-import com.lpcoder.agile.base.check.ruler.StrRuler.notNull
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
