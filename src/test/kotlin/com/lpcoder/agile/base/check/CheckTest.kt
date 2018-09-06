@@ -81,6 +81,23 @@ class CheckTest {
     }
 
     /**
+     * 通过and、Ruler.ofAll()、可变长参数实现规则的“且”逻辑
+     */
+    @Test
+    fun andTest() {
+        var specialName = "张三"
+        // 下面三种写法效果相同
+        specialName alias "姓名" must (lengthGte(2) and lengthLte(10))
+        specialName alias "姓名" must be(Ruler.ofAll(lengthGte(2), lengthLte(10)))
+        specialName alias "姓名" must be(lengthGte(2), lengthLte(10))
+
+        thrown.expect(CheckException::class.java)
+        thrown.expectMessage("code=-11005, desc=姓名的长度必须小于或等于10")
+        specialName = "乔伊·亚历山大·比基·卡利斯勒·达夫·埃利奥特·福克斯·伊维鲁莫"
+        specialName alias "姓名" must (lengthGte(2) and lengthLte(10))
+    }
+
+    /**
      * 除了beNullVal和nullVal()之外的其他内置Ruler,
      * 都会先进行beNotNull校验,若业务场景允许为null,可用或逻辑处理
      */
