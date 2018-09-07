@@ -7,4 +7,4 @@
 使用说明：https://www.jianshu.com/p/45c9cc632f64
 
 
-  [1]: http://static.zybuluo.com/LingPai/qirk7ijwu5et7ts2q1og58lx/%E6%A0%A1%E9%AA%8C%E5%99%A8%E7%89%B9%E6%80%A7.svg
+  [1]: https://github.com/LingPaicoder/agile-base/tree/master/src/test/resources/校验器特性.png
