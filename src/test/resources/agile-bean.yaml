@@ -1,0 +1,9 @@
+beans:
+    -
+        id: customService
+        class: com.lpcoder.agile.base.bean.service.CustomService
+        isSingleton: true
+    -
+        id: invalidBean
+        class: com.lpcoder.agile.invalid.invalidBean
+        isSingleton: false

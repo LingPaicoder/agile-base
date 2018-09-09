@@ -1,9 +1,9 @@
-package com.lpcoder.agile.base.bean.factory.support
+package com.lpcoder.agile.base.bean.container.support
 
+import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.definition.BeanDefinition
-import com.lpcoder.agile.base.bean.factory.BeanFactory
 
-class DefaultBeanFactory(configPath: String) : BeanFactory {
+class DefaultBeanContainer(configPath: String) : BeanContainer {
 
     override fun getBeanDefinition(beanId: String): BeanDefinition? {
         return null
