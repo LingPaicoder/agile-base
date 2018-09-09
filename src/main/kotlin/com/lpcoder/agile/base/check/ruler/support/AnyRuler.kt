@@ -1,7 +1,7 @@
-package com.lpcoder.agile.base.check.ruler
+package com.lpcoder.agile.base.check.ruler.support
 
 import com.lpcoder.agile.base.check.CheckResultCodeEnum.*
-import com.lpcoder.agile.base.check.Ruler
+import com.lpcoder.agile.base.check.ruler.Ruler
 
 object AnyRuler {
     val beNullVal = nullVal()

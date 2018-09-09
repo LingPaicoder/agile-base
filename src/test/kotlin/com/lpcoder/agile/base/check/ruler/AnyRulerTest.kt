@@ -1,8 +1,8 @@
 package com.lpcoder.agile.base.check.ruler
 
 import com.lpcoder.agile.base.check.*
-import com.lpcoder.agile.base.check.ruler.AnyRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.AnyRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNotNull
+import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNullVal
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException

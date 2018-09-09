@@ -1,5 +1,7 @@
 package com.lpcoder.agile.base.check
 
+import com.lpcoder.agile.base.check.ruler.Ruler
+
 /**
  * @author: liurenpeng
  * @date: Created in 18-7-11

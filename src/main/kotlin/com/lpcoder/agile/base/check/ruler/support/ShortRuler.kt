@@ -1,8 +1,8 @@
-package com.lpcoder.agile.base.check.ruler
+package com.lpcoder.agile.base.check.ruler.support
 
 import com.lpcoder.agile.base.check.CheckResultCodeEnum.*
-import com.lpcoder.agile.base.check.Ruler
 import com.lpcoder.agile.base.check.and
+import com.lpcoder.agile.base.check.ruler.Ruler
 import com.lpcoder.agile.base.util.NumberUtil.isEq
 import com.lpcoder.agile.base.util.NumberUtil.isGt
 import com.lpcoder.agile.base.util.NumberUtil.isGte

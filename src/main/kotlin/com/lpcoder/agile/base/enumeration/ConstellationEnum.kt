@@ -2,9 +2,9 @@ package com.lpcoder.agile.base.enumeration
 
 import com.lpcoder.agile.base.check.be
 import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.IntRuler.gt
-import com.lpcoder.agile.base.check.ruler.IntRuler.gte
-import com.lpcoder.agile.base.check.ruler.IntRuler.lte
+import com.lpcoder.agile.base.check.ruler.support.IntRuler.gt
+import com.lpcoder.agile.base.check.ruler.support.IntRuler.gte
+import com.lpcoder.agile.base.check.ruler.support.IntRuler.lte
 import org.apache.commons.lang3.StringUtils
 
 enum class ConstellationEnum(val minDate: String,

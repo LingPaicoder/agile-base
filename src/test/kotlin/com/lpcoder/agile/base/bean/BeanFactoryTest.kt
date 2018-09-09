@@ -3,14 +3,15 @@ package com.lpcoder.agile.base.bean
 import com.lpcoder.agile.base.bean.factory.BeanFactory
 import com.lpcoder.agile.base.bean.factory.support.DefaultBeanFactory
 import com.lpcoder.agile.base.bean.service.CustomService
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class BeanFactoryTest {
 
     @Test
     fun testGetBean() {
-        val configPath = "beans.xml"
+        val configPath = "agile-bean.xml"
         val beanId = "customService"
         val beanClassName = "com.lpcoder.agile.base.bean.service.CustomService"
 

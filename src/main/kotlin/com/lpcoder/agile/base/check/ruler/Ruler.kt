@@ -1,4 +1,6 @@
-package com.lpcoder.agile.base.check
+package com.lpcoder.agile.base.check.ruler
+
+import com.lpcoder.agile.base.check.CheckException
 
 /**
  * 规则类
