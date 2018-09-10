@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wrapper>
-    <beans>
-        <bean>
-            <id>customService</id>
-            <class>com.lpcoder.agile.base.bean.service.CustomService</class>
-            <isSingleton>true</isSingleton>
-        </bean>
-        <bean>
-            <id>invalidBean</id>
-            <class>com.lpcoder.agile.invalid.invalidBean</class>
-            <isSingleton>false</isSingleton>
-        </bean>
-    </beans>
-</wrapper>
+<beans>
+    <bean id="customService"
+          class="com.lpcoder.agile.base.bean.service.CustomService"/>
+    <bean id="invalidBean"
+          class="com.lpcoder.agile.invalid.invalidBean"
+          isSingleton="false"/>
+</beans>
