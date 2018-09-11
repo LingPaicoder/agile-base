@@ -1,11 +1,11 @@
-package com.lpcoder.agile.base.bean.definition.support.resource
+package com.lpcoder.agile.base.core.resource
 
 import com.lpcoder.agile.base.util.ClassUtil
 import java.io.FileNotFoundException
 import java.io.InputStream
 
-class ClassPathBeanDefinitionResource(override val path: String)
-    : BeanDefinitionResource {
+class ClassPathResource(override val filePath: String)
+    : Resource {
 
     private var classLoader: ClassLoader = ClassUtil.getDefaultClassLoader()
 
@@ -14,7 +14,7 @@ class ClassPathBeanDefinitionResource(override val path: String)
     }
 
     override fun getInputStream(): InputStream {
-        return this.classLoader.getResourceAsStream(this.path)
-                ?: throw FileNotFoundException(path + " cannot be opened")
+        return this.classLoader.getResourceAsStream(this.filePath)
+                ?: throw FileNotFoundException(filePath + " cannot be opened")
     }
 }
