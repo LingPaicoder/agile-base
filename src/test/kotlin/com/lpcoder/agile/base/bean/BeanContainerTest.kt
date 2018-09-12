@@ -1,6 +1,5 @@
 package com.lpcoder.agile.base.bean
 
-import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
 import com.lpcoder.agile.base.bean.definition.support.parser.XMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.service.CustomService
@@ -23,11 +22,12 @@ class BeanContainerTest {
         val beanId = "customService"
         val beanClassName = "com.lpcoder.agile.base.bean.service.CustomService"
 
-        val container: BeanContainer = DefaultBeanContainer(ClassPathResource(configPath))
-        val beanDefinition = container.getBeanDefinition(beanId)
+        val beanConfig = ClassPathResource(configPath)
+        val beanContainer = DefaultBeanContainer(beanConfig)
+        val beanDefinition = beanContainer.getBeanDefinition(beanId)
         assertEquals(beanDefinition?.beanClassName, beanClassName)
 
-        val customService = container.getBean(beanId) as? CustomService
+        val customService = beanContainer.getBean(beanId) as? CustomService
         assertNotNull(customService)
     }
 
@@ -37,11 +37,12 @@ class BeanContainerTest {
         val beanId = "customService"
         val beanClassName = "com.lpcoder.agile.base.bean.service.CustomService"
 
-        val container: BeanContainer = DefaultBeanContainer(ClassPathResource(configPath))
-        val beanDefinition = container.getBeanDefinition(beanId)
+        val beanConfig = ClassPathResource(configPath)
+        val beanContainer = DefaultBeanContainer(beanConfig)
+        val beanDefinition = beanContainer.getBeanDefinition(beanId)
         assertEquals(beanDefinition?.beanClassName, beanClassName)
 
-        val customService = container.getBean(beanId) as? CustomService
+        val customService = beanContainer.getBean(beanId) as? CustomService
         assertNotNull(customService)
     }
 
