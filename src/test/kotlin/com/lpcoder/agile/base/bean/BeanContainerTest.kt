@@ -1,7 +1,7 @@
 package com.lpcoder.agile.base.bean
 
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
-import com.lpcoder.agile.base.bean.definition.support.parser.XMLBeanDefinitionParser
+import com.lpcoder.agile.base.bean.parser.XMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.service.CustomService
 import com.lpcoder.agile.base.core.resource.ClassPathResource
 import org.junit.Assert.assertEquals

@@ -1,16 +1,16 @@
-package com.lpcoder.agile.base.bean.definition.support.parser
+package com.lpcoder.agile.base.bean.parser
 
 import com.lpcoder.agile.base.bean.exception.BeanDefinitionStoreException
 import org.apache.commons.lang3.StringUtils
 
-enum class SupportFileType(val suffix: String, val parser: BeanDefinitionParser) {
+enum class SupportFileTypeEnum(val suffix: String, val parser: BeanDefinitionParser) {
     XML("xml", XMLBeanDefinitionParser()),
     YAML("yaml", YAMLBeanDefinitionParser());
 
     companion object {
-        fun getBySuffix(suffix: String): SupportFileType {
+        fun getBySuffix(suffix: String): SupportFileTypeEnum {
             return try {
-                enumValues<SupportFileType>().first { fileType -> suffix == fileType.suffix }
+                enumValues<SupportFileTypeEnum>().first { fileType -> suffix == fileType.suffix }
             } catch (e: NoSuchElementException) {
                 throw BeanDefinitionStoreException(StringUtils.join(
                         "unrecognizable file suffix: ",
@@ -22,7 +22,7 @@ enum class SupportFileType(val suffix: String, val parser: BeanDefinitionParser)
         }
 
         private fun getAllSupportSuffix(): List<String> {
-            return enumValues<SupportFileType>().map { fileType -> fileType.suffix }
+            return enumValues<SupportFileTypeEnum>().map { fileType -> fileType.suffix }
         }
     }
 }
