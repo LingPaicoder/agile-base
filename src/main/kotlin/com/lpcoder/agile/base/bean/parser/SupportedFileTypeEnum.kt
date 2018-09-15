@@ -3,14 +3,14 @@ package com.lpcoder.agile.base.bean.parser
 import com.lpcoder.agile.base.bean.exception.BeanDefinitionStoreException
 import org.apache.commons.lang3.StringUtils
 
-enum class SupportFileTypeEnum(val suffix: String, val parser: BeanDefinitionParser) {
+enum class SupportedFileTypeEnum(val suffix: String, val parser: BeanDefinitionParser) {
     XML("xml", XMLBeanDefinitionParser()),
     YAML("yaml", YAMLBeanDefinitionParser());
 
     companion object {
-        fun getBySuffix(suffix: String): SupportFileTypeEnum {
+        fun getBySuffix(suffix: String): SupportedFileTypeEnum {
             return try {
-                enumValues<SupportFileTypeEnum>().first { fileType -> suffix == fileType.suffix }
+                enumValues<SupportedFileTypeEnum>().first { fileType -> suffix == fileType.suffix }
             } catch (e: NoSuchElementException) {
                 throw BeanDefinitionStoreException(StringUtils.join(
                         "unrecognizable file suffix: ",
@@ -22,7 +22,7 @@ enum class SupportFileTypeEnum(val suffix: String, val parser: BeanDefinitionPar
         }
 
         private fun getAllSupportSuffix(): List<String> {
-            return enumValues<SupportFileTypeEnum>().map { fileType -> fileType.suffix }
+            return enumValues<SupportedFileTypeEnum>().map { fileType -> fileType.suffix }
         }
     }
 }
