@@ -5,5 +5,5 @@ package com.lpcoder.agile.base
  * @date: Created in 18-7-13
  */
 fun main(args: Array<String>) {
-    println("1234".last())
+    println("false".toBoolean())
 }

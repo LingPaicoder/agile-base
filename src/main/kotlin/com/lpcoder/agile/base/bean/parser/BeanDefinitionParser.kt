@@ -7,4 +7,8 @@ interface BeanDefinitionParser {
     fun parse(source: Resource): List<BeanDefinition>
 }
 
+val idAttr = "id"
 
+val classAttr = "class"
+
+val isSingletonAttr = "isSingleton"
