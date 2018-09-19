@@ -10,6 +10,7 @@ import org.dom4j.io.SAXReader
 import java.util.stream.Collectors
 
 class XMLBeanDefinitionParser : BeanDefinitionParser {
+
     override fun parse(source: Resource): List<BeanDefinition> {
         source must beNotNull
         source.getInputStream() must beNotNull

@@ -7,6 +7,8 @@ interface BeanDefinitionParser {
     fun parse(source: Resource): List<BeanDefinition>
 }
 
+val beansAttr = "beans"
+
 val idAttr = "id"
 
 val classAttr = "class"
