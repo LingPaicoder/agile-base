@@ -41,9 +41,7 @@ class DefaultBeanContainer(resource: Resource) : BeanContainer {
 
     override fun getBean(beanId: String): Any? {
         val beanDefinition = beanDefinitionMap[beanId]
-        if (null == beanDefinition) {
-            return null
-        }
+        beanDefinition ?: throw BeanCreationException("not found beanDefinition of $beanId")
         if (beanDefinition.isSingleton) {
             return singletonObjMap[beanId]
         }
