@@ -2,6 +2,7 @@ package com.lpcoder.agile.base.bean
 
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
 import com.lpcoder.agile.base.bean.exception.BeanCreationException
+import com.lpcoder.agile.base.bean.exception.BeanDefinitionStoreException
 import com.lpcoder.agile.base.bean.parser.XMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.parser.YAMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.service.CustomService
@@ -80,12 +81,12 @@ class BeanContainerTest {
                 .getBean(errBeanId) as? CustomService
     }
 
-    /*@Test
+    @Test
     fun testBeanDefinitionStoreException() {
-        //thrown.expect(BeanCreationException::class.java)
-        //thrown.expectMessage("create bean for com.lpcoder.agile.invalid.invalidBean failed")
+        thrown.expect(BeanDefinitionStoreException::class.java)
+        thrown.expectMessage("XXX.xml cannot be opened")
         DefaultBeanContainer(ClassPathResource(errXmlConfigPath))
                 .getBean(errBeanId) as? CustomService
-    }*/
+    }
 
 }
