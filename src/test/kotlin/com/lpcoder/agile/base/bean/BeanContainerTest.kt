@@ -7,8 +7,7 @@ import com.lpcoder.agile.base.bean.parser.XMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.parser.YAMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.service.CustomService
 import com.lpcoder.agile.base.core.resource.ClassPathResource
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -71,6 +70,14 @@ class BeanContainerTest {
 
         val customService = beanContainer.getBean(beanId) as? CustomService
         assertNotNull(customService)
+    }
+
+    @Test
+    fun testSingleton() {
+        val container = DefaultBeanContainer(ClassPathResource(yamlConfigPath))
+        val customService1 = container.getBean(beanId)
+        val customService2 = container.getBean(beanId)
+        assertTrue(customService1 === customService2)
     }
 
     @Test
