@@ -51,31 +51,19 @@ class BeanContainerTest {
 
     @Test
     fun testGetBeanByXML() {
-        val beanConfig = ClassPathResource(xmlConfigPath)
-        val beanContainer = DefaultBeanContainer(beanConfig)
-        val beanDefinition = beanContainer.getBeanDefinition(beanId)
-        assertEquals(beanDefinition?.beanClassName, beanClassName)
-
-        val customService = beanContainer.getBean(beanId) as? CustomService
-        assertNotNull(customService)
+        testGetBean(containerOfYAML!!)
+        testGetBean(containerOfXML!!)
     }
 
-    @Test
-    fun testGetBeanByYAML() {
-        val beanConfig = ClassPathResource(yamlConfigPath)
-        val beanContainer = DefaultBeanContainer(beanConfig)
-        val beanDefinition = beanContainer.getBeanDefinition(beanId)
-        assertEquals(beanDefinition?.beanClassName, beanClassName)
-
-        val customService = beanContainer.getBean(beanId) as? CustomService
+    private fun testGetBean(container: BeanContainer) {
+        val customService = container.getBean(beanId) as? CustomService
         assertNotNull(customService)
     }
 
     @Test
     fun testSingleton() {
-        val container = DefaultBeanContainer(ClassPathResource(yamlConfigPath))
-        val customService1 = container.getBean(beanId)
-        val customService2 = container.getBean(beanId)
+        val customService1 = containerOfXML!!.getBean(beanId)
+        val customService2 = containerOfXML!!.getBean(beanId)
         assertTrue(customService1 === customService2)
     }
 
@@ -83,7 +71,7 @@ class BeanContainerTest {
     fun testBeanCreationException() {
         thrown.expect(BeanCreationException::class.java)
         thrown.expectMessage("create bean for com.lpcoder.agile.invalid.invalidBean failed")
-        containerOfXML?.getBean(errAndNotSingletonBeanId) as? CustomService
+        containerOfXML!!.getBean(errAndNotSingletonBeanId) as? CustomService
     }
 
     @Test
