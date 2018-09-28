@@ -1,13 +1,13 @@
 package com.lpcoder.agile.base.bean
 
+import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
 import com.lpcoder.agile.base.bean.exception.BeanCreationException
 import com.lpcoder.agile.base.bean.exception.BeanDefinitionStoreException
-import com.lpcoder.agile.base.bean.parser.XMLBeanDefinitionParser
-import com.lpcoder.agile.base.bean.parser.YAMLBeanDefinitionParser
 import com.lpcoder.agile.base.bean.service.CustomService
 import com.lpcoder.agile.base.core.resource.ClassPathResource
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -17,37 +17,36 @@ class BeanContainerTest {
     @get:Rule
     val thrown: ExpectedException = ExpectedException.none()
 
-    private val beanDefinitionListStr = "[" +
-            "BeanDefinition" +
-            "(id=customService, " +
-            "beanClassName=com.lpcoder.agile.base.bean.service.CustomService, " +
-            "isSingleton=true), " +
-            "BeanDefinition" +
-            "(id=invalidBean, " +
-            "beanClassName=com.lpcoder.agile.invalid.invalidBean, " +
-            "isSingleton=false)]"
-
     private val errXmlConfigPath = "XXX.xml"
     private val xmlConfigPath = "agile-bean.xml"
     private val yamlConfigPath = "agile-bean.yaml"
 
-    private val errBeanId = "invalidBean"
+    private val errAndNotSingletonBeanId = "invalidBean"
     private val beanId = "customService"
     private val beanClassName = "com.lpcoder.agile.base.bean.service.CustomService"
 
+    private var containerOfYAML: BeanContainer? = null
+    private var containerOfXML: BeanContainer? = null
 
-    @Test
-    fun testYAMLParser() {
-        assertEquals(beanDefinitionListStr, YAMLBeanDefinitionParser()
-                .parse(ClassPathResource(yamlConfigPath))
-                .toString())
+    @Before
+    fun before() {
+        containerOfYAML = DefaultBeanContainer(ClassPathResource(yamlConfigPath))
+        containerOfXML = DefaultBeanContainer(ClassPathResource(xmlConfigPath))
     }
 
     @Test
-    fun testXMLParser() {
-        assertEquals(beanDefinitionListStr, XMLBeanDefinitionParser()
-                .parse(ClassPathResource(xmlConfigPath))
-                .toString())
+    fun testParser() {
+        testParser(containerOfYAML!!)
+        testParser(containerOfXML!!)
+    }
+
+    private fun testParser(container: BeanContainer) {
+        val beanDef = container.getBeanDefinition(beanId)!!
+        assertEquals(beanId, beanDef.id)
+        assertEquals(beanClassName, beanDef.beanClassName)
+        assertTrue(beanDef.isSingleton)
+        val beanNotSingletonDef = container.getBeanDefinition(errAndNotSingletonBeanId)!!
+        assertFalse(beanNotSingletonDef.isSingleton)
     }
 
     @Test
@@ -84,8 +83,7 @@ class BeanContainerTest {
     fun testBeanCreationException() {
         thrown.expect(BeanCreationException::class.java)
         thrown.expectMessage("create bean for com.lpcoder.agile.invalid.invalidBean failed")
-        DefaultBeanContainer(ClassPathResource(xmlConfigPath))
-                .getBean(errBeanId) as? CustomService
+        containerOfXML?.getBean(errAndNotSingletonBeanId) as? CustomService
     }
 
     @Test
@@ -93,7 +91,7 @@ class BeanContainerTest {
         thrown.expect(BeanDefinitionStoreException::class.java)
         thrown.expectMessage("XXX.xml cannot be opened")
         DefaultBeanContainer(ClassPathResource(errXmlConfigPath))
-                .getBean(errBeanId) as? CustomService
+                .getBean(beanId) as? CustomService
     }
 
 }
