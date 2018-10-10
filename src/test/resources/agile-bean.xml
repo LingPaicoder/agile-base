@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="customService"
-          class="com.lpcoder.agile.base.bean.service.CustomService"/>
-    <bean id="invalidBean"
-          class="com.lpcoder.agile.invalid.invalidBean"
-          isSingleton="false"/>
+    <bean id="customService" class="com.lpcoder.agile.base.bean.service.CustomService">
+        <property name="accountDao" ref="accountDao"/>
+        <property name="itemDao" ref="itemDao"/>
+    </bean>
+    <bean id="accountDao" class="com.lpcoder.agile.base.bean.dao.AccountDao"/>
+    <bean id="itemDao" class="com.lpcoder.agile.base.bean.dao.ItemDao"/>
+    <bean id="invalidBean" class="com.lpcoder.agile.invalid.invalidBean" isSingleton="false"/>
 </beans>

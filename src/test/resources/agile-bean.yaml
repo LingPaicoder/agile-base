@@ -2,6 +2,19 @@ beans:
     -
         id: customService
         class: com.lpcoder.agile.base.bean.service.CustomService
+        property:
+            -
+                name: accountDao
+                ref: accountDao
+            -
+                name: itemDao
+                ref: itemDao
+    -
+        id: accountDao
+        class: com.lpcoder.agile.base.bean.dao.AccountDao
+    -
+        id: itemDao
+        class: com.lpcoder.agile.base.bean.dao.ItemDao
     -
         id: invalidBean
         class: com.lpcoder.agile.invalid.invalidBean
