@@ -3,6 +3,7 @@ package com.lpcoder.agile.base.bean.container.support
 import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.exception.BeanCreationException
+import com.lpcoder.agile.base.bean.parser.BeanDefinitionParser
 import com.lpcoder.agile.base.bean.parser.SupportedFileTypeEnum
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.must
@@ -12,15 +13,17 @@ import com.lpcoder.agile.base.util.ClassUtil
 import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
-class DefaultBeanContainer(resource: Resource) : BeanContainer {
+class DefaultBeanContainer(resource: Resource,
+                           private var parser: BeanDefinitionParser? = null)
+    : BeanContainer {
 
     private val beanDefinitionMap: Map<String, BeanDefinition>
     private val singletonObjMap: Map<String, Any>
 
     init {
-        val beanDefinitions = SupportedFileTypeEnum
-                .getBySuffix(resource.getFileSuffix())
-                .parser.parse(resource)
+        parser = parser ?:
+                SupportedFileTypeEnum.getBySuffix(resource.getFileSuffix()).parser
+        val beanDefinitions = parser!!.parse(resource)
         val beanIds = beanDefinitions.stream()
                 .map(BeanDefinition::id)
                 .collect(Collectors.toList())
