@@ -9,6 +9,9 @@ beans:
             -
                 name: itemDao
                 ref: itemDao
+            -
+                name: env
+                value: test
     -
         id: accountDao
         class: com.lpcoder.agile.base.bean.dao.AccountDao

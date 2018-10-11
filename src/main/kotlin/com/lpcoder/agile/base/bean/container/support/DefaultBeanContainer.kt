@@ -18,6 +18,7 @@ class DefaultBeanContainer(resource: Resource,
     : BeanContainer {
 
     private val beanDefinitionMap: Map<String, BeanDefinition>
+    private val beanClassMap: Map<String, Class<*>>
     private val singletonObjMap: Map<String, Any>
 
     init {
@@ -30,7 +31,11 @@ class DefaultBeanContainer(resource: Resource,
         beanIds alias "beanIds" must beNotContainsDup
 
         beanDefinitionMap = ConcurrentHashMap(64)
-        beanDefinitions.stream().forEach { beanDefinitionMap[it.id] = it }
+        beanClassMap = ConcurrentHashMap(64)
+        beanDefinitions.stream().forEach {
+            beanDefinitionMap[it.id] = it
+            beanClassMap[it.id] = ClassUtil.getDefaultClassLoader().loadClass(it.beanClassName)
+        }
 
         singletonObjMap = ConcurrentHashMap(64)
         beanDefinitions.stream()
@@ -53,9 +58,7 @@ class DefaultBeanContainer(resource: Resource,
 
     private fun createBean(beanDefinition: BeanDefinition): Any {
         try {
-            return ClassUtil.getDefaultClassLoader()
-                    .loadClass(beanDefinition.beanClassName)
-                    .newInstance()
+            return beanClassMap[beanDefinition.id]!!.newInstance()
         } catch (e: Exception) {
             throw BeanCreationException("create bean for ${beanDefinition.beanClassName} failed", e)
         }

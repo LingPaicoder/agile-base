@@ -1,6 +1,6 @@
 package com.lpcoder.agile.base.bean.parser
 
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionStoreException
+import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
 import org.apache.commons.lang3.StringUtils
 
 enum class SupportedFileTypeEnum(val suffix: String, val parser: BeanDefinitionParser) {
@@ -12,7 +12,7 @@ enum class SupportedFileTypeEnum(val suffix: String, val parser: BeanDefinitionP
             return try {
                 enumValues<SupportedFileTypeEnum>().first { fileType -> suffix == fileType.suffix }
             } catch (e: NoSuchElementException) {
-                throw BeanDefinitionStoreException(StringUtils.join(
+                throw BeanDefinitionException(StringUtils.join(
                         "unrecognizable file suffix: ",
                         suffix,
                         ". all of the support suffix: ",

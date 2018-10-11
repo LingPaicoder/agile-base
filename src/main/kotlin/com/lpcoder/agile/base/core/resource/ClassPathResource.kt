@@ -1,6 +1,6 @@
 package com.lpcoder.agile.base.core.resource
 
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionStoreException
+import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
 import com.lpcoder.agile.base.util.ClassUtil
 import java.io.InputStream
 
@@ -15,6 +15,6 @@ class ClassPathResource(override val filePath: String)
 
     override fun getInputStream(): InputStream {
         return this.classLoader.getResourceAsStream(this.filePath)
-                ?: throw BeanDefinitionStoreException(filePath + " cannot be opened")
+                ?: throw BeanDefinitionException(filePath + " cannot be opened")
     }
 }
