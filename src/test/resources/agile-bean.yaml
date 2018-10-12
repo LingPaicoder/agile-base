@@ -19,6 +19,6 @@ beans:
         id: itemDao
         class: com.lpcoder.agile.base.bean.dao.ItemDao
     -
-        id: invalidBean
-        class: com.lpcoder.agile.invalid.invalidBean
+        id: notSingletonBean
+        class: com.lpcoder.agile.base.bean.component.NotSingletonBean
         isSingleton: false

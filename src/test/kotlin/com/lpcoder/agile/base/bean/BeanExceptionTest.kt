@@ -9,13 +9,15 @@ import org.junit.Test
 class BeanExceptionTest : BaseTest() {
 
     private val errXmlConfigPath = "XXX.xml"
-    private val errAndNotSingletonBeanId = "invalidBean"
+    private val invalidBeanConfigPath = "invalid-bean.xml"
+    private val errBeanId = "invalidBean"
 
     @Test
-    fun testBeanCreationExceptionCausedByClass() {
+    fun testBeanDefinitionExceptionCausedByClass() {
         thrown.expect(BeanDefinitionException::class.java)
-        thrown.expectMessage("create bean for com.lpcoder.agile.invalid.invalidBean failed")
-        containerOfXML!!.getBean(errAndNotSingletonBeanId) as? CustomService
+        thrown.expectMessage("not found class com.lpcoder.agile.invalid.invalidBean")
+        DefaultBeanContainer(ClassPathResource(invalidBeanConfigPath))
+                .getBean(errBeanId) as? CustomService
     }
 
     @Test

@@ -3,8 +3,10 @@ package com.lpcoder.agile.base.bean.container.support
 import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.exception.BeanCreationException
+import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
 import com.lpcoder.agile.base.bean.parser.BeanDefinitionParser
 import com.lpcoder.agile.base.bean.parser.SupportedFileTypeEnum
+import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.support.CollRuler.beNotContainsDup
@@ -22,25 +24,36 @@ class DefaultBeanContainer(resource: Resource,
     private val singletonObjMap: Map<String, Any>
 
     init {
-        parser = parser ?:
-                SupportedFileTypeEnum.getBySuffix(resource.getFileSuffix()).parser
-        val beanDefinitions = parser!!.parse(resource)
-        val beanIds = beanDefinitions.stream()
-                .map(BeanDefinition::id)
-                .collect(Collectors.toList())
-        beanIds alias "beanIds" must beNotContainsDup
+        try {
+            parser = parser ?:
+                    SupportedFileTypeEnum.getBySuffix(resource.getFileSuffix()).parser
+            val beanDefinitions = parser!!.parse(resource)
+            val beanIds = beanDefinitions.stream()
+                    .map(BeanDefinition::id)
+                    .collect(Collectors.toList())
+            beanIds alias "beanIds" must beNotContainsDup
 
-        beanDefinitionMap = ConcurrentHashMap(64)
-        beanClassMap = ConcurrentHashMap(64)
-        beanDefinitions.stream().forEach {
-            beanDefinitionMap[it.id] = it
-            beanClassMap[it.id] = ClassUtil.getDefaultClassLoader().loadClass(it.beanClassName)
+            beanDefinitionMap = ConcurrentHashMap(64)
+            beanClassMap = ConcurrentHashMap(64)
+
+            beanDefinitions.stream().forEach {
+                beanDefinitionMap[it.id] = it
+                beanClassMap[it.id] = ClassUtil.getDefaultClassLoader().loadClass(it.beanClassName)
+            }
+
+            singletonObjMap = ConcurrentHashMap(64)
+            beanDefinitions.stream()
+                    .filter(BeanDefinition::isSingleton)
+                    .forEach { singletonObjMap[it.id] = createBean(it) }
+        } catch (e: BeanCreationException) {
+            throw e
+        } catch (e: CheckException) {
+            throw BeanDefinitionException(e.desc, e)
+        } catch (e: ClassNotFoundException) {
+            throw BeanDefinitionException("not found class " + (e.message ?: ""), e)
+        } catch (e: Exception) {
+            throw BeanDefinitionException(e.message ?: "", e)
         }
-
-        singletonObjMap = ConcurrentHashMap(64)
-        beanDefinitions.stream()
-                .filter(BeanDefinition::isSingleton)
-                .forEach { singletonObjMap[it.id] = createBean(it) }
     }
 
     override fun getBeanDefinition(beanId: String): BeanDefinition? {

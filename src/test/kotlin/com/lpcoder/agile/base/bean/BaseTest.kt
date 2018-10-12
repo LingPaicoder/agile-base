@@ -12,6 +12,7 @@ open class BaseTest {
     @get:Rule
     val thrown: ExpectedException = ExpectedException.none()
 
+    protected val notSingletonBeanId = "notSingletonBean"
     protected val beanId = "customService"
     protected val beanClassName = "com.lpcoder.agile.base.bean.service.CustomService"
 

@@ -18,7 +18,7 @@ class BeanContainerParserTest : BaseTest() {
         assertEquals(beanId, beanDef.id)
         assertEquals(beanClassName, beanDef.beanClassName)
         assertTrue(beanDef.isSingleton)
-        val beanNotSingletonDef = container.getBeanDefinition(errAndNotSingletonBeanId)!!
+        val beanNotSingletonDef = container.getBeanDefinition(notSingletonBeanId)!!
         assertFalse(beanNotSingletonDef.isSingleton)
     }
 

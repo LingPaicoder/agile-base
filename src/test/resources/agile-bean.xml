@@ -7,5 +7,5 @@
     </bean>
     <bean id="accountDao" class="com.lpcoder.agile.base.bean.dao.AccountDao"/>
     <bean id="itemDao" class="com.lpcoder.agile.base.bean.dao.ItemDao"/>
-    <bean id="invalidBean" class="com.lpcoder.agile.invalid.invalidBean" isSingleton="false"/>
+    <bean id="notSingletonBean" class="com.lpcoder.agile.base.bean.component.NotSingletonBean" isSingleton="false"/>
 </beans>
