@@ -12,18 +12,21 @@ import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.support.CollRuler.beNotContainsDup
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
-import java.util.concurrent.ConcurrentHashMap
 import java.util.stream.Collectors
 
-class DefaultBeanContainer(resource: Resource,
+class DefaultBeanContainer(private val resource: Resource,
                            private var parser: BeanDefinitionParser? = null)
     : BeanContainer {
 
-    private val beanDefinitionMap: Map<String, BeanDefinition>
-    private val beanClassMap: Map<String, Class<*>>
-    private val singletonObjMap: Map<String, Any>
+    private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
+    private val beanClassMap = mutableMapOf<String, Class<*>>()
+    private val singletonObjMap = mutableMapOf<String, Any>()
 
     init {
+        initContainer()
+    }
+
+    private fun initContainer() {
         try {
             parser = parser ?:
                     SupportedFileTypeEnum.getBySuffix(resource.getFileSuffix()).parser
@@ -33,18 +36,13 @@ class DefaultBeanContainer(resource: Resource,
                     .collect(Collectors.toList())
             beanIds alias "beanIds" must beNotContainsDup
 
-            beanDefinitionMap = ConcurrentHashMap(64)
-            beanClassMap = ConcurrentHashMap(64)
-
             beanDefinitions.stream().forEach {
                 beanDefinitionMap[it.id] = it
                 beanClassMap[it.id] = ClassUtil.getDefaultClassLoader().loadClass(it.beanClassName)
             }
-
-            singletonObjMap = ConcurrentHashMap(64)
-            beanDefinitions.stream()
-                    .filter(BeanDefinition::isSingleton)
-                    .forEach { singletonObjMap[it.id] = createBean(it) }
+            beanDefinitions.stream().filter(BeanDefinition::isSingleton).forEach {
+                singletonObjMap[it.id] = createBean(it.id)
+            }
         } catch (e: BeanCreationException) {
             throw e
         } catch (e: CheckException) {
@@ -66,14 +64,17 @@ class DefaultBeanContainer(resource: Resource,
         if (beanDefinition.isSingleton) {
             return singletonObjMap[beanId]
         }
-        return createBean(beanDefinition)
+        return createBean(beanId)
     }
 
-    private fun createBean(beanDefinition: BeanDefinition): Any {
+    private fun createBean(beanId: String): Any {
         try {
-            return beanClassMap[beanDefinition.id]!!.newInstance()
+            if (!beanDefinitionMap.keys.contains(beanId)) {
+                throw BeanCreationException("not found beanId: $beanId")
+            }
+            return beanClassMap[beanId]!!.newInstance()
         } catch (e: Exception) {
-            throw BeanCreationException("create bean for ${beanDefinition.beanClassName} failed", e)
+            throw BeanCreationException("create bean for ${beanDefinitionMap[beanId]?.beanClassName} failed", e)
         }
     }
 
