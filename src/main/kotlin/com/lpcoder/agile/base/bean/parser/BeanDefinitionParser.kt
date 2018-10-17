@@ -14,3 +14,11 @@ val idAttr = "id"
 val classAttr = "class"
 
 val isSingletonAttr = "isSingleton"
+
+val propertyElement = "property"
+
+val nameAttr = "name"
+
+val refAttr = "ref"
+
+val valueAttr = "value"
