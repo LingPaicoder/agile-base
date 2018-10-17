@@ -1,4 +1,3 @@
 package com.lpcoder.agile.base.bean.definition
 
-open class BeanPropertyValue {
-}
+open class BeanPropertyValue(val value: String)

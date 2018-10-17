@@ -1,4 +1,3 @@
 package com.lpcoder.agile.base.bean.definition
 
-class RuntimeBeanReferenceValue : BeanPropertyValue() {
-}
+class RuntimeBeanReferenceValue(value: String) : BeanPropertyValue(value)
