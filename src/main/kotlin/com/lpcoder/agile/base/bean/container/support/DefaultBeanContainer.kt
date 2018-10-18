@@ -1,15 +1,16 @@
 package com.lpcoder.agile.base.bean.container.support
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
-import com.lpcoder.agile.base.bean.definition.BeanDefinition
-import com.lpcoder.agile.base.bean.exception.BeanCreationException
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
-import com.lpcoder.agile.base.bean.parser.BeanDefinitionParser
-import com.lpcoder.agile.base.bean.parser.SupportedFileTypeEnum
+import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.exception.BeanCreationException
+import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
+import com.lpcoder.agile.base.bean.container.support.parser.BeanDefinitionParser
+import com.lpcoder.agile.base.bean.container.support.parser.SupportedFileTypeEnum
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.support.CollRuler.beNotContainsDup
+import com.lpcoder.agile.base.core.resource.ClassPathResource
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.util.stream.Collectors
@@ -25,6 +26,8 @@ class DefaultBeanContainer(private val resource: Resource,
     init {
         initContainer()
     }
+
+    constructor(configPath: String) : this(ClassPathResource(configPath))
 
     private fun initContainer() {
         try {

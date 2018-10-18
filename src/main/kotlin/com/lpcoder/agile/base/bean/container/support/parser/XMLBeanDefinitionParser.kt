@@ -1,11 +1,11 @@
-package com.lpcoder.agile.base.bean.parser
+package com.lpcoder.agile.base.bean.container.support.parser
 
-import com.lpcoder.agile.base.bean.definition.BeanDefinition
-import com.lpcoder.agile.base.bean.definition.BeanProperty
-import com.lpcoder.agile.base.bean.definition.BeanPropertyValue
-import com.lpcoder.agile.base.bean.definition.support.RuntimeBeanReferenceValue
-import com.lpcoder.agile.base.bean.definition.support.TypedStringValue
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
+import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValue
+import com.lpcoder.agile.base.bean.container.support.definition.support.RuntimeBeanReferenceValue
+import com.lpcoder.agile.base.bean.container.support.definition.support.TypedStringValue
+import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNotNull
 import com.lpcoder.agile.base.core.resource.Resource

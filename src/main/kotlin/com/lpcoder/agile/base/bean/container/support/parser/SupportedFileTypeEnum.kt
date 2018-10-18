@@ -1,6 +1,6 @@
-package com.lpcoder.agile.base.bean.parser
+package com.lpcoder.agile.base.bean.container.support.parser
 
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
+import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import org.apache.commons.lang3.StringUtils
 
 enum class SupportedFileTypeEnum(val suffix: String, val parser: BeanDefinitionParser) {

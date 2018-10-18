@@ -1,6 +1,6 @@
 package com.lpcoder.agile.base.core.resource
 
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
+import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import com.lpcoder.agile.base.util.ClassUtil
 import java.io.InputStream
 

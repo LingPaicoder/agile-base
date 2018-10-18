@@ -1,4 +1,4 @@
-package com.lpcoder.agile.base.bean.definition
+package com.lpcoder.agile.base.bean.container.support.definition
 
 data class BeanDefinition(
         val id: String,

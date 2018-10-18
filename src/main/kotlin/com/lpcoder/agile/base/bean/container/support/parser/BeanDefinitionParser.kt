@@ -1,6 +1,6 @@
-package com.lpcoder.agile.base.bean.parser
+package com.lpcoder.agile.base.bean.container.support.parser
 
-import com.lpcoder.agile.base.bean.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.core.resource.Resource
 
 interface BeanDefinitionParser {

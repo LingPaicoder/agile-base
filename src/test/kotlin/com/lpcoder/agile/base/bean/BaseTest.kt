@@ -24,8 +24,8 @@ open class BaseTest {
 
     @Before
     fun before() {
-        containerOfYAML = DefaultBeanContainer(ClassPathResource(yamlConfigPath))
-        containerOfXML = DefaultBeanContainer(ClassPathResource(xmlConfigPath))
+        containerOfYAML = DefaultBeanContainer(yamlConfigPath)
+        containerOfXML = DefaultBeanContainer(xmlConfigPath)
     }
 
 }

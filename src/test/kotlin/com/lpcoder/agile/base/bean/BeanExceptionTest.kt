@@ -1,7 +1,7 @@
 package com.lpcoder.agile.base.bean
 
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
-import com.lpcoder.agile.base.bean.exception.BeanDefinitionException
+import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import com.lpcoder.agile.base.bean.service.CustomService
 import com.lpcoder.agile.base.core.resource.ClassPathResource
 import org.junit.Test
@@ -16,16 +16,14 @@ class BeanExceptionTest : BaseTest() {
     fun testBeanDefinitionExceptionCausedByClass() {
         thrown.expect(BeanDefinitionException::class.java)
         thrown.expectMessage("not found class com.lpcoder.agile.invalid.invalidBean")
-        DefaultBeanContainer(ClassPathResource(invalidBeanConfigPath))
-                .getBean(errBeanId) as? CustomService
+        DefaultBeanContainer(invalidBeanConfigPath).getBean(errBeanId) as? CustomService
     }
 
     @Test
     fun testBeanDefinitionExceptionCausedByConfFile() {
         thrown.expect(BeanDefinitionException::class.java)
         thrown.expectMessage("XXX.xml cannot be opened")
-        DefaultBeanContainer(ClassPathResource(errXmlConfigPath))
-                .getBean(beanId) as? CustomService
+        DefaultBeanContainer(errXmlConfigPath).getBean(beanId) as? CustomService
     }
 
 }
