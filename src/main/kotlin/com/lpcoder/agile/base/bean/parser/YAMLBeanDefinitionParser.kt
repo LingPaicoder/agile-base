@@ -32,6 +32,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
     }
 
     private fun parseProperties(element: Map<String, Any>, definition: BeanDefinition) {
+        if (null == element[propertyElement]) return
         @Suppress("UNCHECKED_CAST")
         val properties = element[propertyElement] as List<Map<String, String>>
         properties.forEach {

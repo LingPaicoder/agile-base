@@ -3,7 +3,8 @@
     <bean id="customService" class="com.lpcoder.agile.base.bean.service.CustomService">
         <property name="accountDao" ref="accountDao"/>
         <property name="itemDao" ref="itemDao"/>
-        <property name="env" value="test"/>
+        <property name="author" value="lingPai"/>
+        <property name="version" value="2"/>
     </bean>
     <bean id="accountDao" class="com.lpcoder.agile.base.bean.dao.AccountDao"/>
     <bean id="itemDao" class="com.lpcoder.agile.base.bean.dao.ItemDao"/>

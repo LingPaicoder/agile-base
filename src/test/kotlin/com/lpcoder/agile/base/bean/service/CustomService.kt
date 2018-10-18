@@ -6,4 +6,6 @@ import com.lpcoder.agile.base.bean.dao.ItemDao
 class CustomService {
     var accountDao: AccountDao? = null
     var itemDao: ItemDao? = null
+    var author: String? = null
+    var age: Int? = null
 }

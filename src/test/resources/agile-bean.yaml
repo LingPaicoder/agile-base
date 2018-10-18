@@ -10,8 +10,11 @@ beans:
                 name: itemDao
                 ref: itemDao
             -
-                name: env
-                value: test
+                name: author
+                value: lingPai
+            -
+                name: version
+                value: 2
     -
         id: accountDao
         class: com.lpcoder.agile.base.bean.dao.AccountDao
