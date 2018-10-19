@@ -2,6 +2,7 @@ package com.lpcoder.agile.base.bean.container.support
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyConverter
 import com.lpcoder.agile.base.bean.container.support.exception.BeanCreationException
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import com.lpcoder.agile.base.bean.container.support.parser.BeanDefinitionParser
@@ -13,6 +14,9 @@ import com.lpcoder.agile.base.check.ruler.support.CollRuler.beNotContainsDup
 import com.lpcoder.agile.base.core.resource.ClassPathResource
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
+import com.lpcoder.agile.base.util.CollectionUtil
+import org.apache.commons.beanutils.BeanUtils
+import org.slf4j.LoggerFactory
 import java.util.stream.Collectors
 
 class DefaultBeanContainer(private val resource: Resource,
@@ -22,6 +26,8 @@ class DefaultBeanContainer(private val resource: Resource,
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
     private val beanClassMap = mutableMapOf<String, Class<*>>()
     private val singletonObjMap = mutableMapOf<String, Any>()
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     init {
         initContainer()
@@ -43,9 +49,11 @@ class DefaultBeanContainer(private val resource: Resource,
                 beanDefinitionMap[it.id] = it
                 beanClassMap[it.id] = ClassUtil.getDefaultClassLoader().loadClass(it.beanClassName)
             }
-            beanDefinitions.stream().filter(BeanDefinition::isSingleton).forEach {
+            beanDefinitions.stream().filter(BeanDefinition::isSingleton)
+                    .filter { !singletonObjMap.containsKey(it.id) }.forEach {
                 singletonObjMap[it.id] = createBean(it.id)
             }
+            printInitEndLog()
         } catch (e: BeanCreationException) {
             throw e
         } catch (e: CheckException) {
@@ -57,28 +65,53 @@ class DefaultBeanContainer(private val resource: Resource,
         }
     }
 
-    override fun getBeanDefinition(beanId: String): BeanDefinition? {
-        return beanDefinitionMap[beanId]
-    }
+    override fun getBeanDefinition(beanId: String): BeanDefinition =
+            getFromMap(beanDefinitionMap, beanId, "beanDefinitionMap")
 
-    override fun getBean(beanId: String): Any? {
-        val beanDefinition = beanDefinitionMap[beanId]
-        beanDefinition ?: throw BeanCreationException("not found beanDefinition of $beanId")
-        if (beanDefinition.isSingleton) {
-            return singletonObjMap[beanId]
+    override fun getBean(beanId: String): Any {
+        if (getBeanDefinition(beanId).isSingleton) {
+            var bean = singletonObjMap[beanId]
+            if (bean == null) {
+                bean = createBean(beanId)
+                singletonObjMap[beanId] = bean
+            }
+            return bean
         }
-        return createBean(beanId)
+        try {
+            return createBean(beanId)
+        } catch (e: Exception) {
+            throw BeanCreationException(e.message ?: "", e)
+        }
     }
 
     private fun createBean(beanId: String): Any {
-        try {
-            if (!beanDefinitionMap.keys.contains(beanId)) {
-                throw BeanCreationException("not found beanId: $beanId")
-            }
-            return beanClassMap[beanId]!!.newInstance()
-        } catch (e: Exception) {
-            throw BeanCreationException("create bean for ${beanDefinitionMap[beanId]?.beanClassName} failed", e)
+        val bean = instantiateBean(beanId)
+        populateBeanProperty(bean, beanId)
+        return bean
+    }
+
+    private fun instantiateBean(beanId: String) =
+            getFromMap(beanClassMap, beanId, "beanClassMap").newInstance()
+
+    private fun populateBeanProperty(bean: Any, beanId: String) {
+        val beanDefinition = getFromMap(beanDefinitionMap, beanId, "beanDefinitionMap")
+        val beanProperties = beanDefinition.properties
+        if (CollectionUtil.isEmpty(beanProperties)) return
+        val converter = BeanPropertyConverter(this)
+        beanProperties.forEach {
+            BeanUtils.setProperty(bean, it.name, converter.convert(it.value))
         }
+    }
+
+    private fun <K, V> getFromMap(map: Map<K, V>, key: K, mapDesc: String): V {
+        return map[key] ?: throw IllegalArgumentException("no key in $mapDesc is $key. $mapDesc keys: ${map.keys}")
+    }
+
+    private fun printInitEndLog() {
+        logger.info("beanContainer init end")
+        logger.info("beanDefinitionMap:$beanDefinitionMap")
+        logger.info("beanClassMap:$beanClassMap")
+        logger.info("singletonObjMap:$singletonObjMap")
     }
 
 }

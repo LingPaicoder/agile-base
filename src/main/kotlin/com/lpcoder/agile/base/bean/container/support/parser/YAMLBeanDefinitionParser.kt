@@ -34,9 +34,9 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
     private fun parseProperties(element: Map<String, Any>, definition: BeanDefinition) {
         if (null == element[propertyElement]) return
         @Suppress("UNCHECKED_CAST")
-        val properties = element[propertyElement] as List<Map<String, String>>
+        val properties = element[propertyElement] as List<Map<String, Any>>
         properties.forEach {
-            val propertyName = it[nameAttr]
+            val propertyName = it[nameAttr] as String?
             if (StringUtil.isEmpty(propertyName)) {
                 throw BeanDefinitionException("Tag 'property' must have a 'name' attribute")
             }
@@ -46,20 +46,20 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
         }
     }
 
-    private fun beanPropertyValueOf(propElement: Map<String, String>, propertyName: String): BeanPropertyValue {
+    private fun beanPropertyValueOf(propElement: Map<String, Any>, propertyName: String): BeanPropertyValue {
         val isRefAttr = propElement[refAttr] != null
         val isValueAttr = propElement[valueAttr] != null
         val elementDesc = "<property> element for property '$propertyName'"
         return when {
             isRefAttr -> {
-                val refName = propElement[refAttr]
+                val refName = StringUtil.getString(propElement[refAttr])
                 if (StringUtil.isEmpty(refName)) {
                     throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
                 }
-                RuntimeBeanReferenceValue(refName!!)
+                RuntimeBeanReferenceValue(refName)
             }
             isValueAttr -> {
-                TypedStringValue(propElement[valueAttr] ?: "")
+                TypedStringValue(StringUtil.getString(propElement[valueAttr]))
             }
             else -> throw BeanDefinitionException("$elementDesc must specify a ref or value")
         }

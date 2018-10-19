@@ -7,6 +7,9 @@ import org.apache.commons.lang3.StringUtils
  * @date: Created in 18-7-12
  */
 object StringUtil {
+
+    fun getString(target: Any?): String = (target ?: "").toString()
+
     fun isNotEmpty(target: String?) = !isEmpty(target)
     fun isEmpty(target: String?) = StringUtils.isEmpty(target)
     fun isEq(target: String?, norm: String?) = norm == target

@@ -26,5 +26,6 @@ object CollectionUtil {
     fun isNotContainsNull(target: Collection<*>?) = !isContainsNull(target)
     fun isContainsDup(target: Collection<*>?) = ArrayUtil.isContainsDup(target!!.toTypedArray())
     fun isNotContainsDup(target: Collection<*>?) = !isContainsDup(target)
-    fun isNotEmpty(target: Collection<*>?) = CollectionUtils.isNotEmpty(target)
+    fun isNotEmpty(target: Collection<*>?) = !isEmpty(target)
+    fun isEmpty(target: Collection<*>?) = CollectionUtils.isEmpty(target)
 }

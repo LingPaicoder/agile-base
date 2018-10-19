@@ -19,8 +19,8 @@ open class BaseTest {
     protected var containerOfYAML: BeanContainer? = null
     protected var containerOfXML: BeanContainer? = null
 
-    private val xmlConfigPath = "agile-bean.xml"
     private val yamlConfigPath = "agile-bean.yaml"
+    private val xmlConfigPath = "agile-bean.xml"
 
     @Before
     fun before() {

@@ -16,14 +16,14 @@ class BeanExceptionTest : BaseTest() {
     fun testBeanDefinitionExceptionCausedByClass() {
         thrown.expect(BeanDefinitionException::class.java)
         thrown.expectMessage("not found class com.lpcoder.agile.invalid.invalidBean")
-        DefaultBeanContainer(invalidBeanConfigPath).getBean(errBeanId) as? CustomService
+        DefaultBeanContainer(invalidBeanConfigPath).getBean(errBeanId) as CustomService
     }
 
     @Test
     fun testBeanDefinitionExceptionCausedByConfFile() {
         thrown.expect(BeanDefinitionException::class.java)
         thrown.expectMessage("XXX.xml cannot be opened")
-        DefaultBeanContainer(errXmlConfigPath).getBean(beanId) as? CustomService
+        DefaultBeanContainer(errXmlConfigPath).getBean(beanId) as CustomService
     }
 
 }

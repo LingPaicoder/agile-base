@@ -14,23 +14,18 @@ class BeanContainerParserTest : BaseTest() {
     }
 
     private fun testParser(container: BeanContainer) {
-        val beanDef = container.getBeanDefinition(beanId)!!
+        val beanDef = container.getBeanDefinition(beanId)
         assertEquals(beanId, beanDef.id)
         assertEquals(beanClassName, beanDef.beanClassName)
         assertTrue(beanDef.isSingleton)
-        val beanNotSingletonDef = container.getBeanDefinition(notSingletonBeanId)!!
+        val beanNotSingletonDef = container.getBeanDefinition(notSingletonBeanId)
         assertFalse(beanNotSingletonDef.isSingleton)
     }
 
     @Test
     fun testGetBeanByXML() {
-        testGetBean(containerOfYAML!!)
-        testGetBean(containerOfXML!!)
-    }
-
-    private fun testGetBean(container: BeanContainer) {
-        val customService = container.getBean(beanId) as? CustomService
-        assertNotNull(customService)
+        containerOfYAML!!.getBean(beanId) as CustomService
+        containerOfXML!!.getBean(beanId) as CustomService
     }
 
 }
