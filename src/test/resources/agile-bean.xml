@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="customService" class="com.lpcoder.agile.base.bean.service.CustomService">
+    <bean id="customService" class="com.lpcoder.agile.base.bean.container.service.CustomService">
         <property name="accountDao" ref="accountDao"/>
         <property name="itemDao" ref="itemDao"/>
         <property name="author" value="lingPai"/>
         <property name="version" value="2"/>
     </bean>
-    <bean id="accountDao" class="com.lpcoder.agile.base.bean.dao.AccountDao"/>
-    <bean id="itemDao" class="com.lpcoder.agile.base.bean.dao.ItemDao"/>
-    <bean id="notSingletonBean" class="com.lpcoder.agile.base.bean.component.NotSingletonBean" isSingleton="false"/>
+    <bean id="accountDao" class="com.lpcoder.agile.base.bean.container.dao.AccountDao"/>
+    <bean id="itemDao" class="com.lpcoder.agile.base.bean.container.dao.ItemDao"/>
+    <bean id="notSingletonBean" class="com.lpcoder.agile.base.bean.container.component.NotSingletonBean" isSingleton="false"/>
 </beans>

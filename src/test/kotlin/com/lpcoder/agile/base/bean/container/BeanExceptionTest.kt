@@ -1,9 +1,8 @@
-package com.lpcoder.agile.base.bean
+package com.lpcoder.agile.base.bean.container
 
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
-import com.lpcoder.agile.base.bean.service.CustomService
-import com.lpcoder.agile.base.core.resource.ClassPathResource
+import com.lpcoder.agile.base.bean.container.service.CustomService
 import org.junit.Test
 
 class BeanExceptionTest : BaseTest() {

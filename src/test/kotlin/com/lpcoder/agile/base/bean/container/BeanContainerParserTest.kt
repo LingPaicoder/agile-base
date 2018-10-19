@@ -1,7 +1,6 @@
-package com.lpcoder.agile.base.bean
+package com.lpcoder.agile.base.bean.container
 
-import com.lpcoder.agile.base.bean.container.BeanContainer
-import com.lpcoder.agile.base.bean.service.CustomService
+import com.lpcoder.agile.base.bean.container.service.CustomService
 import org.junit.Assert.*
 import org.junit.Test
 

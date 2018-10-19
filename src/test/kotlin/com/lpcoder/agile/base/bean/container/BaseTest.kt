@@ -1,4 +1,4 @@
-package com.lpcoder.agile.base.bean
+package com.lpcoder.agile.base.bean.container
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
@@ -14,7 +14,7 @@ open class BaseTest {
 
     protected val notSingletonBeanId = "notSingletonBean"
     protected val beanId = "customService"
-    protected val beanClassName = "com.lpcoder.agile.base.bean.service.CustomService"
+    protected val beanClassName = "com.lpcoder.agile.base.bean.container.CustomService"
 
     protected var containerOfYAML: BeanContainer? = null
     protected var containerOfXML: BeanContainer? = null

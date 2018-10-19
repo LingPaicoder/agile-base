@@ -1,7 +1,7 @@
 beans:
     -
         id: customService
-        class: com.lpcoder.agile.base.bean.service.CustomService
+        class: com.lpcoder.agile.base.bean.container.CustomService
         property:
             -
                 name: accountDao
@@ -17,11 +17,11 @@ beans:
                 value: 2
     -
         id: accountDao
-        class: com.lpcoder.agile.base.bean.dao.AccountDao
+        class: com.lpcoder.agile.base.bean.container.AccountDao
     -
         id: itemDao
-        class: com.lpcoder.agile.base.bean.dao.ItemDao
+        class: com.lpcoder.agile.base.bean.container.ItemDao
     -
         id: notSingletonBean
-        class: com.lpcoder.agile.base.bean.component.NotSingletonBean
+        class: com.lpcoder.agile.base.bean.container.NotSingletonBean
         isSingleton: false

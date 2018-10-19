@@ -1,4 +1,4 @@
-package com.lpcoder.agile.base.bean
+package com.lpcoder.agile.base.bean.container
 
 import org.junit.Assert.assertTrue
 import org.junit.Test
