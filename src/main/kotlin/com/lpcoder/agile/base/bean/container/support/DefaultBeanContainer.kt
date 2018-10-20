@@ -23,7 +23,7 @@ import java.util.stream.Collectors
 
 class DefaultBeanContainer(private val resource: Resource,
                            private val parser: BeanDefinitionParser,
-                           public val classLoader: ClassLoader)
+                           private val classLoader: ClassLoader)
     : BeanContainer {
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
@@ -68,9 +68,6 @@ class DefaultBeanContainer(private val resource: Resource,
         }
     }
 
-    override fun getBeanDefinition(beanId: String): BeanDefinition =
-            getFromMapForcibly(beanDefinitionMap, beanId, "beanDefinitionMap")
-
     override fun getBean(beanId: String): Any {
         if (getBeanDefinition(beanId).isSingleton) {
             var bean = singletonObjMap[beanId]
@@ -86,6 +83,15 @@ class DefaultBeanContainer(private val resource: Resource,
             throw BeanCreationException("create bean for '$beanId' failed. ${e.message ?: ""}", e)
         }
     }
+
+    override fun getBeanDefinition(beanId: String): BeanDefinition =
+            getFromMapForcibly(beanDefinitionMap, beanId, "beanDefinitionMap")
+
+    override fun getBeanClass(beanId: String): Class<*> =
+            getFromMapForcibly(beanClassMap, beanId, "beanClassMap")
+
+    override fun getBeanClassLoader(): ClassLoader = classLoader
+
 
     private fun createBean(beanId: String): Any {
         val bean = instantiateBean(beanId)

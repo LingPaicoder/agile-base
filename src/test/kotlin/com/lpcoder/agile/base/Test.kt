@@ -1,12 +1,13 @@
 package com.lpcoder.agile.base
 
-import javax.print.attribute.IntegerSyntax
-
 /**
  * @author: liurenpeng
  * @date: Created in 18-7-13
  */
 fun main(args: Array<String>) {
-    val str : String? = null
-    println(str.isNullOrBlank())
+    val map = mutableMapOf<String, String>()
+    map.put("1", "one")
+    map.put("2", "two")
+    val map2 = map.toMap()
+    println(map === map2)
 }
