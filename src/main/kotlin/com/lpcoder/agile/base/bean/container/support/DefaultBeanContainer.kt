@@ -82,7 +82,7 @@ class DefaultBeanContainer(private val resource: Resource,
         try {
             return createBean(beanId)
         } catch (e: Exception) {
-            throw BeanCreationException(e.message ?: "", e)
+            throw BeanCreationException("create bean for '$beanId' failed. ${e.message ?: ""}", e)
         }
     }
 
@@ -92,8 +92,13 @@ class DefaultBeanContainer(private val resource: Resource,
         return bean
     }
 
-    private fun instantiateBean(beanId: String) =
+    private fun instantiateBean(beanId: String): Any {
+        return if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
+            Any()
+        } else {
             getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
+        }
+    }
 
     private fun populateBeanProperty(bean: Any, beanId: String) {
         val beanDefinition = getFromMapForcibly(beanDefinitionMap, beanId, "beanDefinitionMap")

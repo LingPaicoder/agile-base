@@ -41,7 +41,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
         while (iterator.hasNext()) {
             val argElement = iterator.next() as Element
             val indexStr = argElement.attributeValue(indexAttr)
-            if (StringUtil.isEmpty(indexStr)) {
+            if (indexStr.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
             if (StringUtil.isDigit(indexStr)) {
@@ -49,7 +49,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             }
             val index = indexStr.toInt()
             val type = argElement.attributeValue(typeAttr)
-            if (StringUtil.isEmpty(type)) {
+            if (type.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'type' attribute")
             }
             val constructorArgValue = beanConstructorArgValueOf(argElement, index)
@@ -66,7 +66,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
         while (iterator.hasNext()) {
             val propElement = iterator.next() as Element
             val propertyName = propElement.attributeValue(nameAttr)
-            if (StringUtil.isEmpty(propertyName)) {
+            if (propertyName.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'property' must have a 'name' attribute")
             }
             val propertyValue = beanPropertyValueOf(propElement, propertyName)
@@ -84,7 +84,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
         return when {
             isRefAttr -> {
                 val refName = propElement.attributeValue(refAttr)
-                if (StringUtil.isEmpty(refName)) {
+                if (refName.isNullOrBlank()) {
                     throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
                 }
                 RuntimeBeanReferenceValue(refName)

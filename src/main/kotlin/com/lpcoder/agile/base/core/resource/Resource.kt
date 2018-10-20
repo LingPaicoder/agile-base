@@ -8,7 +8,7 @@ interface Resource {
     fun getInputStream(): InputStream
     fun getFileSuffix(): String {
         val suffix = filePath.substringAfterLast(".")
-        if (StringUtil.isEmpty(suffix)) {
+        if (suffix.isBlank()) {
             throw IllegalArgumentException(
                     "can't identify suffix from filePath: " + filePath)
         }

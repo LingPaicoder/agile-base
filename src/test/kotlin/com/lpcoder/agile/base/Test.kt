@@ -7,5 +7,6 @@ import javax.print.attribute.IntegerSyntax
  * @date: Created in 18-7-13
  */
 fun main(args: Array<String>) {
-    println(1::class.java)
+    val str : String? = null
+    println(str.isNullOrBlank())
 }

@@ -40,7 +40,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
         val constructorArgs = element[constructorArgElement] as List<Map<String, Any>>
         constructorArgs.forEach {
             val indexStr = it[indexAttr] as String?
-            if (StringUtil.isEmpty(indexStr)) {
+            if (indexStr.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
             if (StringUtil.isDigit(indexStr)) {
@@ -48,7 +48,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
             }
             val index = indexStr!!.toInt()
             val type = it[typeAttr] as String?
-            if (StringUtil.isEmpty(type)) {
+            if (type.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'type' attribute")
             }
             val constructorArgValue = beanConstructorArgValueOf(it, index)
@@ -66,7 +66,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
         val properties = element[propertyElement] as List<Map<String, Any>>
         properties.forEach {
             val propertyName = it[nameAttr] as String?
-            if (StringUtil.isEmpty(propertyName)) {
+            if (propertyName.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'property' must have a 'name' attribute")
             }
             val propertyValue = beanPropertyValueOf(it, propertyName!!)
@@ -84,7 +84,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
         return when {
             isRefAttr -> {
                 val refName = StringUtil.getString(propElement[refAttr])
-                if (StringUtil.isEmpty(refName)) {
+                if (refName.isBlank()) {
                     throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
                 }
                 RuntimeBeanReferenceValue(refName)
