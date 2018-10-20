@@ -1,9 +1,11 @@
 package com.lpcoder.agile.base.bean.container
 
 import com.lpcoder.agile.base.bean.container.component.SimpleTypeBean
+import com.lpcoder.agile.base.bean.container.dao.AccountDao
+import com.lpcoder.agile.base.bean.container.dao.ItemDao
 import com.lpcoder.agile.base.bean.container.service.CustomService
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 
 class BeanPropertyInjectionTest : BaseTest() {
@@ -17,9 +19,9 @@ class BeanPropertyInjectionTest : BaseTest() {
     }
 
     private fun testCommonProp(customService: CustomService) {
-        Assert.assertNotNull(customService.accountDao)
-        Assert.assertNotNull(customService.itemDao)
-        Assert.assertEquals("lingPai", customService.author)
+        assertNotNull(customService.accountDao)
+        assertNotNull(customService.itemDao)
+        assertEquals("lingPai", customService.author)
     }
 
     @Test
@@ -36,16 +38,16 @@ class BeanPropertyInjectionTest : BaseTest() {
     }
 
     private fun testSimpleTypeProp(simpleTypeBean: SimpleTypeBean) {
-        Assert.assertEquals('c', simpleTypeBean.charVal)
-        Assert.assertEquals("str", simpleTypeBean.strVal)
-        Assert.assertEquals(10.toByte(), simpleTypeBean.byteVal)
-        Assert.assertEquals(10.toShort(), simpleTypeBean.shortVal)
-        Assert.assertEquals(10, simpleTypeBean.intVal)
-        Assert.assertEquals(10.toLong(), simpleTypeBean.longVal)
-        Assert.assertEquals(2.1.toFloat(), simpleTypeBean.floatVal)
-        Assert.assertEquals(2.1, simpleTypeBean.doubleVal)
-        Assert.assertEquals(true, simpleTypeBean.booleanTrueVal)
-        Assert.assertEquals(false, simpleTypeBean.booleanFalseVal)
+        assertEquals('c', simpleTypeBean.charVal)
+        assertEquals("str", simpleTypeBean.strVal)
+        assertEquals(10.toByte(), simpleTypeBean.byteVal)
+        assertEquals(10.toShort(), simpleTypeBean.shortVal)
+        assertEquals(10, simpleTypeBean.intVal)
+        assertEquals(10.toLong(), simpleTypeBean.longVal)
+        assertEquals(2.1.toFloat(), simpleTypeBean.floatVal)
+        assertEquals(2.1, simpleTypeBean.doubleVal)
+        assertEquals(true, simpleTypeBean.booleanTrueVal)
+        assertEquals(false, simpleTypeBean.booleanFalseVal)
     }
 
 }
