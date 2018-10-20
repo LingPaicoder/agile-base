@@ -22,7 +22,7 @@ class BeanContainerParserTest : BaseTest() {
     }
 
     @Test
-    fun testGetBeanByXML() {
+    fun testGetBean() {
         containerOfYAML!!.getBean(beanId) as CustomService
         containerOfXML!!.getBean(beanId) as CustomService
     }

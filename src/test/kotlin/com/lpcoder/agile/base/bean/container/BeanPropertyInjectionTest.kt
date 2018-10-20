@@ -1,8 +1,6 @@
 package com.lpcoder.agile.base.bean.container
 
 import com.lpcoder.agile.base.bean.container.component.SimpleTypeBean
-import com.lpcoder.agile.base.bean.container.dao.AccountDao
-import com.lpcoder.agile.base.bean.container.dao.ItemDao
 import com.lpcoder.agile.base.bean.container.service.CustomService
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
 import org.junit.Assert.*

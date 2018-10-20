@@ -7,8 +7,12 @@ class BeanSingletonTest : BaseTest() {
 
     @Test
     fun testSingleton() {
-        val customService1 = containerOfXML!!.getBean(beanId)
-        val customService2 = containerOfXML!!.getBean(beanId)
+        var customService1 = containerOfXML!!.getBean(beanId)
+        var customService2 = containerOfXML!!.getBean(beanId)
+        assertTrue(customService1 === customService2)
+
+        customService1 = containerOfYAML!!.getBean(beanId)
+        customService2 = containerOfYAML!!.getBean(beanId)
         assertTrue(customService1 === customService2)
     }
 
