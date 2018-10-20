@@ -56,6 +56,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             val constructorArg = BeanConstructorArg(index, type, constructorArgValue)
             definition.constructorArgs.add(constructorArg)
         }
+        definition.constructorArgs.sortBy { it.index }
     }
 
     private fun beanConstructorArgValueOf(propElement: Element, index: Int) =
