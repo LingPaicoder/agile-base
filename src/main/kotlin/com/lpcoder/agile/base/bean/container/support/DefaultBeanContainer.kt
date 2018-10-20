@@ -1,8 +1,9 @@
 package com.lpcoder.agile.base.bean.container.support
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
+import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArgResolver
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
-import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyConverter
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueConverter
 import com.lpcoder.agile.base.bean.container.support.exception.BeanCreationException
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import com.lpcoder.agile.base.bean.container.support.parser.BeanDefinitionParser
@@ -15,14 +16,14 @@ import com.lpcoder.agile.base.core.resource.ClassPathResource
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import com.lpcoder.agile.base.util.CollectionUtil
-import com.lpcoder.agile.base.util.MapUtil
 import com.lpcoder.agile.base.util.MapUtil.getFromMapForcibly
 import org.apache.commons.beanutils.BeanUtils
 import org.slf4j.LoggerFactory
 import java.util.stream.Collectors
 
 class DefaultBeanContainer(private val resource: Resource,
-                           private var parser: BeanDefinitionParser? = null)
+                           private val parser: BeanDefinitionParser,
+                           public val classLoader: ClassLoader)
     : BeanContainer {
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
@@ -36,20 +37,20 @@ class DefaultBeanContainer(private val resource: Resource,
     }
 
     constructor(configPath: String) : this(ClassPathResource(configPath))
+    constructor(resource: Resource) : this(
+            resource,
+            SupportedFileTypeEnum.getBySuffix(resource.getFileSuffix()).parser,
+            ClassUtil.getDefaultClassLoader())
 
     private fun initContainer() {
         try {
-            parser = parser ?:
-                    SupportedFileTypeEnum.getBySuffix(resource.getFileSuffix()).parser
-            val beanDefinitions = parser!!.parse(resource)
-            val beanIds = beanDefinitions.stream()
-                    .map(BeanDefinition::id)
-                    .collect(Collectors.toList())
+            val beanDefinitions = parser.parse(resource)
+            val beanIds = beanDefinitions.stream().map(BeanDefinition::id).collect(Collectors.toList())
             beanIds alias "beanIds" must beNotContainsDup
 
             beanDefinitions.stream().forEach {
                 beanDefinitionMap[it.id] = it
-                beanClassMap[it.id] = ClassUtil.getDefaultClassLoader().loadClass(it.beanClassName)
+                beanClassMap[it.id] = classLoader.loadClass(it.beanClassName)
             }
             beanDefinitions.stream().filter(BeanDefinition::isSingleton)
                     .filter { !singletonObjMap.containsKey(it.id) }.forEach {
@@ -94,7 +95,7 @@ class DefaultBeanContainer(private val resource: Resource,
 
     private fun instantiateBean(beanId: String): Any {
         return if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
-            Any()
+            BeanConstructorArgResolver(this).newInstanceByAutoWireConstructor(beanId)
         } else {
             getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
         }
@@ -104,7 +105,7 @@ class DefaultBeanContainer(private val resource: Resource,
         val beanDefinition = getFromMapForcibly(beanDefinitionMap, beanId, "beanDefinitionMap")
         val beanProperties = beanDefinition.properties
         if (CollectionUtil.isEmpty(beanProperties)) return
-        val converter = BeanPropertyConverter(this)
+        val converter = BeanPropertyValueConverter(this)
         beanProperties.forEach {
             BeanUtils.setProperty(bean, it.name, converter.convert(it.value))
         }
