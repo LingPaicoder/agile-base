@@ -8,7 +8,7 @@ import org.junit.Test
 class BeanExceptionTest : BaseTest() {
 
     private val errXmlConfigPath = "XXX.xml"
-    private val invalidBeanConfigPath = "invalid-bean.xml"
+    private val invalidBeanConfigPath = "bean/invalid-bean.xml"
     private val errBeanId = "invalidBean"
 
     @Test

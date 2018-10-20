@@ -4,7 +4,6 @@
         <property name="accountDao" ref="accountDao"/>
         <property name="itemDao" ref="itemDao"/>
         <property name="author" value="lingPai"/>
-        <property name="version" value="2"/>
     </bean>
     <bean id="accountDao" class="com.lpcoder.agile.base.bean.container.dao.AccountDao"/>
     <bean id="itemDao" class="com.lpcoder.agile.base.bean.container.dao.ItemDao"/>

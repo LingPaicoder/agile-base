@@ -1,0 +1,35 @@
+beans:
+    -
+        id: simpleTypeBean
+        class: com.lpcoder.agile.base.bean.container.component.SimpleTypeBean
+        property:
+            -
+                name: charVal
+                value: c
+            -
+                name: strVal
+                value: str
+            -
+                name: byteVal
+                value: 10
+            -
+                name: shortVal
+                value: 10
+            -
+                name: intVal
+                value: 10
+            -
+                name: longVal
+                value: 10
+            -
+                name: floatVal
+                value: 2.1
+            -
+                name: doubleVal
+                value: 2.1
+            -
+                name: booleanTrueVal
+                value: true
+            -
+                name: booleanFalseVal
+                value: false
