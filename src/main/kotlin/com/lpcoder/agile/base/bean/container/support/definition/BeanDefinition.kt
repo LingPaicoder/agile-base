@@ -5,5 +5,6 @@ data class BeanDefinition(
         val beanClassName: String,
         val isSingleton: Boolean
 ) {
+    val constructorArgs = mutableListOf<BeanConstructorArg>()
     val properties = mutableListOf<BeanProperty>()
 }

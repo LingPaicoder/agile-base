@@ -22,3 +22,9 @@ val nameAttr = "name"
 val refAttr = "ref"
 
 val valueAttr = "value"
+
+val constructorArgElement = "constructor-arg"
+
+val indexAttr = "index"
+
+val typeAttr = "type"

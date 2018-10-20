@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
+import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValue
@@ -29,9 +30,34 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             val isSingletonStr = element.attributeValue(isSingletonAttr)
             val isSingleton = if (StringUtils.isEmpty(isSingletonStr)) true else isSingletonStr.toBoolean()
             val definition = BeanDefinition(id, clazz, isSingleton)
+            parseConstructorArgs(element, definition)
             parseProperties(element, definition)
             return@map definition
         }.collect(Collectors.toList())
+    }
+
+    private fun parseConstructorArgs(element: Element, definition: BeanDefinition) {
+        val iterator = element.elementIterator(constructorArgElement)
+        while (iterator.hasNext()) {
+            val argElement = iterator.next() as Element
+            val indexStr = argElement.attributeValue(indexAttr)
+            if (StringUtil.isEmpty(indexStr)) {
+                throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
+            }
+            if (StringUtil.isDigit(indexStr)) {
+                throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
+            }
+            val index = indexStr.toInt()
+            val type = argElement.attributeValue(typeAttr)
+            val constructorArgValue = beanConstructorArgValueOf(argElement, index)
+            val constructorArg = BeanConstructorArg(index, type, constructorArgValue)
+            definition.constructorArgs.add(constructorArg)
+        }
+    }
+
+    private fun beanConstructorArgValueOf(propElement: Element, index: Int): BeanPropertyValue {
+        val elementDesc = "<constructor-arg> element for index '$index'"
+        return beanValueOf(propElement, elementDesc)
     }
 
     private fun parseProperties(element: Element, definition: BeanDefinition) {
@@ -49,9 +75,13 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
     }
 
     private fun beanPropertyValueOf(propElement: Element, propertyName: String): BeanPropertyValue {
+        val elementDesc = "<property> element for property '$propertyName'"
+        return beanValueOf(propElement, elementDesc)
+    }
+
+    private fun beanValueOf(propElement: Element, elementDesc: String): BeanPropertyValue {
         val isRefAttr = propElement.attribute(refAttr) != null
         val isValueAttr = propElement.attribute(valueAttr) != null
-        val elementDesc = "<property> element for property '$propertyName'"
         return when {
             isRefAttr -> {
                 val refName = propElement.attributeValue(refAttr)
@@ -66,4 +96,5 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             else -> throw BeanDefinitionException("$elementDesc must specify a ref or value")
         }
     }
+
 }

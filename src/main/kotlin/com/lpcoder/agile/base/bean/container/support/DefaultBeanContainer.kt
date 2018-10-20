@@ -15,6 +15,8 @@ import com.lpcoder.agile.base.core.resource.ClassPathResource
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import com.lpcoder.agile.base.util.CollectionUtil
+import com.lpcoder.agile.base.util.MapUtil
+import com.lpcoder.agile.base.util.MapUtil.getFromMapForcibly
 import org.apache.commons.beanutils.BeanUtils
 import org.slf4j.LoggerFactory
 import java.util.stream.Collectors
@@ -66,7 +68,7 @@ class DefaultBeanContainer(private val resource: Resource,
     }
 
     override fun getBeanDefinition(beanId: String): BeanDefinition =
-            getFromMap(beanDefinitionMap, beanId, "beanDefinitionMap")
+            getFromMapForcibly(beanDefinitionMap, beanId, "beanDefinitionMap")
 
     override fun getBean(beanId: String): Any {
         if (getBeanDefinition(beanId).isSingleton) {
@@ -91,20 +93,16 @@ class DefaultBeanContainer(private val resource: Resource,
     }
 
     private fun instantiateBean(beanId: String) =
-            getFromMap(beanClassMap, beanId, "beanClassMap").newInstance()
+            getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
 
     private fun populateBeanProperty(bean: Any, beanId: String) {
-        val beanDefinition = getFromMap(beanDefinitionMap, beanId, "beanDefinitionMap")
+        val beanDefinition = getFromMapForcibly(beanDefinitionMap, beanId, "beanDefinitionMap")
         val beanProperties = beanDefinition.properties
         if (CollectionUtil.isEmpty(beanProperties)) return
         val converter = BeanPropertyConverter(this)
         beanProperties.forEach {
             BeanUtils.setProperty(bean, it.name, converter.convert(it.value))
         }
-    }
-
-    private fun <K, V> getFromMap(map: Map<K, V>, key: K, mapDesc: String): V {
-        return map[key] ?: throw IllegalArgumentException("no key in $mapDesc is $key. $mapDesc keys: ${map.keys}")
     }
 
     private fun printInitEndLog() {
