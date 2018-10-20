@@ -49,16 +49,17 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             }
             val index = indexStr.toInt()
             val type = argElement.attributeValue(typeAttr)
+            if (StringUtil.isEmpty(type)) {
+                throw BeanDefinitionException("Tag 'constructor-arg' must have a 'type' attribute")
+            }
             val constructorArgValue = beanConstructorArgValueOf(argElement, index)
             val constructorArg = BeanConstructorArg(index, type, constructorArgValue)
             definition.constructorArgs.add(constructorArg)
         }
     }
 
-    private fun beanConstructorArgValueOf(propElement: Element, index: Int): BeanPropertyValue {
-        val elementDesc = "<constructor-arg> element for index '$index'"
-        return beanValueOf(propElement, elementDesc)
-    }
+    private fun beanConstructorArgValueOf(propElement: Element, index: Int) =
+            beanValueOf(propElement, "<constructor-arg> element for index '$index'")
 
     private fun parseProperties(element: Element, definition: BeanDefinition) {
         val iterator = element.elementIterator(propertyElement)
@@ -74,10 +75,8 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
         }
     }
 
-    private fun beanPropertyValueOf(propElement: Element, propertyName: String): BeanPropertyValue {
-        val elementDesc = "<property> element for property '$propertyName'"
-        return beanValueOf(propElement, elementDesc)
-    }
+    private fun beanPropertyValueOf(propElement: Element, propertyName: String) =
+            beanValueOf(propElement, "<property> element for property '$propertyName'")
 
     private fun beanValueOf(propElement: Element, elementDesc: String): BeanPropertyValue {
         val isRefAttr = propElement.attribute(refAttr) != null
