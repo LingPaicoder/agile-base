@@ -44,7 +44,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             if (indexStr.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
-            if (StringUtil.isDigit(indexStr)) {
+            if (!StringUtil.isDigit(indexStr)) {
                 throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
             }
             val index = indexStr.toInt()

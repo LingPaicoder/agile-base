@@ -1,6 +1,6 @@
 beans:
     -
-        id: customService
+        id: constructorBean
         class: com.lpcoder.agile.base.bean.container.component.ConstructorBean
         constructor-arg:
             -
@@ -13,7 +13,7 @@ beans:
                 ref: itemDao
             -
                 index: 2
-                type: java.lang.Integer
+                type: int
                 value: 1
     -
         id: accountDao

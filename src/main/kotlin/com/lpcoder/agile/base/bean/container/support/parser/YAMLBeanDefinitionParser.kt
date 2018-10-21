@@ -39,11 +39,11 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
         @Suppress("UNCHECKED_CAST")
         val constructorArgs = element[constructorArgElement] as List<Map<String, Any>>
         constructorArgs.forEach {
-            val indexStr = it[indexAttr] as String?
-            if (indexStr.isNullOrBlank()) {
+            val indexStr = it[indexAttr].toString()
+            if (indexStr.isBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
-            if (StringUtil.isDigit(indexStr)) {
+            if (!StringUtil.isDigit(indexStr)) {
                 throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
             }
             val index = indexStr!!.toInt()

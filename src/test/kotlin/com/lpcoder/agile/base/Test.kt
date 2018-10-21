@@ -5,9 +5,6 @@ package com.lpcoder.agile.base
  * @date: Created in 18-7-13
  */
 fun main(args: Array<String>) {
-    val map = mutableMapOf<String, String>()
-    map.put("1", "one")
-    map.put("2", "two")
-    val map2 = map.toMap()
-    println(map === map2)
+    println(java.lang.Integer.TYPE.kotlin)
+    println(Int::class.java.equals(java.lang.Integer.TYPE.componentType))
 }

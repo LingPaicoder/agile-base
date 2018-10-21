@@ -1,30 +1,30 @@
 package com.lpcoder.agile.base.bean.container.support.definition
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
+import com.lpcoder.agile.base.bean.container.support.definition.support.RuntimeBeanReferenceValue
+import com.lpcoder.agile.base.bean.container.support.definition.support.TypedStringValue
+import com.lpcoder.agile.base.util.ClassUtil
+import com.lpcoder.agile.base.util.ClassUtil.loadClass
 import org.apache.commons.beanutils.ConvertUtilsBean
+import kotlin.reflect.KClass
 
 class BeanConstructorArgResolver(private val container: BeanContainer) {
 
-    private val convertUtil = ConvertUtilsBean()
+    private val convertUtilsBean = ConvertUtilsBean()
 
     fun newInstanceByAutoWireConstructor(beanId: String): Any {
-        val args = container.getBeanDefinition(beanId).constructorArgs.map {
-            val type = container.getBeanClassLoader().loadClass(it.type)
-            val value = BeanPropertyValueConverter(container).convert(it.value)
-            convertUtil.lookup(type).convert(type, value)
+        val types = container.getBeanDefinition(beanId).constructorArgs.map { it.type }
+        val argsToUse = container.getBeanDefinition(beanId).constructorArgs.map {
+            when (it.value) {
+                is RuntimeBeanReferenceValue -> BeanPropertyValueConverter(container).convert(it.value)
+                is TypedStringValue -> convertUtilsBean.lookup(loadClass(it.type)).convert(loadClass(it.type), it.value.value)
+                else -> IllegalArgumentException("unsupported value type: ${it.value::class}")
+            }
         }
         val constructorToUse = container.getBeanClass(beanId).constructors
-                .find { allTypeMatchedOnTheIndex(it.parameterTypes.toList(), args.map { it::class.java }) }
+                .find { it.parameterTypes.toList().map { it.name } == types }
                 ?: throw IllegalArgumentException("$beanId can't find a matched constructor")
-        return constructorToUse.newInstance(args)
-    }
-
-    private fun allTypeMatchedOnTheIndex(norm: List<Class<*>>, target: List<Class<*>>): Boolean {
-        if (norm.size != target.size) return false
-        norm.forEachIndexed { i, clazz ->
-            if (clazz !== target[i]) return false
-        }
-        return true
+        return constructorToUse.newInstance(*argsToUse.toTypedArray())
     }
 
 }
