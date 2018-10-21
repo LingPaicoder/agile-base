@@ -1,8 +1,5 @@
 package com.lpcoder.agile.base.util
 
-import kotlin.reflect.KClass
-
-
 object ClassUtil {
 
     // todo: study and optimize
