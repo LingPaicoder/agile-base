@@ -2,7 +2,8 @@ package com.lpcoder.agile.base.bean.container
 
 import com.lpcoder.agile.base.bean.container.component.ConstructorBean
 import com.lpcoder.agile.base.bean.container.support.DefaultBeanContainer
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class BeanConstructorInjectionTest {

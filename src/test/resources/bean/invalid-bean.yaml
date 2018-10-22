@@ -1,5 +1,6 @@
-beans:
-    -
-        id: invalidBean
-        class: com.lpcoder.agile.invalid.invalidBean
-        isSingleton: false
+container:
+    beans:
+        -
+            id: invalidBean
+            class: com.lpcoder.agile.invalid.invalidBean
+            isSingleton: false

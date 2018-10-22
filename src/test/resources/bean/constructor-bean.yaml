@@ -1,23 +1,24 @@
-beans:
-    -
-        id: constructorBean
-        class: com.lpcoder.agile.base.bean.container.component.ConstructorBean
-        constructor-arg:
-            -
-                index: 0
-                type: com.lpcoder.agile.base.bean.container.dao.AccountDao
-                ref: accountDao
-            -
-                index: 1
-                type: com.lpcoder.agile.base.bean.container.dao.ItemDao
-                ref: itemDao
-            -
-                index: 2
-                type: int
-                value: 1
-    -
-        id: accountDao
-        class: com.lpcoder.agile.base.bean.container.dao.AccountDao
-    -
-        id: itemDao
-        class: com.lpcoder.agile.base.bean.container.dao.ItemDao
+container:
+    beans:
+        -
+            id: constructorBean
+            class: com.lpcoder.agile.base.bean.container.component.ConstructorBean
+            constructor-arg:
+                -
+                    index: 0
+                    type: com.lpcoder.agile.base.bean.container.dao.AccountDao
+                    ref: accountDao
+                -
+                    index: 1
+                    type: com.lpcoder.agile.base.bean.container.dao.ItemDao
+                    ref: itemDao
+                -
+                    index: 2
+                    type: int
+                    value: 1
+        -
+            id: accountDao
+            class: com.lpcoder.agile.base.bean.container.dao.AccountDao
+        -
+            id: itemDao
+            class: com.lpcoder.agile.base.bean.container.dao.ItemDao

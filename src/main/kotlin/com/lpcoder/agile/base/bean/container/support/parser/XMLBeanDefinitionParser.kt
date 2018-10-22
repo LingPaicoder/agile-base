@@ -14,33 +14,33 @@ import com.lpcoder.agile.base.util.StringUtil
 import org.apache.commons.lang3.StringUtils
 import org.dom4j.Element
 import org.dom4j.io.SAXReader
-import java.util.stream.Collectors
 
 class XMLBeanDefinitionParser : BeanDefinitionParser {
 
     override fun parse(source: Resource): List<BeanDefinition> {
         source must beNotNull
         source.getInputStream() must beNotNull
-        return source.getInputStream().use {
-            SAXReader().read(it).rootElement
-        }.elements().stream().map { element ->
-            element as Element
-            val id = element.attributeValue(idAttr)
-            val clazz = element.attributeValue(classAttr)
-            val isSingletonStr = element.attributeValue(isSingletonAttr)
+        val definitions = mutableListOf<BeanDefinition>()
+        val containerElement = source.getInputStream().use { SAXReader().read(it).rootElement }
+        containerElement.element(beansKey).elements(beanKey).stream().map { beanElement ->
+            beanElement as Element
+            val id = beanElement.attributeValue(idKey)
+            val clazz = beanElement.attributeValue(classKey)
+            val isSingletonStr = beanElement.attributeValue(isSingletonKey)
             val isSingleton = if (StringUtils.isEmpty(isSingletonStr)) true else isSingletonStr.toBoolean()
             val definition = BeanDefinition(id, clazz, isSingleton)
-            parseConstructorArgs(element, definition)
-            parseProperties(element, definition)
+            parseConstructorArgs(beanElement, definition)
+            parseProperties(beanElement, definition)
             return@map definition
-        }.collect(Collectors.toList())
+        }.forEach { definitions.add(it) }
+        return definitions
     }
 
     private fun parseConstructorArgs(element: Element, definition: BeanDefinition) {
-        val iterator = element.elementIterator(constructorArgElement)
+        val iterator = element.elementIterator(constructorArgKey)
         while (iterator.hasNext()) {
             val argElement = iterator.next() as Element
-            val indexStr = argElement.attributeValue(indexAttr)
+            val indexStr = argElement.attributeValue(indexKey)
             if (indexStr.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
@@ -48,7 +48,7 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
                 throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
             }
             val index = indexStr.toInt()
-            val type = argElement.attributeValue(typeAttr)
+            val type = argElement.attributeValue(typeKey)
             if (type.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'type' attribute")
             }
@@ -63,10 +63,10 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             beanValueOf(propElement, "<constructor-arg> element for index '$index'")
 
     private fun parseProperties(element: Element, definition: BeanDefinition) {
-        val iterator = element.elementIterator(propertyElement)
+        val iterator = element.elementIterator(propertyKey)
         while (iterator.hasNext()) {
             val propElement = iterator.next() as Element
-            val propertyName = propElement.attributeValue(nameAttr)
+            val propertyName = propElement.attributeValue(nameKey)
             if (propertyName.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'property' must have a 'name' attribute")
             }
@@ -80,18 +80,18 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             beanValueOf(propElement, "<property> element for property '$propertyName'")
 
     private fun beanValueOf(propElement: Element, elementDesc: String): BeanPropertyValue {
-        val isRefAttr = propElement.attribute(refAttr) != null
-        val isValueAttr = propElement.attribute(valueAttr) != null
+        val isRefAttr = propElement.attribute(refKey) != null
+        val isValueAttr = propElement.attribute(valueKey) != null
         return when {
             isRefAttr -> {
-                val refName = propElement.attributeValue(refAttr)
+                val refName = propElement.attributeValue(refKey)
                 if (refName.isNullOrBlank()) {
                     throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
                 }
                 RuntimeBeanReferenceValue(refName)
             }
             isValueAttr -> {
-                TypedStringValue(propElement.attributeValue(valueAttr))
+                TypedStringValue(propElement.attributeValue(valueKey))
             }
             else -> throw BeanDefinitionException("$elementDesc must specify a ref or value")
         }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container>
+    <auto-scans>
+        <scan package="com.lpcoder.agile.base.bean.container.component" />
+        <scan package="com.lpcoder.agile.base.bean.container.dao" />
+    </auto-scans>
     <beans>
         <bean id="customService"
               class="com.lpcoder.agile.base.bean.container.service.CustomService">

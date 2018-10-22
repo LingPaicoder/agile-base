@@ -7,24 +7,28 @@ interface BeanDefinitionParser {
     fun parse(source: Resource): List<BeanDefinition>
 }
 
-val beansAttr = "beans"
+val containerKey = "container"
 
-val idAttr = "id"
+val beansKey = "beans"
 
-val classAttr = "class"
+val beanKey = "bean"
 
-val isSingletonAttr = "isSingleton"
+val idKey = "id"
 
-val propertyElement = "property"
+val classKey = "class"
 
-val nameAttr = "name"
+val isSingletonKey = "isSingleton"
 
-val refAttr = "ref"
+val propertyKey = "property"
 
-val valueAttr = "value"
+val nameKey = "name"
 
-val constructorArgElement = "constructor-arg"
+val refKey = "ref"
 
-val indexAttr = "index"
+val valueKey = "value"
 
-val typeAttr = "type"
+val constructorArgKey = "constructor-arg"
+
+val indexKey = "index"
+
+val typeKey = "type"

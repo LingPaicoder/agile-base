@@ -10,8 +10,8 @@ import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionExc
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNotNull
 import com.lpcoder.agile.base.core.resource.Resource
+import com.lpcoder.agile.base.util.MapUtil
 import com.lpcoder.agile.base.util.StringUtil
-import org.dom4j.Element
 import org.yaml.snakeyaml.Yaml
 
 class YAMLBeanDefinitionParser : BeanDefinitionParser {
@@ -19,27 +19,29 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
     override fun parse(source: Resource): List<BeanDefinition> {
         source must beNotNull
         source.getInputStream() must beNotNull
-
+        val definitions = mutableListOf<BeanDefinition>()
         @Suppress("UNCHECKED_CAST")
-        return source.getInputStream().use {
-            Yaml().load(it) as Map<String, List<Map<String, Any>>>
-        }[beansAttr]!!.map { element ->
-            val id = element[idAttr] as String
-            val clazz = element[classAttr] as String
-            val isSingleton = (element[isSingletonAttr] ?: true) as Boolean
+        val container = MapUtil.getFromMapForcibly(source.getInputStream().use {
+            Yaml().load(it) as Map<String, Map<String, List<Map<String, Any>>>>
+        }, containerKey, "containerConfig")
+        container[beansKey]?.map { element ->
+            val id = element[idKey] as String
+            val clazz = element[classKey] as String
+            val isSingleton = (element[isSingletonKey] ?: true) as Boolean
             val definition = BeanDefinition(id, clazz, isSingleton)
             parseConstructorArgs(element, definition)
             parseProperties(element, definition)
             return@map definition
-        }
+        }?.forEach { definitions.add(it) }
+        return definitions
     }
 
     private fun parseConstructorArgs(element: Map<String, Any>, definition: BeanDefinition) {
-        if (null == element[constructorArgElement]) return
+        if (null == element[constructorArgKey]) return
         @Suppress("UNCHECKED_CAST")
-        val constructorArgs = element[constructorArgElement] as List<Map<String, Any>>
+        val constructorArgs = element[constructorArgKey] as List<Map<String, Any>>
         constructorArgs.forEach {
-            val indexStr = it[indexAttr].toString()
+            val indexStr = it[indexKey].toString()
             if (indexStr.isBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
@@ -47,7 +49,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
                 throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
             }
             val index = indexStr!!.toInt()
-            val type = it[typeAttr] as String?
+            val type = it[typeKey] as String?
             if (type.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'type' attribute")
             }
@@ -62,11 +64,11 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
             beanValueOf(propElement, "<constructor-arg> element for index '$index'")
 
     private fun parseProperties(element: Map<String, Any>, definition: BeanDefinition) {
-        if (null == element[propertyElement]) return
+        if (null == element[propertyKey]) return
         @Suppress("UNCHECKED_CAST")
-        val properties = element[propertyElement] as List<Map<String, Any>>
+        val properties = element[propertyKey] as List<Map<String, Any>>
         properties.forEach {
-            val propertyName = it[nameAttr] as String?
+            val propertyName = it[nameKey] as String?
             if (propertyName.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'property' must have a 'name' attribute")
             }
@@ -80,18 +82,18 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
             beanValueOf(propElement, "<property> element for property '$propertyName'")
 
     private fun beanValueOf(propElement: Map<String, Any>, elementDesc: String): BeanPropertyValue {
-        val isRefAttr = propElement[refAttr] != null
-        val isValueAttr = propElement[valueAttr] != null
+        val isRefAttr = propElement[refKey] != null
+        val isValueAttr = propElement[valueKey] != null
         return when {
             isRefAttr -> {
-                val refName = StringUtil.getString(propElement[refAttr])
+                val refName = StringUtil.getString(propElement[refKey])
                 if (refName.isBlank()) {
                     throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
                 }
                 RuntimeBeanReferenceValue(refName)
             }
             isValueAttr -> {
-                TypedStringValue(StringUtil.getString(propElement[valueAttr]))
+                TypedStringValue(StringUtil.getString(propElement[valueKey]))
             }
             else -> throw BeanDefinitionException("$elementDesc must specify a ref or value")
         }

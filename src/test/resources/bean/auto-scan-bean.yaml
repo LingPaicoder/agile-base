@@ -1,0 +1,4 @@
+container:
+    auto-scans:
+        -
+            package: com.lpcoder.agile.base.bean.container

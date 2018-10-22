@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans>
-    <bean id="simpleTypeBean" class="com.lpcoder.agile.base.bean.container.component.SimpleTypeBean">
-        <property name="charVal" value="c"/>
-        <property name="strVal" value="str"/>
-        <property name="byteVal" value="10"/>
-        <property name="shortVal" value="10"/>
-        <property name="intVal" value="10"/>
-        <property name="longVal" value="10"/>
-        <property name="floatVal" value="2.1"/>
-        <property name="doubleVal" value="2.1"/>
-        <property name="booleanTrueVal" value="true"/>
-        <property name="booleanFalseVal" value="false"/>
-    </bean>
-</beans>
+<container>
+    <beans>
+        <bean id="simpleTypeBean"
+              class="com.lpcoder.agile.base.bean.container.component.SimpleTypeBean">
+            <property name="charVal" value="c"/>
+            <property name="strVal" value="str"/>
+            <property name="byteVal" value="10"/>
+            <property name="shortVal" value="10"/>
+            <property name="intVal" value="10"/>
+            <property name="longVal" value="10"/>
+            <property name="floatVal" value="2.1"/>
+            <property name="doubleVal" value="2.1"/>
+            <property name="booleanTrueVal" value="true"/>
+            <property name="booleanFalseVal" value="false"/>
+        </bean>
+    </beans>
+</container>
