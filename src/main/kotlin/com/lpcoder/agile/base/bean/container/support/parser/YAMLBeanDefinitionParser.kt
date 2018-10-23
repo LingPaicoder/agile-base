@@ -19,11 +19,18 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
     override fun parse(source: Resource): List<BeanDefinition> {
         source must beNotNull
         source.getInputStream() must beNotNull
-        val definitions = mutableListOf<BeanDefinition>()
+
         @Suppress("UNCHECKED_CAST")
         val container = MapUtil.getFromMapForcibly(source.getInputStream().use {
             Yaml().load(it) as Map<String, Map<String, List<Map<String, Any>>>>
         }, containerKey, "containerConfig")
+        val definitions = mutableListOf<BeanDefinition>()
+
+        parseBeans(container, definitions)
+        return definitions
+    }
+
+    private fun parseBeans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {
         container[beansKey]?.map { element ->
             val id = element[idKey] as String
             val clazz = element[classKey] as String
@@ -33,7 +40,6 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
             parseProperties(element, definition)
             return@map definition
         }?.forEach { definitions.add(it) }
-        return definitions
     }
 
     private fun parseConstructorArgs(element: Map<String, Any>, definition: BeanDefinition) {

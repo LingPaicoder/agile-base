@@ -20,8 +20,15 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
     override fun parse(source: Resource): List<BeanDefinition> {
         source must beNotNull
         source.getInputStream() must beNotNull
-        val definitions = mutableListOf<BeanDefinition>()
+
         val containerElement = source.getInputStream().use { SAXReader().read(it).rootElement }
+        val definitions = mutableListOf<BeanDefinition>()
+
+        parseBeans(containerElement, definitions)
+        return definitions
+    }
+
+    private fun parseBeans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
         containerElement.element(beansKey).elements(beanKey).stream().map { beanElement ->
             beanElement as Element
             val id = beanElement.attributeValue(idKey)
@@ -33,7 +40,6 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
             parseProperties(beanElement, definition)
             return@map definition
         }.forEach { definitions.add(it) }
-        return definitions
     }
 
     private fun parseConstructorArgs(element: Element, definition: BeanDefinition) {
