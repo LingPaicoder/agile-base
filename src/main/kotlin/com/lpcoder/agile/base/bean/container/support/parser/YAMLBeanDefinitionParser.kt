@@ -26,8 +26,13 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
         }, containerKey, "containerConfig")
         val definitions = mutableListOf<BeanDefinition>()
 
+        parseAutoScans(container, definitions)
         parseBeans(container, definitions)
         return definitions
+    }
+
+    private fun parseAutoScans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {
+        // TODO
     }
 
     private fun parseBeans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {

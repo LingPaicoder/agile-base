@@ -24,8 +24,13 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
         val containerElement = source.getInputStream().use { SAXReader().read(it).rootElement }
         val definitions = mutableListOf<BeanDefinition>()
 
+        parseAutoScans(containerElement, definitions)
         parseBeans(containerElement, definitions)
         return definitions
+    }
+
+    private fun parseAutoScans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
+        // TODO
     }
 
     private fun parseBeans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
