@@ -30,11 +30,13 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
     }
 
     private fun parseAutoScans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
-        // TODO
+        val packages = containerElement.element(autoScansKey).elements(scanKey)
+                .map { (it as Element).attributeValue(packageKey) }.toList()
+        scanBeanDefinition(packages).forEach { definitions.add(it) }
     }
 
     private fun parseBeans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
-        containerElement.element(beansKey).elements(beanKey).stream().map { beanElement ->
+        containerElement.element(beansKey).elements(beanKey).map { beanElement ->
             beanElement as Element
             val id = beanElement.attributeValue(idKey)
             val clazz = beanElement.attributeValue(classKey)

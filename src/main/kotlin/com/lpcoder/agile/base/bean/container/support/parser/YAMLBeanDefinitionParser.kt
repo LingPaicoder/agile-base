@@ -32,7 +32,8 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
     }
 
     private fun parseAutoScans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {
-        // TODO
+        val packages = container[autoScansKey]?.map { it[packageKey] as String }?.toList() ?: return
+        scanBeanDefinition(packages).forEach { definitions.add(it) }
     }
 
     private fun parseBeans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {
@@ -59,7 +60,7 @@ class YAMLBeanDefinitionParser : BeanDefinitionParser {
             if (!StringUtil.isDigit(indexStr)) {
                 throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
             }
-            val index = indexStr!!.toInt()
+            val index = indexStr.toInt()
             val type = it[typeKey] as String?
             if (type.isNullOrBlank()) {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'type' attribute")
