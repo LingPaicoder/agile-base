@@ -6,6 +6,9 @@ import java.net.URL
 
 object ClassUtil {
 
+    private val PATH_SEPARATOR = "/"
+    private val PACKAGE_SEPARATOR = "."
+
     // todo: study and optimize
     fun getDefaultClassLoader(): ClassLoader {
         return Thread.currentThread().contextClassLoader
@@ -25,7 +28,7 @@ object ClassUtil {
             }
 
     fun getClassSet(packageName: String): Set<Class<*>> =
-            getDefaultClassLoader().getResources(packageName.replace(".", "/"))
+            getDefaultClassLoader().getResources(packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR))
                     .toList().map { getClassSet(it) }.flatMap { it }.toSet()
 
 
@@ -35,52 +38,6 @@ object ClassUtil {
                 "jar" -> getClassSetByJarProtocolUrl(url)
                 else -> throw IllegalArgumentException("unknown url protocol: ${url.protocol}. support only 'file' or 'jar'")
             }
-
-
-    private fun getClassSetByFileProtocolUrl(url: URL): Set<Class<*>> {
-        if (url.protocol != ("file")) {
-            throw IllegalArgumentException("found url protocol: ${url.protocol}. support only 'file'")
-        }
-        val packagePath = url.path.replace("%20", " ")
-        File(packagePath).listFiles { file ->
-            (file.isFile && file.name.endsWith(".class")) || file.isDirectory
-        }.toList()
-        return emptySet()
-    }
-
-    private fun addClass(classSet: Set<Class<*>>, packagePath: String, packageName: String) {
-
-    }
-
-
-    /*private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName) {
-        File[] files = new File(packagePath).listFiles(new FileFilter() {
-            public boolean accept(File file) {
-                return (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory();
-            }
-        });
-        for (File file : files) {
-            String fileName = file.getName();
-            if (file.isFile()) {
-                String className = fileName.substring(0, fileName.lastIndexOf("."));
-                if (StringUtil.isNotEmpty(packageName)) {
-                    className = packageName + "." + className;
-                }
-                doAddClass(classSet, className);
-            } else {
-                String subPackagePath = fileName;
-                if (StringUtil.isNotEmpty(packagePath)) {
-                    subPackagePath = packagePath + "/" + subPackagePath;
-                }
-                String subPackageName = fileName;
-                if (StringUtil.isNotEmpty(packageName)) {
-                    subPackageName = packageName + "." + subPackageName;
-                }
-                addClass(classSet, subPackagePath, subPackageName);
-            }
-        }
-    }*/
-
 
     private fun getClassSetByJarProtocolUrl(url: URL): Set<Class<*>> {
         if (url.protocol != ("jar")) {
@@ -94,47 +51,29 @@ object ClassUtil {
                 .toSet()
     }
 
-    /*public static Set<Class<?>> getClassSet(String packageName) {
-        Set<Class<?>> classSet = new HashSet<Class<?>>();
-        try {
-            Enumeration<URL> urls = getClassLoader().getResources(packageName.replace(".", "/"));
-            while (urls.hasMoreElements()) {
-                URL url = urls.nextElement();
-                if (url != null) {
-                    String protocol = url.getProtocol();
-                    if (protocol.equals("file")) {
-                        String packagePath = url.getPath().replaceAll("%20", " ");
-                        addClass(classSet, packagePath, packageName);
-                    } else if (protocol.equals("jar")) {
-                        JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-                        if (jarURLConnection != null) {
-                            JarFile jarFile = jarURLConnection.getJarFile();
-                            if (jarFile != null) {
-                                Enumeration<JarEntry> jarEntries = jarFile.entries();
-                                while (jarEntries.hasMoreElements()) {
-                                    JarEntry jarEntry = jarEntries.nextElement();
-                                    String jarEntryName = jarEntry.getName();
-                                    if (jarEntryName.endsWith(".class")) {
-                                        String className = jarEntryName.substring(0, jarEntryName.lastIndexOf(".")).replaceAll("/", ".");
-                                        doAddClass(classSet, className);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.error("get class set failure", e);
-            throw new RuntimeException(e);
+    private fun getClassSetByFileProtocolUrl(url: URL): Set<Class<*>> {
+        if (url.protocol != ("file")) {
+            throw IllegalArgumentException("found url protocol: ${url.protocol}. support only 'file'")
         }
-        return classSet;
+        val packagePath = url.path.replace("%20", " ")
+        val classSet = mutableSetOf<Class<*>>()
+        addClass(classSet, packagePath)
+        return classSet
     }
 
-    private static void doAddClass(Set<Class<?>> classSet, String className) {
-        Class<?> cls = loadClass(className, false);
-        classSet.add(cls);
-    }*/
-
+    private fun addClass(classSet: MutableSet<Class<*>>, packagePath: String) {
+        File(packagePath).listFiles { file ->
+            (file.isFile && file.name.endsWith(".class")) || file.isDirectory
+        }.toList().forEach {
+            if (it.isFile) {
+                val classSimpleName = it.name.substring(0, it.name.lastIndexOf("."))
+                val className = packagePath.replace(PATH_SEPARATOR, PACKAGE_SEPARATOR) + classSimpleName
+                classSet.add(Class.forName(className, false, getDefaultClassLoader()))
+            } else {
+                val subPackagePath = packagePath + PATH_SEPARATOR + it.name
+                addClass(classSet, subPackagePath)
+            }
+        }
+    }
 
 }
