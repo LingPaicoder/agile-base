@@ -1,8 +1,11 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
+import com.lpcoder.agile.base.bean.container.support.annotation.Bean
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
+import java.beans.Introspector
+import kotlin.streams.toList
 
 interface BeanDefinitionParser {
     fun parse(source: Resource): List<BeanDefinition>
@@ -10,7 +13,16 @@ interface BeanDefinitionParser {
 
 fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
     val classes = packages.map { ClassUtil.getClassSet(it) }.flatMap { it }.toSet()
-    return emptySet()
+    return classes.stream().filter { it.isAnnotationPresent(Bean::class.java) }.map {
+        val id = if (it.getAnnotation(Bean::class.java).id.isBlank()) {
+            Introspector.decapitalize(it.simpleName)
+        } else {
+            it.getAnnotation(Bean::class.java).id
+        }
+        val className = it.name
+        val isSingleton = it.getAnnotation(Bean::class.java).isSingleton
+        BeanDefinition(id, className, isSingleton)
+    }.toList().toSet()
 }
 
 val containerKey = "container"
