@@ -1,7 +1,9 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
 import com.lpcoder.agile.base.bean.container.support.annotation.Bean
+import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.beans.Introspector
@@ -21,9 +23,21 @@ fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
         }
         val className = it.name
         val isSingleton = it.getAnnotation(Bean::class.java).isSingleton
-        BeanDefinition(id, className, isSingleton)
+        val definition = BeanDefinition(id, className, isSingleton)
+        definition.constructorArgs.addAll(parseConstructorInjectionInfo(it))
+        definition.properties.addAll(parsePropertyInjectionInfo(it))
+        definition
     }.toList().toSet()
 }
+
+private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructorArg> {
+    return emptyList()
+}
+
+private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {
+    return emptyList()
+}
+
 
 val containerKey = "container"
 
