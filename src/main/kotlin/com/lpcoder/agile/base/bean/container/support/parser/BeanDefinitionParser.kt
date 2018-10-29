@@ -52,7 +52,7 @@ private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {
     if (fieldsToBeInjected.isEmpty()) {
         return emptyList()
     }
-    fieldsToBeInjected.map {
+    return fieldsToBeInjected.map {
         val value = if (ClassUtil.isBasicType(it.type)) {
             TypedStringValue(ClassUtil.getBasicTypeDefaultValue(it.type).toString())
         } else {
