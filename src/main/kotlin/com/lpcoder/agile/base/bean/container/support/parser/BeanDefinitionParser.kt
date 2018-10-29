@@ -34,10 +34,10 @@ fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
 }
 
 private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructorArg> {
-    val constructorToInject = clazz.constructors.firstOrNull {
+    val constructorToBeInjected = clazz.constructors.firstOrNull {
         it.isAnnotationPresent(AutoInject::class.java)
     } ?: return emptyList()
-    return constructorToInject.parameterTypes.mapIndexed { index, paramClazz ->
+    return constructorToBeInjected.parameterTypes.mapIndexed { index, paramClazz ->
         val value = if (ClassUtil.isBasicType(paramClazz)) {
             TypedStringValue(ClassUtil.getBasicTypeDefaultValue(paramClazz).toString())
         } else {
@@ -48,7 +48,18 @@ private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructor
 }
 
 private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {
-    return emptyList()
+    val fieldsToBeInjected = clazz.fields.filter { it.isAnnotationPresent(AutoInject::class.java) }.toList()
+    if (fieldsToBeInjected.isEmpty()) {
+        return emptyList()
+    }
+    fieldsToBeInjected.map {
+        val value = if (ClassUtil.isBasicType(it.type)) {
+            TypedStringValue(ClassUtil.getBasicTypeDefaultValue(it.type).toString())
+        } else {
+            RuntimeBeanReferenceValue(Introspector.decapitalize(it.type.simpleName))
+        }
+        BeanProperty(it.name, value)
+    }.toList()
 }
 
 
