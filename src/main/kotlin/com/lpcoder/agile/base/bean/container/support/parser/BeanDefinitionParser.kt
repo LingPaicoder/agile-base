@@ -1,9 +1,12 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
+import com.lpcoder.agile.base.bean.container.support.annotation.AutoInject
 import com.lpcoder.agile.base.bean.container.support.annotation.Bean
 import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
+import com.lpcoder.agile.base.bean.container.support.definition.support.RuntimeBeanReferenceValue
+import com.lpcoder.agile.base.bean.container.support.definition.support.TypedStringValue
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.beans.Introspector
@@ -31,7 +34,17 @@ fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
 }
 
 private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructorArg> {
-    return emptyList()
+    val constructorToInject = clazz.constructors.firstOrNull {
+        it.isAnnotationPresent(AutoInject::class.java)
+    } ?: return emptyList()
+    return constructorToInject.parameterTypes.mapIndexed { index, paramClazz ->
+        val value = if (ClassUtil.isBasicType(paramClazz)) {
+            TypedStringValue(ClassUtil.getBasicTypeDefaultValue(paramClazz).toString())
+        } else {
+            RuntimeBeanReferenceValue(Introspector.decapitalize(paramClazz.simpleName))
+        }
+        BeanConstructorArg(index, paramClazz.name, value)
+    }.toList()
 }
 
 private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {

@@ -9,9 +9,27 @@ object ClassUtil {
     private val PATH_SEPARATOR = "/"
     private val PACKAGE_SEPARATOR = "."
 
+    private val BASIC_TYPE_DEFAULT_VALUE_MAP = mapOf<Class<*>, Any>(
+            Byte::class.java to 0.toByte(),
+            Short::class.java to 0.toShort(),
+            Int::class.java to 0,
+            Long::class.java to 0.toLong(),
+            Float::class.java to 0.0.toFloat(),
+            Double::class.java to 0.0,
+            Char::class.java to ' ',
+            Boolean::class.java to false)
+
     // todo: study and optimize
     fun getDefaultClassLoader(): ClassLoader {
         return Thread.currentThread().contextClassLoader
+    }
+
+    fun isBasicType(clazz: Class<*>) = BASIC_TYPE_DEFAULT_VALUE_MAP.keys.contains(clazz)
+
+    fun getBasicTypeDefaultValue(clazz: Class<*>) = if (isBasicType(clazz)) {
+        BASIC_TYPE_DEFAULT_VALUE_MAP[clazz]
+    } else {
+        throw IllegalArgumentException("$clazz is not basic type")
     }
 
     fun loadClass(type: String, classLoader: ClassLoader = getDefaultClassLoader()): Class<*> =
@@ -21,7 +39,7 @@ object ClassUtil {
                 "int" -> Int::class.java
                 "long" -> Long::class.java
                 "float" -> Float::class.java
-                "double" -> Float::class.java
+                "double" -> Double::class.java
                 "char" -> Char::class.java
                 "boolean" -> Boolean::class.java
                 else -> classLoader.loadClass(type)
