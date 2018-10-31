@@ -1,6 +1,11 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
-import com.lpcoder.agile.base.bean.container.support.definition.*
+import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
+import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValue
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.BASIC_TYPE
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import com.lpcoder.agile.base.check.must
 import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNotNull
@@ -96,10 +101,10 @@ class XMLBeanDefinitionParser : BeanDefinitionParser {
                 if (refName.isNullOrBlank()) {
                     throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
                 }
-                BeanPropertyValue(refName, BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE)
+                BeanPropertyValue(refName, RUNTIME_BEAN_REFERENCE_TYPE)
             }
             isValueAttr -> {
-                BeanPropertyValue(propElement.attributeValue(valueKey), BeanPropertyValueType.BASIC_TYPE)
+                BeanPropertyValue(propElement.attributeValue(valueKey), BASIC_TYPE)
             }
             else -> throw BeanDefinitionException("$elementDesc must specify a ref or value")
         }

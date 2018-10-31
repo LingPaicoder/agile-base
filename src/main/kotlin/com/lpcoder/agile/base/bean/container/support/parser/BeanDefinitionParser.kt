@@ -2,7 +2,11 @@ package com.lpcoder.agile.base.bean.container.support.parser
 
 import com.lpcoder.agile.base.bean.container.support.annotation.AutoInject
 import com.lpcoder.agile.base.bean.container.support.annotation.Bean
-import com.lpcoder.agile.base.bean.container.support.definition.*
+import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
+import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
+import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValue
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.*
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.beans.Introspector
@@ -35,9 +39,9 @@ private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructor
     } ?: return emptyList()
     val rst = constructorToBeInjected.parameterTypes.mapIndexed { index, paramClazz ->
         val value = if (ClassUtil.isBasicType(paramClazz)) {
-            BeanPropertyValue(ClassUtil.getBasicTypeDefaultValue(paramClazz).toString(), BeanPropertyValueType.BASIC_TYPE)
+            BeanPropertyValue(ClassUtil.getBasicTypeDefaultValue(paramClazz).toString(), BASIC_TYPE)
         } else {
-            BeanPropertyValue(Introspector.decapitalize(paramClazz.simpleName), BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE)
+            BeanPropertyValue(Introspector.decapitalize(paramClazz.simpleName), RUNTIME_BEAN_REFERENCE_TYPE)
         }
         BeanConstructorArg(index, paramClazz.name, value)
     }.toList()
@@ -52,9 +56,9 @@ private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {
     }
     val rst = fieldsToBeInjected.map {
         val value = if (ClassUtil.isBasicType(it.type)) {
-            BeanPropertyValue(ClassUtil.getBasicTypeDefaultValue(it.type).toString(), BeanPropertyValueType.BASIC_TYPE)
+            BeanPropertyValue(ClassUtil.getBasicTypeDefaultValue(it.type).toString(), BASIC_TYPE)
         } else {
-            BeanPropertyValue(Introspector.decapitalize(it.type.simpleName), BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE)
+            BeanPropertyValue(Introspector.decapitalize(it.type.simpleName), RUNTIME_BEAN_REFERENCE_TYPE)
         }
         BeanProperty(it.name, value)
     }.toList()
