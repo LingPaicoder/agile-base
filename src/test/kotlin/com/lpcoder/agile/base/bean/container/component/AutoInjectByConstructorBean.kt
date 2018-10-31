@@ -5,4 +5,4 @@ import com.lpcoder.agile.base.bean.container.support.annotation.AutoInject
 import com.lpcoder.agile.base.bean.container.support.annotation.Bean
 
 @Bean
-class AutoInjectByConstructorBean(@AutoInject val autoInjectDao: AutoInjectDao)
+class AutoInjectByConstructorBean @AutoInject constructor(val autoInjectDao: AutoInjectDao)

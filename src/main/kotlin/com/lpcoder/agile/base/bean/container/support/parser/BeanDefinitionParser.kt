@@ -2,11 +2,7 @@ package com.lpcoder.agile.base.bean.container.support.parser
 
 import com.lpcoder.agile.base.bean.container.support.annotation.AutoInject
 import com.lpcoder.agile.base.bean.container.support.annotation.Bean
-import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
-import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
-import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
-import com.lpcoder.agile.base.bean.container.support.definition.support.RuntimeBeanReferenceValue
-import com.lpcoder.agile.base.bean.container.support.definition.support.TypedStringValue
+import com.lpcoder.agile.base.bean.container.support.definition.*
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.beans.Introspector
@@ -37,14 +33,16 @@ private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructor
     val constructorToBeInjected = clazz.constructors.firstOrNull {
         it.isAnnotationPresent(AutoInject::class.java)
     } ?: return emptyList()
-    return constructorToBeInjected.parameterTypes.mapIndexed { index, paramClazz ->
+    val rst = constructorToBeInjected.parameterTypes.mapIndexed { index, paramClazz ->
         val value = if (ClassUtil.isBasicType(paramClazz)) {
-            TypedStringValue(ClassUtil.getBasicTypeDefaultValue(paramClazz).toString())
+            BeanPropertyValue(ClassUtil.getBasicTypeDefaultValue(paramClazz).toString(), BeanPropertyValueType.BASIC_TYPE)
         } else {
-            RuntimeBeanReferenceValue(Introspector.decapitalize(paramClazz.simpleName))
+            BeanPropertyValue(Introspector.decapitalize(paramClazz.simpleName), BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE)
         }
         BeanConstructorArg(index, paramClazz.name, value)
     }.toList()
+    println("constructor rst:$rst")
+    return rst
 }
 
 private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {
@@ -52,14 +50,16 @@ private fun parsePropertyInjectionInfo(clazz: Class<*>): List<BeanProperty> {
     if (fieldsToBeInjected.isEmpty()) {
         return emptyList()
     }
-    return fieldsToBeInjected.map {
+    val rst = fieldsToBeInjected.map {
         val value = if (ClassUtil.isBasicType(it.type)) {
-            TypedStringValue(ClassUtil.getBasicTypeDefaultValue(it.type).toString())
+            BeanPropertyValue(ClassUtil.getBasicTypeDefaultValue(it.type).toString(), BeanPropertyValueType.BASIC_TYPE)
         } else {
-            RuntimeBeanReferenceValue(Introspector.decapitalize(it.type.simpleName))
+            BeanPropertyValue(Introspector.decapitalize(it.type.simpleName), BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE)
         }
         BeanProperty(it.name, value)
     }.toList()
+    println("property rst:$rst")
+    return rst
 }
 
 

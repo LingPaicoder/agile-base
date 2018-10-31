@@ -1,10 +1,11 @@
 package com.lpcoder.agile.base.bean.container.support.definition
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
-import com.lpcoder.agile.base.bean.container.support.definition.support.RuntimeBeanReferenceValue
-import com.lpcoder.agile.base.bean.container.support.definition.support.TypedStringValue
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.BASIC_TYPE
+import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE
 import com.lpcoder.agile.base.util.ClassUtil.loadClass
 import org.apache.commons.beanutils.ConvertUtilsBean
+
 
 class BeanConstructorArgResolver(private val container: BeanContainer) {
 
@@ -13,10 +14,9 @@ class BeanConstructorArgResolver(private val container: BeanContainer) {
     fun newInstanceByAutoWireConstructor(beanId: String): Any {
         val types = container.getBeanDefinition(beanId).constructorArgs.map { it.type }
         val argsToUse = container.getBeanDefinition(beanId).constructorArgs.map {
-            when (it.value) {
-                is RuntimeBeanReferenceValue -> BeanPropertyValueConverter(container).convert(it.value)
-                is TypedStringValue -> convertUtilsBean.lookup(loadClass(it.type)).convert(loadClass(it.type), it.value.value)
-                else -> IllegalArgumentException("unsupported value type: ${it.value::class}")
+            when (it.value.type) {
+                RUNTIME_BEAN_REFERENCE_TYPE -> BeanPropertyValueConverter(container).convert(it.value)
+                BASIC_TYPE -> convertUtilsBean.lookup(loadClass(it.type)).convert(loadClass(it.type), it.value.value)
             }
         }
         val constructorToUse = container.getBeanClass(beanId).constructors

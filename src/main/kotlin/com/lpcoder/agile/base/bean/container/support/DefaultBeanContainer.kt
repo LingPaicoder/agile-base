@@ -52,6 +52,9 @@ class DefaultBeanContainer(private val resource: Resource,
                 beanDefinitionMap[it.id] = it
                 beanClassMap[it.id] = classLoader.loadClass(it.beanClassName)
             }
+            println("beanDefinitionMap:$beanDefinitionMap")
+            println("beanDefinitionMap.constructorArgs:${beanDefinitionMap.values.flatMap { it.constructorArgs }.toList()}")
+            println("beanDefinitionMap.properties:${beanDefinitionMap.values.flatMap { it.properties }.toList()}")
             beanDefinitions.stream().filter(BeanDefinition::isSingleton)
                     .filter { !singletonObjMap.containsKey(it.id) }.forEach {
                 singletonObjMap[it.id] = createBean(it.id)
@@ -59,6 +62,8 @@ class DefaultBeanContainer(private val resource: Resource,
             printInitEndLog()
         } catch (e: BeanCreationException) {
             throw e
+        } catch (e: InstantiationException) {
+            throw BeanCreationException("unable to instantiate singleton bean: ${e.message}", e)
         } catch (e: CheckException) {
             throw BeanDefinitionException(e.desc, e)
         } catch (e: ClassNotFoundException) {
