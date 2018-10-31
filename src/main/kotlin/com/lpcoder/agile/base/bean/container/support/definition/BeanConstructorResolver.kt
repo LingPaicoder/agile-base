@@ -7,7 +7,7 @@ import com.lpcoder.agile.base.util.ClassUtil.loadClass
 import org.apache.commons.beanutils.ConvertUtilsBean
 
 
-class BeanConstructorArgResolver(private val container: BeanContainer) {
+class BeanConstructorResolver(private val container: BeanContainer) {
 
     private val convertUtilsBean = ConvertUtilsBean()
 

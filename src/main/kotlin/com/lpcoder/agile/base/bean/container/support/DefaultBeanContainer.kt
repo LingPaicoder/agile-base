@@ -1,7 +1,7 @@
 package com.lpcoder.agile.base.bean.container.support
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
-import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArgResolver
+import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorResolver
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueConverter
 import com.lpcoder.agile.base.bean.container.support.exception.BeanCreationException
@@ -30,7 +30,7 @@ class DefaultBeanContainer(private val resource: Resource,
     private val beanClassMap = mutableMapOf<String, Class<*>>()
     private val singletonObjMap = mutableMapOf<String, Any>()
 
-    private val constructorResolver = BeanConstructorArgResolver(this)
+    private val beanConstructorResolver = BeanConstructorResolver(this)
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -108,7 +108,7 @@ class DefaultBeanContainer(private val resource: Resource,
 
     private fun instantiateBean(beanId: String): Any {
         return if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
-            constructorResolver.newInstanceByAutoWireConstructor(beanId)
+            beanConstructorResolver.newInstanceByAutoWireConstructor(beanId)
         } else {
             getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
         }
