@@ -45,15 +45,9 @@ object ClassUtil {
                 else -> classLoader.loadClass(type)
             }
 
-    fun getClassSet(packageName: String): Set<Class<*>> {
-        val urls = getDefaultClassLoader().getResources(packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR))
-        while (urls.hasMoreElements()) {
-            val url = urls.nextElement()
-        }
-        return getDefaultClassLoader().getResources(packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR))
-                .toList().map { getClassSet(it, packageName) }.flatMap { it }.toSet()
-    }
-
+    fun getClassSet(packageName: String): Set<Class<*>> =
+            getDefaultClassLoader().getResources(packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR))
+                    .toList().map { getClassSet(it, packageName) }.flatMap { it }.toSet()
 
     private fun getClassSet(url: URL, packageName: String): Set<Class<*>> {
         return when (url.protocol) {

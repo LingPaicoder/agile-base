@@ -30,6 +30,8 @@ class DefaultBeanContainer(private val resource: Resource,
     private val beanClassMap = mutableMapOf<String, Class<*>>()
     private val singletonObjMap = mutableMapOf<String, Any>()
 
+    private val constructorResolver = BeanConstructorArgResolver(this)
+
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     init {
@@ -106,7 +108,7 @@ class DefaultBeanContainer(private val resource: Resource,
 
     private fun instantiateBean(beanId: String): Any {
         return if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
-            BeanConstructorArgResolver(this).newInstanceByAutoWireConstructor(beanId)
+            constructorResolver.newInstanceByAutoWireConstructor(beanId)
         } else {
             getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
         }
