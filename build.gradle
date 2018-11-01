@@ -26,6 +26,7 @@ dependencies {
     compile "commons-collections:commons-collections:3.2.1"
     compile "dom4j:dom4j:1.6.1"
     compile 'org.yaml:snakeyaml:1.17'
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     testCompile "junit:junit:4.12"
 }
 
