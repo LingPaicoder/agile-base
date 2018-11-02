@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container>
     <auto-scans>
-        <scan package="com.lpcoder.agile.base.bean.container" />
+        <scan package="com.lpcoder.agile.base.bean.container"/>
     </auto-scans>
+    <aop-configs>
+        <pointcut id="placeOrder"
+                  expression="execution(* com.lpcoder.agile.base.bean.container.service.placeOrder(..))">
+            <before method="transactionManager::start"/>
+            <after-returning method="transactionManager::commit"/>
+            <after-throwing method="transactionManager::rollback"/>
+        </pointcut>
+    </aop-configs>
 </container>
