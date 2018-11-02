@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container>
+    <auto-scans>
+        <scan package="com.lpcoder.agile.base.bean.container" />
+    </auto-scans>
+</container>
