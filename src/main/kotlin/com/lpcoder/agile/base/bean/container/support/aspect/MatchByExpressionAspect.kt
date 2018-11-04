@@ -4,9 +4,9 @@ import com.lpcoder.agile.base.util.ClassUtil
 import org.aspectj.weaver.tools.PointcutParser
 import org.aspectj.weaver.tools.PointcutPrimitive
 
-abstract class MatchByExpressionAspect<T, R>(order: Int = 1,
+abstract class MatchByExpressionAspect(order: Int = 1,
                                              expression: String)
-    : BaseAspect<T, R>(order,
+    : BaseAspect(order,
         { method ->
             val pointcutParser = PointcutParser
                     .getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(

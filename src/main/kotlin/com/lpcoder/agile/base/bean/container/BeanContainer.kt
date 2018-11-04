@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.bean.container
 
+import com.lpcoder.agile.base.bean.container.support.aspect.AbstractAspect
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 
 // todo : bean生命周期的管理
@@ -8,4 +9,6 @@ interface BeanContainer {
     fun getBeanDefinition(beanId: String): BeanDefinition
     fun getBeanClass(beanId: String): Class<*>
     fun getBeanClassLoader(): ClassLoader
+    fun getBeanDefinitions(): Set<BeanDefinition>
+    fun getAspects(): Set<AbstractAspect>
 }

@@ -20,7 +20,7 @@ class BeanConstructorResolver(private val container: BeanContainer) {
             }
         }
         val constructorToUse = container.getBeanClass(beanId).constructors
-                .find { it.parameterTypes.toList().map { it.name } == types }
+                .find {constructor -> constructor.parameterTypes.toList().map { it.name } == types }
                 ?: throw IllegalArgumentException("$beanId can't find a matched constructor")
         return constructorToUse.newInstance(*argsToUse.toTypedArray())
     }

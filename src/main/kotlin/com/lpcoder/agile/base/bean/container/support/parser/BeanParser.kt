@@ -14,11 +14,12 @@ import com.lpcoder.agile.base.check.ruler.support.AnyRuler
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.beans.Introspector
+import java.lang.reflect.Modifier
 import kotlin.streams.toList
 
 interface BeanParser {
     fun parseBeanDefinition(resource: Resource): Set<BeanDefinition>
-    fun parseAspect(resource: Resource): Set<AbstractAspect<*, *>>
+    fun parseAspect(resource: Resource): Set<AbstractAspect>
 }
 
 fun checkResource(resource: Resource) {
@@ -43,11 +44,14 @@ fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
     }.toList().toSet()
 }
 
-fun scanAspect(packages: List<String>): Set<AbstractAspect<*, *>> {
+fun scanAspect(packages: List<String>): Set<AbstractAspect> {
     val classes = packages.map { ClassUtil.getClassSet(it) }.flatMap { it }.toSet()
     return classes.stream().filter {
-        AbstractAspect::class.java.isAssignableFrom(it) && it != AbstractAspect::class.java
-    }.map { it.newInstance() as AbstractAspect<*, *> }.toList().toSet()
+        AbstractAspect::class.java.isAssignableFrom(it)
+                && it != AbstractAspect::class.java
+                && !it.isInterface
+                && !Modifier.isAbstract(it.modifiers)
+    }.map { it.newInstance() as AbstractAspect }.toList().toSet()
 }
 
 private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructorArg> {

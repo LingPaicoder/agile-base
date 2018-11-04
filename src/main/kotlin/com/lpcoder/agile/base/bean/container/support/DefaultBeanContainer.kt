@@ -2,6 +2,7 @@ package com.lpcoder.agile.base.bean.container.support
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
 import com.lpcoder.agile.base.bean.container.support.aspect.AbstractAspect
+import com.lpcoder.agile.base.bean.container.support.aspect.BeanAspectResolver
 import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorResolver
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueConverter
@@ -24,13 +25,14 @@ class DefaultBeanContainer(private val resource: Resource,
     : BeanContainer {
 
     private val beanDefinitions = mutableSetOf<BeanDefinition>()
-    private val aspects = mutableSetOf<AbstractAspect<*, *>>()
+    private val aspects = mutableSetOf<AbstractAspect>()
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
     private val beanClassMap = mutableMapOf<String, Class<*>>()
     private val singletonObjMap = mutableMapOf<String, Any>()
 
     private val beanConstructorResolver = BeanConstructorResolver(this)
+    private val beanAspectResolver = BeanAspectResolver(this)
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -95,6 +97,10 @@ class DefaultBeanContainer(private val resource: Resource,
 
     override fun getBeanClassLoader(): ClassLoader = classLoader
 
+    override fun getBeanDefinitions(): Set<BeanDefinition> = beanDefinitions.toSet()
+
+    override fun getAspects(): Set<AbstractAspect> = aspects.toSet()
+
 
     private fun createBean(beanId: String): Any {
         val bean = instantiateBean(beanId)
@@ -103,10 +109,17 @@ class DefaultBeanContainer(private val resource: Resource,
     }
 
     private fun instantiateBean(beanId: String): Any {
-        return if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
+        val bean = if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
             beanConstructorResolver.newInstanceByAutoWireConstructor(beanId)
         } else {
             getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
+        }
+
+        val isNeedAdvice = CollectionUtil.isNotEmpty(beanAspectResolver.beanIdToAspectSetMap[beanId])
+        return if (isNeedAdvice) {
+            beanAspectResolver.createProxy(bean, beanId)
+        } else {
+            bean
         }
     }
 

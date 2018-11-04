@@ -25,7 +25,7 @@ class XMLBeanParser : BeanParser {
         return definitions
     }
 
-    override fun parseAspect(resource: Resource): Set<AbstractAspect<*, *>> {
+    override fun parseAspect(resource: Resource): Set<AbstractAspect> {
         checkResource(resource)
         val containerElement = resource.getInputStream().use { SAXReader().read(it).rootElement }
         return scanAspect(getPackages(containerElement))

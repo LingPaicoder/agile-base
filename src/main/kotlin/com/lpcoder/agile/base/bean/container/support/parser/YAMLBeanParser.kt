@@ -19,7 +19,7 @@ class YAMLBeanParser : BeanParser {
         return definitions
     }
 
-    override fun parseAspect(resource: Resource): Set<AbstractAspect<*, *>> {
+    override fun parseAspect(resource: Resource): Set<AbstractAspect> {
         checkResource(resource)
         val containerInfo = getContainerInfo(resource)
         val packages = getPackages(containerInfo) ?: return emptySet()
