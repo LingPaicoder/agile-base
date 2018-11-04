@@ -3,12 +3,9 @@
     <auto-scans>
         <scan package="com.lpcoder.agile.base.bean.container"/>
     </auto-scans>
-    <aop-configs>
-        <pointcut id="placeOrder"
-                  expression="execution(* com.lpcoder.agile.base.bean.container.service.placeOrder(..))">
-            <before method="transactionManager::start"/>
-            <after-returning method="transactionManager::commit"/>
-            <after-throwing method="transactionManager::rollback"/>
+    <aspects>
+        <pointcut expression="* com.lpcoder.agile.base.bean.container.service.placeOrder(..)">
+            <aspect order="1" ref="transactionAspect"/>
         </pointcut>
-    </aop-configs>
+    </aspects>
 </container>
