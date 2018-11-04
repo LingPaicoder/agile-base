@@ -18,14 +18,24 @@ class BeanAspectResolver(private val container: BeanContainer) {
             }.toSet()
             beanIdToAspectSetMap[beanDefinition.id] = aspectSet
         }
-
     }
 
-    fun createProxy(bean: Any, beanId: String): Any {
+    fun createProxy(constructorArgTypes: Array<Class<*>>, constructorArgs: Array<Any>, beanId: String): Any {
         val targetClass = container.getBeanClass(beanId)
         val methodInterceptor = MethodInterceptor { targetObject, targetMethod, methodParams, methodProxy ->
             AspectContext(targetClass, targetObject, targetMethod, methodProxy, methodParams, beanIdToAspectSetMap[beanId]!!).proceed()
         }
-        return Enhancer.create(targetClass,methodInterceptor )
+        val enhancer = Enhancer()
+        enhancer.setSuperclass(targetClass)
+        enhancer.setCallback(methodInterceptor)
+        return enhancer.create(constructorArgTypes, constructorArgs)
+    }
+
+    fun createProxyByNoArgumentConstructor(beanId: String): Any {
+        val targetClass = container.getBeanClass(beanId)
+        val methodInterceptor = MethodInterceptor { targetObject, targetMethod, methodParams, methodProxy ->
+            AspectContext(targetClass, targetObject, targetMethod, methodProxy, methodParams, beanIdToAspectSetMap[beanId]!!).proceed()
+        }
+        return Enhancer.create(targetClass, methodInterceptor)
     }
 }

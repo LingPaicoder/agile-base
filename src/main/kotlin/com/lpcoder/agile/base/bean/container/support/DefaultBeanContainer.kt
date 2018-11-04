@@ -109,17 +109,21 @@ class DefaultBeanContainer(private val resource: Resource,
     }
 
     private fun instantiateBean(beanId: String): Any {
-        val bean = if (beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()) {
-            beanConstructorResolver.newInstanceByAutoWireConstructor(beanId)
-        } else {
-            getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
-        }
-
-        val isNeedAdvice = CollectionUtil.isNotEmpty(beanAspectResolver.beanIdToAspectSetMap[beanId])
-        return if (isNeedAdvice) {
-            beanAspectResolver.createProxy(bean, beanId)
-        } else {
-            bean
+        val constructorHasArgs = beanDefinitionMap[beanId]!!.constructorArgs.isNotEmpty()
+        val needAdvice = CollectionUtil.isNotEmpty(beanAspectResolver.beanIdToAspectSetMap[beanId])
+        return when {
+            constructorHasArgs && needAdvice -> {
+                val constructorArgTypes = beanConstructorResolver.getConstructor(beanId).parameterTypes
+                val constructorArgs = beanConstructorResolver.getConstructorArgs(beanId)
+                beanAspectResolver.createProxy(constructorArgTypes, constructorArgs, beanId)
+            }
+            constructorHasArgs && !needAdvice ->
+                beanConstructorResolver.newInstanceByAutoWireConstructor(beanId)
+            !constructorHasArgs && needAdvice ->
+                beanAspectResolver.createProxyByNoArgumentConstructor(beanId)
+            !constructorHasArgs && !needAdvice ->
+                getFromMapForcibly(beanClassMap, beanId, "beanClassMap").newInstance()
+            else -> throw RuntimeException("impossible condition happened")
         }
     }
 
