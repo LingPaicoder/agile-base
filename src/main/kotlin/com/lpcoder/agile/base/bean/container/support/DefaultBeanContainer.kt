@@ -1,6 +1,7 @@
 package com.lpcoder.agile.base.bean.container.support
 
 import com.lpcoder.agile.base.bean.container.BeanContainer
+import com.lpcoder.agile.base.bean.container.support.aspect.AbstractAspect
 import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorResolver
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueConverter
@@ -9,9 +10,6 @@ import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionExc
 import com.lpcoder.agile.base.bean.container.support.parser.BeanParser
 import com.lpcoder.agile.base.bean.container.support.parser.SupportedFileTypeEnum
 import com.lpcoder.agile.base.check.CheckException
-import com.lpcoder.agile.base.check.alias
-import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.support.CollRuler.beNotContainsDup
 import com.lpcoder.agile.base.core.resource.ClassPathResource
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
@@ -19,12 +17,14 @@ import com.lpcoder.agile.base.util.CollectionUtil
 import com.lpcoder.agile.base.util.MapUtil.getFromMapForcibly
 import org.apache.commons.beanutils.BeanUtils
 import org.slf4j.LoggerFactory
-import java.util.stream.Collectors
 
 class DefaultBeanContainer(private val resource: Resource,
                            private val parser: BeanParser,
                            private val classLoader: ClassLoader)
     : BeanContainer {
+
+    private val beanDefinitions = mutableSetOf<BeanDefinition>()
+    private val aspects = mutableSetOf<AbstractAspect<*, *>>()
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
     private val beanClassMap = mutableMapOf<String, Class<*>>()
@@ -46,9 +46,8 @@ class DefaultBeanContainer(private val resource: Resource,
 
     private fun initContainer() {
         try {
-            val beanDefinitions = parser.parseBeanDefinition(resource)
-            val beanIds = beanDefinitions.stream().map(BeanDefinition::id).collect(Collectors.toList())
-            beanIds alias "beanIds" must beNotContainsDup
+            beanDefinitions.addAll(parser.parseBeanDefinition(resource))
+            aspects.addAll(parser.parseAspect(resource))
 
             beanDefinitions.stream().forEach {
                 beanDefinitionMap[it.id] = it
@@ -56,8 +55,8 @@ class DefaultBeanContainer(private val resource: Resource,
             }
             beanDefinitions.stream().filter(BeanDefinition::isSingleton)
                     .filter { !singletonObjMap.containsKey(it.id) }.forEach {
-                singletonObjMap[it.id] = createBean(it.id)
-            }
+                        singletonObjMap[it.id] = createBean(it.id)
+                    }
             printInitEndLog()
         } catch (e: BeanCreationException) {
             throw e
