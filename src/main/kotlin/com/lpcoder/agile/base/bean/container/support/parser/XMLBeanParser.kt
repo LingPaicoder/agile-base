@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
+import com.lpcoder.agile.base.bean.container.support.aspect.AbstractAspect
 import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
@@ -7,35 +8,37 @@ import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValu
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.BASIC_TYPE
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
-import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNotNull
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.StringUtil
 import org.apache.commons.lang3.StringUtils
 import org.dom4j.Element
 import org.dom4j.io.SAXReader
 
-class XMLBeanDefinitionParser : BeanDefinitionParser {
+class XMLBeanParser : BeanParser {
 
-    override fun parse(source: Resource): List<BeanDefinition> {
-        source must beNotNull
-        source.getInputStream() must beNotNull
-
-        val containerElement = source.getInputStream().use { SAXReader().read(it).rootElement }
-        val definitions = mutableListOf<BeanDefinition>()
-
+    override fun parseBeanDefinition(resource: Resource): Set<BeanDefinition> {
+        checkResource(resource)
+        val containerElement = resource.getInputStream().use { SAXReader().read(it).rootElement }
+        val definitions = mutableSetOf<BeanDefinition>()
         parseAutoScans(containerElement, definitions)
         parseBeans(containerElement, definitions)
         return definitions
     }
 
-    private fun parseAutoScans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
-        val packages = containerElement.element(autoScansKey)?.elements(scanKey)
-                ?.map { (it as Element).attributeValue(packageKey) }?.toList() ?: emptyList()
-        scanBeanDefinition(packages).forEach { definitions.add(it) }
+    override fun parseAspect(resource: Resource): Set<AbstractAspect<*, *>> {
+        checkResource(resource)
+        val containerElement = resource.getInputStream().use { SAXReader().read(it).rootElement }
+        return scanAspect(getPackages(containerElement))
     }
 
-    private fun parseBeans(containerElement: Element, definitions: MutableList<BeanDefinition>) {
+    private fun parseAutoScans(containerElement: Element, definitions: MutableSet<BeanDefinition>) =
+            scanBeanDefinition(getPackages(containerElement)).forEach { definitions.add(it) }
+
+    private fun getPackages(containerElement: Element) =
+            containerElement.element(autoScansKey)?.elements(scanKey)
+                    ?.map { (it as Element).attributeValue(packageKey) }?.toList() ?: emptyList()
+
+    private fun parseBeans(containerElement: Element, definitions: MutableSet<BeanDefinition>) {
         containerElement.element(beansKey).elements(beanKey).map { beanElement ->
             beanElement as Element
             val id = beanElement.attributeValue(idKey)

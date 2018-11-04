@@ -2,19 +2,28 @@ package com.lpcoder.agile.base.bean.container.support.parser
 
 import com.lpcoder.agile.base.bean.container.support.annotation.AutoInject
 import com.lpcoder.agile.base.bean.container.support.annotation.Bean
+import com.lpcoder.agile.base.bean.container.support.aspect.AbstractAspect
 import com.lpcoder.agile.base.bean.container.support.definition.BeanConstructorArg
 import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanProperty
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValue
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.BASIC_TYPE
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE
+import com.lpcoder.agile.base.check.must
+import com.lpcoder.agile.base.check.ruler.support.AnyRuler
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.ClassUtil
 import java.beans.Introspector
 import kotlin.streams.toList
 
-interface BeanDefinitionParser {
-    fun parse(source: Resource): List<BeanDefinition>
+interface BeanParser {
+    fun parseBeanDefinition(resource: Resource): Set<BeanDefinition>
+    fun parseAspect(resource: Resource): Set<AbstractAspect<*, *>>
+}
+
+fun checkResource(resource: Resource) {
+    resource must AnyRuler.beNotNull
+    resource.getInputStream() must AnyRuler.beNotNull
 }
 
 fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
@@ -32,6 +41,13 @@ fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {
         definition.properties.addAll(parsePropertyInjectionInfo(it))
         definition
     }.toList().toSet()
+}
+
+fun scanAspect(packages: List<String>): Set<AbstractAspect<*, *>> {
+    val classes = packages.map { ClassUtil.getClassSet(it) }.flatMap { it }.toSet()
+    return classes.stream().filter {
+        AbstractAspect::class.java.isAssignableFrom(it) && it != AbstractAspect::class.java
+    }.map { it.newInstance() as AbstractAspect<*, *> }.toList().toSet()
 }
 
 private fun parseConstructorInjectionInfo(clazz: Class<*>): List<BeanConstructorArg> {

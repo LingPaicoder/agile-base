@@ -1,37 +1,46 @@
 package com.lpcoder.agile.base.bean.container.support.parser
 
+import com.lpcoder.agile.base.bean.container.support.aspect.AbstractAspect
 import com.lpcoder.agile.base.bean.container.support.definition.*
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
-import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.support.AnyRuler.beNotNull
 import com.lpcoder.agile.base.core.resource.Resource
 import com.lpcoder.agile.base.util.MapUtil
 import com.lpcoder.agile.base.util.StringUtil
 import org.yaml.snakeyaml.Yaml
 
-class YAMLBeanDefinitionParser : BeanDefinitionParser {
+class YAMLBeanParser : BeanParser {
 
-    override fun parse(source: Resource): List<BeanDefinition> {
-        source must beNotNull
-        source.getInputStream() must beNotNull
-
-        @Suppress("UNCHECKED_CAST")
-        val container = MapUtil.getFromMapForcibly(source.getInputStream().use {
-            Yaml().load(it) as Map<String, Map<String, List<Map<String, Any>>>>
-        }, containerKey, "containerConfig")
-        val definitions = mutableListOf<BeanDefinition>()
-
-        parseAutoScans(container, definitions)
-        parseBeans(container, definitions)
+    override fun parseBeanDefinition(resource: Resource): Set<BeanDefinition> {
+        checkResource(resource)
+        val containerInfo = getContainerInfo(resource)
+        val definitions = mutableSetOf<BeanDefinition>()
+        parseAutoScans(containerInfo, definitions)
+        parseBeans(containerInfo, definitions)
         return definitions
     }
 
-    private fun parseAutoScans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {
-        val packages = container[autoScansKey]?.map { it[packageKey] as String }?.toList() ?: return
+    override fun parseAspect(resource: Resource): Set<AbstractAspect<*, *>> {
+        checkResource(resource)
+        val containerInfo = getContainerInfo(resource)
+        val packages = getPackages(containerInfo) ?: return emptySet()
+        return scanAspect(packages)
+    }
+
+    private fun parseAutoScans(container: Map<String, List<Map<String, Any>>>, definitions: MutableSet<BeanDefinition>) {
+        val packages = getPackages(container) ?: return
         scanBeanDefinition(packages).forEach { definitions.add(it) }
     }
 
-    private fun parseBeans(container: Map<String, List<Map<String, Any>>>, definitions: MutableList<BeanDefinition>) {
+    @Suppress("UNCHECKED_CAST")
+    private fun getContainerInfo(resource: Resource) =
+            MapUtil.getFromMapForcibly(resource.getInputStream().use {
+                Yaml().load(it) as Map<String, Map<String, List<Map<String, Any>>>>
+            }, containerKey, "containerConfig")
+
+    private fun getPackages(container: Map<String, List<Map<String, Any>>>) =
+            container[autoScansKey]?.map { it[packageKey] as String }?.toList()
+
+    private fun parseBeans(container: Map<String, List<Map<String, Any>>>, definitions: MutableSet<BeanDefinition>) {
         container[beansKey]?.map { element ->
             val id = element[idKey] as String
             val clazz = element[classKey] as String

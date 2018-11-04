@@ -6,7 +6,7 @@ import com.lpcoder.agile.base.bean.container.support.definition.BeanDefinition
 import com.lpcoder.agile.base.bean.container.support.definition.BeanPropertyValueConverter
 import com.lpcoder.agile.base.bean.container.support.exception.BeanCreationException
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
-import com.lpcoder.agile.base.bean.container.support.parser.BeanDefinitionParser
+import com.lpcoder.agile.base.bean.container.support.parser.BeanParser
 import com.lpcoder.agile.base.bean.container.support.parser.SupportedFileTypeEnum
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory
 import java.util.stream.Collectors
 
 class DefaultBeanContainer(private val resource: Resource,
-                           private val parser: BeanDefinitionParser,
+                           private val parser: BeanParser,
                            private val classLoader: ClassLoader)
     : BeanContainer {
 
@@ -46,7 +46,7 @@ class DefaultBeanContainer(private val resource: Resource,
 
     private fun initContainer() {
         try {
-            val beanDefinitions = parser.parse(resource)
+            val beanDefinitions = parser.parseBeanDefinition(resource)
             val beanIds = beanDefinitions.stream().map(BeanDefinition::id).collect(Collectors.toList())
             beanIds alias "beanIds" must beNotContainsDup
 

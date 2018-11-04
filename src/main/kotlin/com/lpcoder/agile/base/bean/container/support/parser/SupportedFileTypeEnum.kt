@@ -3,9 +3,9 @@ package com.lpcoder.agile.base.bean.container.support.parser
 import com.lpcoder.agile.base.bean.container.support.exception.BeanDefinitionException
 import org.apache.commons.lang3.StringUtils
 
-enum class SupportedFileTypeEnum(val suffix: String, val parser: BeanDefinitionParser) {
-    XML("xml", XMLBeanDefinitionParser()),
-    YAML("yaml", YAMLBeanDefinitionParser());
+enum class SupportedFileTypeEnum(val suffix: String, val parser: BeanParser) {
+    XML("xml", XMLBeanParser()),
+    YAML("yaml", YAMLBeanParser());
 
     companion object {
         fun getBySuffix(suffix: String): SupportedFileTypeEnum {
