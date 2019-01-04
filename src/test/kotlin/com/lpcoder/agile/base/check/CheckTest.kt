@@ -26,6 +26,7 @@ class CheckTest {
     fun mustTest() {
         val trueIdCard = "130802198108204219"
         trueIdCard alias "身份证号" must beIdCard
+        //(trueIdCard.alias("身份证号")).must(beIdCard)
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11007, desc=身份证号必须符合身份证格式")
