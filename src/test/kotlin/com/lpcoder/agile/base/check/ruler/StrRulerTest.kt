@@ -8,8 +8,6 @@ import com.lpcoder.agile.base.check.ruler.support.StrRuler.beAllLetter
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beDigit
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beEmail
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beEmpty
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.notEmpty
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.notNull
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNull
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.bePhone
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beStandardDate
@@ -21,6 +19,8 @@ import com.lpcoder.agile.base.check.ruler.support.StrRuler.lengthGt
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.lengthGte
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.lengthLt
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.lengthLte
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.notEmpty
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.notNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -83,7 +83,7 @@ class StrRulerTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11008, desc=email必须符合邮箱格式")
         email = str
-        email alias "beEmail" must beEmail
+        email alias "email" must beEmail
     }
 
     @Test
@@ -94,7 +94,7 @@ class StrRulerTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11009, desc=phone必须符合手机号格式")
         phone = str
-        phone alias "bePhone" must bePhone
+        phone alias "phone" must bePhone
     }
 
     @Test

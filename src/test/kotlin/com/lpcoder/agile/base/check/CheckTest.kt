@@ -2,7 +2,6 @@ package com.lpcoder.agile.base.check
 
 import com.lpcoder.agile.base.check.ruler.Ruler
 import com.lpcoder.agile.base.check.ruler.support.AnyRuler
-import com.lpcoder.agile.base.check.ruler.support.AnyRuler.notNull
 import com.lpcoder.agile.base.check.ruler.support.IntRuler.lte
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beEmpty
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beIdCard
@@ -21,7 +20,7 @@ class CheckTest {
     val thrown: ExpectedException = ExpectedException.none()
 
     /**
-     * 通过alias、must中缀方法以类自然语言方式编程做校验(自解释性强,推荐)
+     * 使用alias、must中缀方法以类自然语言方式校验(自解释性强,推荐)
      */
     @Test
     fun mustTest() {
@@ -36,7 +35,7 @@ class CheckTest {
     }
 
     /**
-     * 通过doCheck方法以传统Java语法方式做校验(自解释性弱,不推荐)
+     * 使用doCheck方法做校验
      */
     @Test
     fun doCheckTest() {
@@ -50,7 +49,23 @@ class CheckTest {
     }
 
     /**
-     * 若校验失败则会抛出CheckException异常
+     * 建议为校验对象设置别名,如果不需要别名,也可不传,别名默认值为空串""
+     */
+    @Test
+    fun aliasTest() {
+        var idCard: String? = "130802198108204219"
+        // 不使用别名
+        idCard must beIdCard
+
+        idCard = null
+        thrown.expect(CheckException::class.java)
+        thrown.expectMessage("code=-11013, desc=身份证号不能为Null")
+        // 使用别名
+        idCard alias "身份证号" must beIdCard
+    }
+
+    /**
+     * 校验失败抛出异常：CheckException
      */
     @Test
     fun exceptionTest() {
@@ -65,7 +80,24 @@ class CheckTest {
     }
 
     /**
-     * 通过ruler.or方法实现规则的“或”逻辑
+     * 规则的“且”逻辑
+     */
+    @Test
+    fun andTest() {
+        var specialName = "张三"
+        // 以下三种写法效果相同
+        specialName alias "姓名" must be(lengthGte(2), lengthLte(10))
+        specialName alias "姓名" must (lengthGte(2) and lengthLte(10))
+        specialName alias "姓名" must be(Ruler.ofAll(lengthGte(2), lengthLte(10)))
+
+        thrown.expect(CheckException::class.java)
+        thrown.expectMessage("code=-11005, desc=姓名的长度必须小于或等于10")
+        specialName = "乔伊·亚历山大·比基·卡利斯勒·达夫·埃利奥特·福克斯·伊维鲁莫"
+        specialName alias "姓名" must (lengthGte(2) and lengthLte(10))
+    }
+
+    /**
+     * 规则的“或”逻辑
      */
     @Test
     fun orTest() {
@@ -84,25 +116,7 @@ class CheckTest {
     }
 
     /**
-     * 通过and、Ruler.ofAll()、可变长参数实现规则的“且”逻辑
-     */
-    @Test
-    fun andTest() {
-        var specialName = "张三"
-        // 下面三种写法效果相同
-        specialName alias "姓名" must (lengthGte(2) and lengthLte(10))
-        specialName alias "姓名" must be(Ruler.ofAll(lengthGte(2), lengthLte(10)))
-        specialName alias "姓名" must be(lengthGte(2), lengthLte(10))
-
-        thrown.expect(CheckException::class.java)
-        thrown.expectMessage("code=-11005, desc=姓名的长度必须小于或等于10")
-        specialName = "乔伊·亚历山大·比基·卡利斯勒·达夫·埃利奥特·福克斯·伊维鲁莫"
-        specialName alias "姓名" must (lengthGte(2) and lengthLte(10))
-    }
-
-    /**
-     * 除了beNullVal和nullVal()之外的其他内置Ruler,
-     * 都会先进行beNotNull校验,若业务场景允许为null,可用或逻辑处理
+     * 内置Ruler对null的特殊处理：除了beNull之外的其他内置Ruler,都会先进行notNull校验,若业务场景允许为null,可用或逻辑处理
      */
     @Test
     fun nullTest() {
@@ -115,37 +129,21 @@ class CheckTest {
     }
 
     /**
-     * 可为校验对象设置别名,如果不需要别名,也可不传,别名默认值为空串""
-     */
-    @Test
-    fun aliasTest() {
-        val idCard: String? = null
-        // 不使用别名
-        idCard must beNull.or(beIdCard)
-
-        thrown.expect(CheckException::class.java)
-        thrown.expectMessage("code=-11013, desc=身份证号不能为Null")
-        // 使用别名
-        idCard alias "身份证号" must beIdCard
-    }
-
-    /**
-     * 自定义错误编号和错误描述(支持在desc中对norm进行格式化)
+     * 自定义错误编号code和错误描述desc(支持在desc中对校验基准norm进行格式化)
      */
     @Test
     fun userDefinedFailCodeAndDescTest() {
         val specialName = "乔伊·亚历山大·比基·卡利斯勒·达夫·埃利奥特·福克斯·伊维鲁莫"
-        val nameDesc = "姓名"
-        val nameTooLongCode = -2L
-        val lteNorm = 10
-        // 注意此处%d的用法
-        val nameTooLongDesc = "长度超过限制,允许的最大长度:%d"
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-2, desc=姓名长度超过限制,允许的最大长度:10")
+        // 自定义code和desc(注意此处%d的用法)
+        specialName alias "姓名" must lengthLte(10, -2, "长度超过限制,允许的最大长度:%d")
 
-        specialName alias nameDesc must be(lengthGte(2),
-                lengthLte(lteNorm, nameTooLongCode, nameTooLongDesc))
+        thrown.expect(CheckException::class.java)
+        thrown.expectMessage("code=-11005, desc=姓名长度超过限制,允许的最大长度:10")
+        // 只自定义desc,code使用默认值
+        specialName alias "姓名" must lengthLte(10, desc = "长度超过限制,允许的最大长度:%d")
     }
 
     data class Custom(var customId: String?, var name: String?, var age: Int?)
@@ -167,24 +165,5 @@ class CheckTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-18005, desc=商家年龄必须小于或等于60")
         custom must be(customAddRuler)
-    }
-
-    data class User(var userName: String, var password: String)
-
-    private fun queryUserByUserNameAndPassword(userName: String, password: String): User? =
-        User(userName, password)
-
-    private fun login(userName: String, password: String): User {
-        userName alias "用户名" must notEmpty
-        password alias "密码" must notEmpty
-        val user = queryUserByUserNameAndPassword(userName, password)
-        user must notNull(desc = "用户名或密码错误")
-        return user!!
-    }
-
-    @Test
-    fun testLogin() {
-        thrown.expect(CheckException::class.java)
-        login("", "")
     }
 }
