@@ -21,7 +21,7 @@ agile-base是灵派基础包，提供了一些Kotlin项目常用的工具类。
 
 ## 使用示例
 
-使用alias、must中缀方法以类自然语言方式校验(自解释性强,推荐)
+使用alias、must中缀方法以类自然语言方式校验（自解释性强,推荐）
 ```kotlin
 val idCard = "130802198108204219"
 idCard alias "身份证号" must beIdCard
@@ -33,7 +33,7 @@ val idCard = "130802198108204219"
 doCheck(idCard, "身份证号", beIdCard)
 ```
 
-建议为校验对象设置别名,如果不需要别名,也可不传,别名默认值为空串""
+建议为校验对象设置别名，如果不需要别名，也可不传，别名默认值为空串""
 ```kotlin
 val idCard: String? = null
 // 不使用别名
@@ -70,17 +70,15 @@ var specialName = "张三"
 specialName alias "姓名" must beName
 ```
 
-内置Ruler对null的特殊处理：
+内置Ruler对null的特殊处理
 
-除了beNull之外的其他内置Ruler,都会先进行notNull校验。
-
-若业务场景允许为null,可用或逻辑处理。
+除了beNull之外的其他内置Ruler，都会先进行notNull校验。若业务场景允许为null，可用或逻辑处理。
 ```kotlin
 val idCard: String? = null
 idCard alias "身份证号" must beNull.or(beIdCard)
 ```
 
-自定义错误编号code和错误描述desc(支持在desc中对校验基准norm进行格式化)
+自定义错误编号code和错误描述desc（支持在desc中对校验基准norm进行格式化）
 ```kotlin
 val specialName = "乔伊·亚历山大·比基·卡利斯勒·达夫·埃利奥特·福克斯·伊维鲁莫"
 // 自定义code和desc(注意此处%d的用法)
