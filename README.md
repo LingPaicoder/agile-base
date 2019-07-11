@@ -1,6 +1,6 @@
 # agile-base
 
-agile-base是灵派基础包，提供了一些Kotlin项目常用的基础工具类。
+agile-base是灵派基础包，提供了一些Kotlin项目常用的工具类。
 
 目前主要包括两部分：
  * 校验器
@@ -70,7 +70,11 @@ var specialName = "张三"
 specialName alias "姓名" must beName
 ```
 
-内置Ruler对null的特殊处理：除了beNull之外的其他内置Ruler,都会先进行notNull校验,若业务场景允许为null,可用或逻辑处理
+内置Ruler对null的特殊处理：
+
+除了beNull之外的其他内置Ruler,都会先进行notNull校验。
+
+若业务场景允许为null,可用或逻辑处理。
 ```kotlin
 val idCard: String? = null
 idCard alias "身份证号" must beNull.or(beIdCard)
