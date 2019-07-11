@@ -53,13 +53,13 @@ object ClassUtil {
         return when (url.protocol) {
             "file" -> getClassSetByFileProtocolUrl(url, packageName)
             "jar" -> getClassSetByJarProtocolUrl(url)
-            else -> throw IllegalArgumentException("unknown url protocol: ${url.protocol}. support only 'file' or 'jar'")
+            else -> throw IllegalArgumentException("unknown beUrl protocol: ${url.protocol}. support only 'file' or 'jar'")
         }
     }
 
     private fun getClassSetByJarProtocolUrl(url: URL): Set<Class<*>> {
         if (url.protocol != ("jar")) {
-            throw IllegalArgumentException("found url protocol: ${url.protocol}. support only 'jar'")
+            throw IllegalArgumentException("found beUrl protocol: ${url.protocol}. support only 'jar'")
         }
         val jarURLConnection = url.openConnection() as JarURLConnection
         return jarURLConnection.jarFile.entries().toList()
@@ -71,7 +71,7 @@ object ClassUtil {
 
     private fun getClassSetByFileProtocolUrl(url: URL, packageName: String): Set<Class<*>> {
         if (url.protocol != ("file")) {
-            throw IllegalArgumentException("found url protocol: ${url.protocol}. support only 'file'")
+            throw IllegalArgumentException("found beUrl protocol: ${url.protocol}. support only 'file'")
         }
         val packagePath = url.path.replace("%20", " ")
         val classSet = mutableSetOf<Class<*>>()

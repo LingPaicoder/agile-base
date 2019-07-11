@@ -3,11 +3,11 @@ package com.lpcoder.agile.base.check.ruler
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.support.ArrRuler.beNotContainsDup
-import com.lpcoder.agile.base.check.ruler.support.ArrRuler.beNotContainsNull
-import com.lpcoder.agile.base.check.ruler.support.ArrRuler.beNotEmpty
-import com.lpcoder.agile.base.check.ruler.support.ArrRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.support.ArrRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.ArrRuler.notContainsDup
+import com.lpcoder.agile.base.check.ruler.support.ArrRuler.notContainsNull
+import com.lpcoder.agile.base.check.ruler.support.ArrRuler.notEmpty
+import com.lpcoder.agile.base.check.ruler.support.ArrRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.ArrRuler.beNull
 import com.lpcoder.agile.base.check.ruler.support.ArrRuler.lengthEq
 import com.lpcoder.agile.base.check.ruler.support.ArrRuler.lengthGt
 import com.lpcoder.agile.base.check.ruler.support.ArrRuler.lengthGte
@@ -27,56 +27,56 @@ class ArrRulerTest {
     @Test
     fun nullValTest() {
         var array: Array<*>? = null
-        array must beNullVal
+        array must beNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-13009, desc=array必须为Null")
         array = signers
-        array alias "array" must beNullVal
+        array alias "array" must beNull
     }
 
     @Test
     fun notNullTest() {
         var array: Array<*>? = signers
-        array must beNotNull
+        array must notNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-13008, desc=array不能为Null")
         array = null
-        array alias "array" must beNotNull
+        array alias "array" must notNull
     }
 
     @Test
     fun notEmptyTest() {
         var array: Array<*>? = signers
-        array must beNotEmpty
+        array must notEmpty
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-13000, desc=array不能为空")
         array = emptyArray<String>()
-        array alias "array" must beNotEmpty
+        array alias "array" must notEmpty
     }
 
     @Test
     fun notContainsNullTest() {
         var array: Array<*>? = signers
-        array must beNotContainsNull
+        array must notContainsNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-13006, desc=array中不能有空值")
         array = arrayOf("a", null)
-        array alias "array" must beNotContainsNull
+        array alias "array" must notContainsNull
     }
 
     @Test
     fun notContainsDupTest() {
         var array: Array<*>? = signers
-        array must beNotContainsDup
+        array must notContainsDup
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-13007, desc=array中不能有重复值")
         array = arrayOf("a", "a")
-        array alias "array" must beNotContainsDup
+        array alias "array" must notContainsDup
     }
 
     @Test

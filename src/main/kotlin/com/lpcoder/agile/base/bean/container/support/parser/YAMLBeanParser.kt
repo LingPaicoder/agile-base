@@ -62,7 +62,7 @@ class YAMLBeanParser : BeanParser {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
             if (!StringUtil.isDigit(indexStr)) {
-                throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
+                throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be beDigit")
             }
             val index = indexStr.toInt()
             val type = it[typeKey] as String?
@@ -104,7 +104,7 @@ class YAMLBeanParser : BeanParser {
             isRefAttr -> {
                 val refName = StringUtil.getString(propElement[refKey])
                 if (refName.isBlank()) {
-                    throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
+                    throw BeanDefinitionException("$elementDesc contains beEmpty 'ref' attribute")
                 }
                 BeanPropertyValue(refName, BeanPropertyValueType.RUNTIME_BEAN_REFERENCE_TYPE)
             }

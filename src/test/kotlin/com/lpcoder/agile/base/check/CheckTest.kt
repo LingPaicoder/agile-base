@@ -1,14 +1,15 @@
 package com.lpcoder.agile.base.check
 
-import com.lpcoder.agile.base.check.ruler.support.AnyRuler
-import com.lpcoder.agile.base.check.ruler.support.IntRuler.lte
 import com.lpcoder.agile.base.check.ruler.Ruler
+import com.lpcoder.agile.base.check.ruler.support.AnyRuler
+import com.lpcoder.agile.base.check.ruler.support.AnyRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.IntRuler.lte
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beEmpty
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beIdCard
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNotEmpty
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNull
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.lengthGte
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.lengthLte
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.notEmpty
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -106,7 +107,7 @@ class CheckTest {
     @Test
     fun nullTest() {
         val idCard: String? = null
-        idCard alias "身份证号" must beNullVal.or(beIdCard)
+        idCard alias "身份证号" must beNull.or(beIdCard)
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11013, desc=身份证号不能为Null")
@@ -120,7 +121,7 @@ class CheckTest {
     fun aliasTest() {
         val idCard: String? = null
         // 不使用别名
-        idCard must beNullVal.or(beIdCard)
+        idCard must beNull.or(beIdCard)
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11013, desc=身份证号不能为Null")
@@ -155,9 +156,9 @@ class CheckTest {
     @Test
     fun testEntity() {
         val customAddRuler = Ruler { custom: Custom? ->
-            doCheck(custom, "商家", AnyRuler.beNotNull)
-            custom?.customId alias "商家Id" must beNotEmpty
-            custom?.name alias "商家姓名" must beNotEmpty
+            doCheck(custom, "商家", AnyRuler.notNull)
+            custom?.customId alias "商家Id" must notEmpty
+            custom?.name alias "商家姓名" must notEmpty
             custom?.age alias "商家年龄" must lte(60)
         }
 
@@ -166,5 +167,24 @@ class CheckTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-18005, desc=商家年龄必须小于或等于60")
         custom must be(customAddRuler)
+    }
+
+    data class User(var userName: String, var password: String)
+
+    private fun queryUserByUserNameAndPassword(userName: String, password: String): User? =
+        User(userName, password)
+
+    private fun login(userName: String, password: String): User {
+        userName alias "用户名" must notEmpty
+        password alias "密码" must notEmpty
+        val user = queryUserByUserNameAndPassword(userName, password)
+        user must notNull(desc = "用户名或密码错误")
+        return user!!
+    }
+
+    @Test
+    fun testLogin() {
+        thrown.expect(CheckException::class.java)
+        login("", "")
     }
 }

@@ -1,6 +1,15 @@
 package com.lpcoder.agile.base.check.ruler.support
 
-import com.lpcoder.agile.base.check.CheckResultCodeEnum.*
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_NOT_CONTAINS_DUP_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_NOT_CONTAINS_NULL_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_NOT_EMPTY_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_NOT_NULL_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_NULL_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_SIZE_EQ_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_SIZE_GTE_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_SIZE_GT_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_SIZE_LTE_FAIL
+import com.lpcoder.agile.base.check.CheckResultCodeEnum.COLL_SIZE_LT_FAIL
 import com.lpcoder.agile.base.check.and
 import com.lpcoder.agile.base.check.ruler.Ruler
 import com.lpcoder.agile.base.util.CollectionUtil.isNotContainsDup
@@ -13,40 +22,40 @@ import com.lpcoder.agile.base.util.CollectionUtil.isSizeLt
 import com.lpcoder.agile.base.util.CollectionUtil.isSizeLte
 
 object CollRuler {
-    val beNullVal = nullVal()
-    val beNotNull = notNull()
-    val beNotEmpty = notEmpty()
-    val beNotContainsNull = notContainsNull()
-    val beNotContainsDup = notContainsDup()
+    val beNull = beNull()
+    val notNull = notNull()
+    val notEmpty = notEmpty()
+    val notContainsNull = notContainsNull()
+    val notContainsDup = notContainsDup()
 
-    fun nullVal(code: Long = COLL_NULL_FAIL.code, desc: String = COLL_NULL_FAIL.desc)
-            = Ruler.ofNullVal<Collection<*>?>(code, desc)
+    fun beNull(code: Long = COLL_NULL_FAIL.code, desc: String = COLL_NULL_FAIL.desc)
+            = Ruler.ofBeNull<Collection<*>?>(code, desc)
 
     fun notNull(code: Long = COLL_NOT_NULL_FAIL.code, desc: String = COLL_NOT_NULL_FAIL.desc)
             = Ruler.ofNotNull<Collection<*>?>(code, desc)
 
     fun notEmpty(code: Long = COLL_NOT_EMPTY_FAIL.code, desc: String = COLL_NOT_EMPTY_FAIL.desc)
-            = beNotNull and Ruler.of(code, desc, ::isNotEmpty)
+            = notNull and Ruler.of(code, desc, ::isNotEmpty)
 
     fun sizeEq(norm: Int, code: Long = COLL_SIZE_EQ_FAIL.code, desc: String = COLL_SIZE_EQ_FAIL.desc)
-            = beNotNull and Ruler.of(norm, code, desc, ::isSizeEq)
+            = notNull and Ruler.of(norm, code, desc, ::isSizeEq)
 
     fun sizeGt(norm: Int, code: Long = COLL_SIZE_GT_FAIL.code, desc: String = COLL_SIZE_GT_FAIL.desc)
-            = beNotNull and Ruler.of(norm, code, desc, ::isSizeGt)
+            = notNull and Ruler.of(norm, code, desc, ::isSizeGt)
 
     fun sizeGte(norm: Int, code: Long = COLL_SIZE_GTE_FAIL.code, desc: String = COLL_SIZE_GTE_FAIL.desc)
-            = beNotNull and Ruler.of(norm, code, desc, ::isSizeGte)
+            = notNull and Ruler.of(norm, code, desc, ::isSizeGte)
 
     fun sizeLt(norm: Int, code: Long = COLL_SIZE_LT_FAIL.code, desc: String = COLL_SIZE_LT_FAIL.desc)
-            = beNotNull and Ruler.of(norm, code, desc, ::isSizeLt)
+            = notNull and Ruler.of(norm, code, desc, ::isSizeLt)
 
     fun sizeLte(norm: Int, code: Long = COLL_SIZE_LTE_FAIL.code, desc: String = COLL_SIZE_LTE_FAIL.desc)
-            = beNotNull and Ruler.of(norm, code, desc, ::isSizeLte)
+            = notNull and Ruler.of(norm, code, desc, ::isSizeLte)
 
     fun notContainsNull(code: Long = COLL_NOT_CONTAINS_NULL_FAIL.code, desc: String = COLL_NOT_CONTAINS_NULL_FAIL.desc)
-            = beNotNull and Ruler.of(code, desc, ::isNotContainsNull)
+            = notNull and Ruler.of(code, desc, ::isNotContainsNull)
 
     fun notContainsDup(code: Long = COLL_NOT_CONTAINS_DUP_FAIL.code, desc: String = COLL_NOT_CONTAINS_DUP_FAIL.desc)
-            = beNotNull and Ruler.of(code, desc, ::isNotContainsDup)
+            = notNull and Ruler.of(code, desc, ::isNotContainsDup)
 
 }

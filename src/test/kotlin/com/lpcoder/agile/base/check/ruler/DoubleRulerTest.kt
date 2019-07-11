@@ -8,8 +8,8 @@ import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.gt
 import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.gte
 import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.lt
 import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.lte
-import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.DoubleRuler.beNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -24,23 +24,23 @@ class DoubleRulerTest{
     @Test
     fun nullValTest() {
         var num: Double? = null
-        num must beNullVal
+        num must beNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-21000, desc=num必须为Null")
         num = 1.0
-        num alias "num" must beNullVal
+        num alias "num" must beNull
     }
 
     @Test
     fun notNullTest() {
         var num: Double? = 1.0
-        num must beNotNull
+        num must notNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-21006, desc=num不能为Null")
         num = null
-        num alias "num" must beNotNull
+        num alias "num" must notNull
     }
 
     @Test

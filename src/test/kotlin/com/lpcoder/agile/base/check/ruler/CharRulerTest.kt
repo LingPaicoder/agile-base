@@ -3,8 +3,8 @@ package com.lpcoder.agile.base.check.ruler
 import com.lpcoder.agile.base.check.CheckException
 import com.lpcoder.agile.base.check.alias
 import com.lpcoder.agile.base.check.must
-import com.lpcoder.agile.base.check.ruler.support.CharRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.support.CharRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.CharRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.CharRuler.beNull
 import com.lpcoder.agile.base.check.ruler.support.CharRuler.eq
 import com.lpcoder.agile.base.check.ruler.support.CharRuler.gt
 import com.lpcoder.agile.base.check.ruler.support.CharRuler.gte
@@ -23,23 +23,23 @@ class CharRulerTest {
     @Test
     fun nullValTest() {
         var num: Char? = null
-        num must beNullVal
+        num must beNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-22000, desc=num必须为Null")
         num = age
-        num alias "num" must beNullVal
+        num alias "num" must beNull
     }
 
     @Test
     fun notNullTest() {
         var num: Char? = age
-        num must beNotNull
+        num must notNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-22006, desc=num不能为Null")
         num = null
-        num alias "num" must beNotNull
+        num alias "num" must notNull
     }
 
     @Test

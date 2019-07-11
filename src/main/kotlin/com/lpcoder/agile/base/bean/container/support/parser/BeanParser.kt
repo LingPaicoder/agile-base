@@ -23,8 +23,8 @@ interface BeanParser {
 }
 
 fun checkResource(resource: Resource) {
-    resource must AnyRuler.beNotNull
-    resource.getInputStream() must AnyRuler.beNotNull
+    resource must AnyRuler.notNull
+    resource.getInputStream() must AnyRuler.notNull
 }
 
 fun scanBeanDefinition(packages: List<String>): Set<BeanDefinition> {

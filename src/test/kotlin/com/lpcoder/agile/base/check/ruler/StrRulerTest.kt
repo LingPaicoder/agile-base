@@ -8,9 +8,9 @@ import com.lpcoder.agile.base.check.ruler.support.StrRuler.beAllLetter
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beDigit
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beEmail
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beEmpty
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNotEmpty
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.notEmpty
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.StrRuler.beNull
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.bePhone
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beStandardDate
 import com.lpcoder.agile.base.check.ruler.support.StrRuler.beStandardDatetime
@@ -34,23 +34,23 @@ class StrRulerTest {
     @Test
     fun nullValTest() {
         var temp: String? = null
-        temp must beNullVal
+        temp must beNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11017, desc=temp必须为Null")
         temp = str
-        temp alias "temp" must beNullVal
+        temp alias "temp" must beNull
     }
 
     @Test
     fun notNullTest() {
         var temp: String? = str
-        temp must beNotNull
+        temp must notNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11013, desc=temp不能为Null")
         temp = null
-        temp alias "temp" must beNotNull
+        temp alias "temp" must notNull
     }
 
     @Test
@@ -67,12 +67,12 @@ class StrRulerTest {
     @Test
     fun beNotEmptyTest() {
         var temp: String? = str
-        temp must beNotEmpty
+        temp must notEmpty
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11000, desc=temp不能为空")
         temp = ""
-        temp alias "temp" must beNotEmpty
+        temp alias "temp" must notEmpty
     }
 
     @Test
@@ -83,7 +83,7 @@ class StrRulerTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11008, desc=email必须符合邮箱格式")
         email = str
-        email alias "email" must beEmail
+        email alias "beEmail" must beEmail
     }
 
     @Test
@@ -94,7 +94,7 @@ class StrRulerTest {
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-11009, desc=phone必须符合手机号格式")
         phone = str
-        phone alias "phone" must bePhone
+        phone alias "bePhone" must bePhone
     }
 
     @Test

@@ -8,8 +8,8 @@ import com.lpcoder.agile.base.check.ruler.support.LongRuler.gt
 import com.lpcoder.agile.base.check.ruler.support.LongRuler.gte
 import com.lpcoder.agile.base.check.ruler.support.LongRuler.lt
 import com.lpcoder.agile.base.check.ruler.support.LongRuler.lte
-import com.lpcoder.agile.base.check.ruler.support.LongRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.support.LongRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.LongRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.LongRuler.beNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -24,23 +24,23 @@ class LongRulerTest {
     @Test
     fun nullValTest() {
         var num: Long? = null
-        num must beNullVal
+        num must beNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-19000, desc=num必须为Null")
         num = 1
-        num alias "num" must beNullVal
+        num alias "num" must beNull
     }
 
     @Test
     fun notNullTest() {
         var num: Long? = 1
-        num must beNotNull
+        num must notNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-19006, desc=num不能为Null")
         num = null
-        num alias "num" must beNotNull
+        num alias "num" must notNull
     }
 
     @Test

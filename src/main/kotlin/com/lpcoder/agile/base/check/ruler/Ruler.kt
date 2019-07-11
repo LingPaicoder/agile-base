@@ -59,7 +59,7 @@ class Ruler<T>(val check: (T) -> Unit) {
         /**
          * beNullVal-Ruler
          */
-        fun <T> ofNullVal(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
+        fun <T> ofBeNull(failCode: Long, failDesc: String): Ruler<T> = Ruler { checkTarget: T ->
             if (null != checkTarget) {
                 throw CheckException(failCode, failDesc)
             }

@@ -8,8 +8,8 @@ import com.lpcoder.agile.base.check.ruler.support.ShortRuler.gt
 import com.lpcoder.agile.base.check.ruler.support.ShortRuler.gte
 import com.lpcoder.agile.base.check.ruler.support.ShortRuler.lt
 import com.lpcoder.agile.base.check.ruler.support.ShortRuler.lte
-import com.lpcoder.agile.base.check.ruler.support.ShortRuler.beNotNull
-import com.lpcoder.agile.base.check.ruler.support.ShortRuler.beNullVal
+import com.lpcoder.agile.base.check.ruler.support.ShortRuler.notNull
+import com.lpcoder.agile.base.check.ruler.support.ShortRuler.beNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -24,23 +24,23 @@ class ShortRulerTest {
     @Test
     fun nullValTest() {
         var num: Short? = null
-        num must beNullVal
+        num must beNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-17000, desc=num必须为Null")
         num = 1
-        num alias "num" must beNullVal
+        num alias "num" must beNull
     }
 
     @Test
     fun notNullTest() {
         var num: Short? = 1
-        num must beNotNull
+        num must notNull
 
         thrown.expect(CheckException::class.java)
         thrown.expectMessage("code=-17006, desc=num不能为Null")
         num = null
-        num alias "num" must beNotNull
+        num alias "num" must notNull
     }
 
     @Test

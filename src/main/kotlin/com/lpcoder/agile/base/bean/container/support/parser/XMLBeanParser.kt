@@ -61,7 +61,7 @@ class XMLBeanParser : BeanParser {
                 throw BeanDefinitionException("Tag 'constructor-arg' must have a 'index' attribute")
             }
             if (!StringUtil.isDigit(indexStr)) {
-                throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be digit")
+                throw BeanDefinitionException("The 'index' attribute of Tag 'constructor-arg' must be beDigit")
             }
             val index = indexStr.toInt()
             val type = argElement.attributeValue(typeKey)
@@ -102,7 +102,7 @@ class XMLBeanParser : BeanParser {
             isRefAttr -> {
                 val refName = propElement.attributeValue(refKey)
                 if (refName.isNullOrBlank()) {
-                    throw BeanDefinitionException("$elementDesc contains empty 'ref' attribute")
+                    throw BeanDefinitionException("$elementDesc contains beEmpty 'ref' attribute")
                 }
                 BeanPropertyValue(refName, RUNTIME_BEAN_REFERENCE_TYPE)
             }
