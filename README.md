@@ -21,7 +21,7 @@ agile-base是灵派基础包，提供了一些Kotlin项目常用的工具类。
 
 ## 使用示例
 
-使用alias、must中缀方法以类自然语言方式校验（自解释性强,推荐）
+使用alias、must中缀方法以类自然语言方式校验（自解释性强，推荐）
 ```kotlin
 val idCard = "130802198108204219"
 idCard alias "身份证号" must beIdCard
