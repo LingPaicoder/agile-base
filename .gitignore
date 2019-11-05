@@ -6,3 +6,5 @@ gradle
 gradlew
 gradlew.bat
 out
+.DS_store
+*.DS_store
