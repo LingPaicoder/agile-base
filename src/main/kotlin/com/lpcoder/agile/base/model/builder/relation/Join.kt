@@ -1,11 +1,9 @@
-package com.lpcoder.agile.base.model.builder
+package com.lpcoder.agile.base.model.builder.relation
 
+import com.lpcoder.agile.base.open.OpenPair
 import kotlin.reflect.KClass
 
 /**
- * 一对一关联
- * 例如Video通过sourceId与Source关联
- * Video::class join Source::class by Video::sourceId
  * @author liurenpeng
  * Created on 2020-06-04
  */

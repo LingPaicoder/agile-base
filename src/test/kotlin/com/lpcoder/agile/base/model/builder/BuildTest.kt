@@ -1,107 +1,117 @@
 package com.lpcoder.agile.base.model.builder
 
+import com.lpcoder.agile.base.model.builder.annotation.Accompany
+import com.lpcoder.agile.base.model.builder.annotation.Join
+import com.lpcoder.agile.base.model.builder.annotation.MultiMap
+import com.lpcoder.agile.base.model.builder.annotation.SingleMap
+import com.lpcoder.agile.base.model.builder.annotation.TargetModel
+import com.lpcoder.agile.base.model.builder.relation.by
+import com.lpcoder.agile.base.model.builder.relation.flatMap
+import com.lpcoder.agile.base.model.builder.relation.join
+import com.lpcoder.agile.base.model.builder.relation.map
+
 /**
  * @author liurenpeng
  * Created on 2020-05-26
  */
 
-const val USER_ID = "user_id"
-const val DOUGA_COUNTS = "douga_counts"
-
 fun main() {
 
-    GlobalScope inject USER_ID by ::visitor
-
-    Douga::class indexBy Douga::id
-    Douga::class buildBy ::getDougaByIds
-    Douga::class join User::class by Douga::authorId
-    Douga::class join User::class by Douga::checkerId
-    Douga::class flat Video::class by ::getVideosByDougaIds
-    Douga::class bind DOUGA_COUNTS by ::getDougaLikeCount
+    Movie::class indexBy Movie::id
+    Movie::class buildBy ::getMovieByIds
+    Movie::class join User::class by Movie::authorId
+    Movie::class join User::class by Movie::checkerId
+    Movie::class map MovieCount::class by ::getCountsByMovieIds
+    Movie::class flatMap Video::class by ::getVideosByMovieIds
 
     User::class indexBy User::id
     User::class buildBy ::getUserByIds
 
     Video::class indexBy Video::id
     Video::class buildBy ::getVideoByIds
-    Video::class join Source::class by Video::sourceId
+    Video::class map Source::class by ::getSourcesByVideoIds
 
     Source::class indexBy Source::id
     Source::class buildBy ::getSourceByIds
 
-    val dougaId = 1L
-    val videoId = 1L
-    val dougaIds = listOf(1L, 2L)
-    val videoIds = listOf(1L, 2L)
-
-    val userId: Long = GlobalScope extract USER_ID
-    println("userId:$userId.")
-
-    val dougaView1 = ModelBuilder buildSingle DougaView::class by the(Douga::class, dougaId)
-    val dougaView2 = ModelBuilder buildSingle DougaView::class by
-            (the(Douga::class, dougaId) and the(Video::class, videoId))
-    val dougaViews1 = ModelBuilder buildMulti DougaView::class by the(Douga::class, dougaIds)
-    val dougaViews2 = ModelBuilder buildMulti DougaView::class by
-            (the(Douga::class, dougaIds) which ::canBePush and the(Video::class, videoIds))
-    val dougaLikeCounts: Map<Long, Int> = Douga::class extract DOUGA_COUNTS
-
-    val dougaView3Source = the(Douga::class, dougaId) and the(Video::class, videoId)
-    val dougaView3 = ModelBuilder buildSingle DougaView::class by dougaView3Source
-
-    val dougaViews4Source = the(Douga::class, dougaIds) which ::canBePush and
-            (the(Video::class, videoIds) which ::canBeShow)
-    val dougaViews4 = ModelBuilder buildMulti DougaView::class by dougaViews4Source
-
-    println(
-        "userId:$userId. dougaView1:$dougaView1. dougaView2:$dougaView2." +
-                "dougaViews1:$dougaViews1. dougaViews2:$dougaViews2. dougaLikeCounts:$dougaLikeCounts" +
-                "dougaView3:$dougaView3. dougaViews4:$dougaViews4"
-    )
+    val movieId = 1L
+    val movieIds = listOf(1L, 2L)
+    val movieView = ModelBuilder buildSingle MovieView::class by movieId
+    val movieViews = ModelBuilder buildMulti MovieView::class by movieIds
+    println("movieView:$movieView. movieViews:$movieViews.")
 }
 
-fun visitor(): Long {
-    return 0
-}
-
-fun getDougaByIds(ids: Collection<Long>): Map<Long, Douga> {
+fun getMovieByIds(ids: Collection<Long>): kotlin.collections.Map<Long, Movie> {
     return emptyMap()
 }
 
-fun getVideosByDougaIds(id: Collection<Long>): Map<Long, Collection<Video>> {
+fun getVideosByMovieIds(id: Collection<Long>): kotlin.collections.Map<Long, Collection<Video>> {
     return emptyMap()
 }
 
-fun getVideoByIds(ids: Collection<Long>): Map<Long, Video> {
+fun getCountsByMovieIds(id: Collection<Long>): kotlin.collections.Map<Long, MovieCount> {
     return emptyMap()
 }
 
-fun getSourceByIds(ids: Collection<Long>): Map<Long, Source> {
+fun getSourcesByVideoIds(id: Collection<Long>): kotlin.collections.Map<Long, Source> {
     return emptyMap()
 }
 
-fun getUserByIds(ids: Collection<Long>): Map<Long, User> {
+fun getVideoByIds(ids: Collection<Long>): kotlin.collections.Map<Long, Video> {
     return emptyMap()
 }
 
-fun getDougaLikeCount(ids: Collection<Long>): Map<Long, Int> {
+fun getSourceByIds(ids: Collection<Long>): kotlin.collections.Map<Long, Source> {
     return emptyMap()
 }
 
-data class DougaView(
-    val douga: Douga,
-    val videos: Collection<Video>,
-    val sources: Collection<Source>,
-    val groupId: String)
+fun getUserByIds(ids: Collection<Long>): kotlin.collections.Map<Long, User> {
+    return emptyMap()
+}
 
-data class Douga(val id: Long, val videoId: Long, val authorId: Long, val checkerId: Long)
+@TargetModel
+data class MovieView @Accompany constructor(val movie: Movie) {
+
+    @MultiMap
+    lateinit var videos: Collection<VideoDTO>
+
+    @SingleMap
+    lateinit var count: MovieCount
+
+    @Join("authorId")
+    lateinit var author: User
+
+    @Join("checkerId")
+    lateinit var checker: User
+
+    var visitor: Long = 0
+
+    var groupId: String = ""
+}
+
+@TargetModel
+data class VideoDTO @Accompany constructor(val video: Video) {
+
+    @SingleMap
+    lateinit var source: Source
+}
+
+data class Movie(val id: Long, val authorId: Long, val checkerId: Long)
 
 data class User(val id: Long)
 
-data class Video(val id: Long, val sourceId: Long)
+data class Video(val id: Long)
 
 data class Source(val id: Long)
 
-fun canBePush(douga: Douga): Boolean = true
-fun canBeShow(video: Video): Boolean = true
+data class MovieCount(var movieCounts: kotlin.collections.Map<Int, Int>) {
+    fun getByType(type: MovieCountType) : Int = movieCounts[type.value] ?: 0
+}
+
+enum class MovieCountType(val value: Int) {
+    UNKNOWN(0),
+    COMMENT(1), // 评论数
+    PLAY(2), // 播放数
+}
 
 

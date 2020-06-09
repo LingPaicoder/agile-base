@@ -1,4 +1,4 @@
-package com.lpcoder.agile.base.model.builder
+package com.lpcoder.agile.base.open
 
 /**
  * @author liurenpeng

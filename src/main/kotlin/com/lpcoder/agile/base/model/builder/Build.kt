@@ -1,11 +1,11 @@
 package com.lpcoder.agile.base.model.builder
 
+import com.lpcoder.agile.base.open.OpenSingle
 import com.lpcoder.agile.base.util.CollectionUtil.isEmpty
 import java.util.stream.Collectors
 import kotlin.reflect.KClass
 
 /**
- * 构建相关
  * @author liurenpeng
  * Created on 2020-06-04
  */
@@ -29,22 +29,30 @@ class BuildMultiHolder<out A>(value: A) : OpenSingle<A>(value)
 
 class BuildSingleHolder<out A>(value: A) : OpenSingle<A>(value)
 
-infix fun <T : Any> ModelBuilder.buildMulti(clazz: KClass<T>) = BuildMultiHolder(clazz)
+infix fun <T : Any> ModelBuilder.buildMulti(clazz: KClass<T>) =
+    BuildMultiHolder(clazz)
 
-infix fun <T : Any> ModelBuilder.buildSingle(clazz: KClass<T>) = BuildSingleHolder(clazz)
+infix fun <T : Any> ModelBuilder.buildSingle(clazz: KClass<T>) =
+    BuildSingleHolder(clazz)
 
 infix fun <V: Any, T : Any, I> BuildMultiHolder<KClass<V>>.by(source: BuildSource<T, I>) =
-    realBuild(this.value, BuildSourceHolder.ofSingle(source))
+    realBuild(
+        this.value,
+        BuildSourceHolder.ofSingle(source)
+    )
 
-infix fun <V: Any> BuildMultiHolder<KClass<V>>.by(holder: BuildSourceHolder) = realBuild(this.value, holder)
+infix fun <V: Any, I> BuildMultiHolder<KClass<V>>.by(indies: Collection<I>) =
+    "0" as Collection<V>
 
-infix fun <V: Any> BuildSingleHolder<KClass<V>>.by(holder: BuildSourceHolder) : V? {
-    val collection = realBuild(this.value, holder)
-    return if (isEmpty(collection))  null  else collection.first()
+infix fun <V: Any, I> BuildSingleHolder<KClass<V>>.by(index: I) : V? {
+    return "0" as V
 }
 
 infix fun <V: Any, T : Any, I> BuildSingleHolder<KClass<V>>.by(source: BuildSource<T, I>) : V? {
-    val collection = realBuild(this.value, BuildSourceHolder.ofSingle(source))
+    val collection = realBuild(
+        this.value,
+        BuildSourceHolder.ofSingle(source)
+    )
     return if (isEmpty(collection))  null  else collection.first()
 }
 
@@ -78,9 +86,11 @@ class BuildSourceHolder {
     }
 }
 
-fun <T : Any, I> the(clazz: KClass<T>, indies: Collection<I>): BuildSource<T, I> = BuildSource(clazz, indies)
+fun <T : Any, I> the(clazz: KClass<T>, indies: Collection<I>): BuildSource<T, I> =
+    BuildSource(clazz, indies)
 
-fun <T : Any, I> the(clazz: KClass<T>, index: I): BuildSource<T, I> = BuildSource(clazz, setOf(index))
+fun <T : Any, I> the(clazz: KClass<T>, index: I): BuildSource<T, I> =
+    BuildSource(clazz, setOf(index))
 
 infix fun <T : Any, I> BuildSource<T, I>.which(predictor: (T) -> Boolean): BuildSource<T, I> {
     this.predictor = predictor
