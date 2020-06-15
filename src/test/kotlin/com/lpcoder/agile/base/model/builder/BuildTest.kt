@@ -85,7 +85,7 @@ data class MovieView @Accompany constructor(val movie: Movie) {
     lateinit var author: User
 
     @Join("checkerId")
-    lateinit var checker: User
+    var checker: User? = null
 
     @OutJoin(SHARED)
     var shared: Boolean = false
