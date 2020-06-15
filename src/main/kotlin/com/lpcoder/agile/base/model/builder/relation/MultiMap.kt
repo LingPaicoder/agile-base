@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 
 class FlatMapHolder<out A, out B>(first: A, second: B) : OpenPair<A, B>(first, second)
 
-infix fun <T: Any, F: Any> KClass<T>.flatMap(clazz: KClass<F>) =
+infix fun <T: Any, F: Any> KClass<T>.multiMap(clazz: KClass<F>) =
     FlatMapHolder(this, clazz)
 
 infix fun <T: Any, F: Any, TI> FlatMapHolder<KClass<T>, KClass<F>>.by(

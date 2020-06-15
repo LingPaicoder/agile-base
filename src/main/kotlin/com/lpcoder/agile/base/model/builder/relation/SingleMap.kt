@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 
 class MapHolder<out A, out B>(first: A, second: B) : OpenPair<A, B>(first, second)
 
-infix fun <T: Any, F: Any> KClass<T>.map(clazz: KClass<F>) =
+infix fun <T: Any, F: Any> KClass<T>.singleMap(clazz: KClass<F>) =
     MapHolder(this, clazz)
 
 infix fun <T: Any, F: Any, TI> MapHolder<KClass<T>, KClass<F>>.by(
