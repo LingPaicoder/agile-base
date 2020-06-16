@@ -7,7 +7,9 @@ import com.lpcoder.agile.base.model.builder.annotation.MultiMap
 import com.lpcoder.agile.base.model.builder.annotation.OutJoin
 import com.lpcoder.agile.base.model.builder.annotation.SingleMap
 import com.lpcoder.agile.base.model.builder.annotation.TargetModel
+import com.lpcoder.agile.base.model.builder.relation.buildBy
 import com.lpcoder.agile.base.model.builder.relation.by
+import com.lpcoder.agile.base.model.builder.relation.indexBy
 import com.lpcoder.agile.base.model.builder.relation.join
 import com.lpcoder.agile.base.model.builder.relation.multiMap
 import com.lpcoder.agile.base.model.builder.relation.outJoin
