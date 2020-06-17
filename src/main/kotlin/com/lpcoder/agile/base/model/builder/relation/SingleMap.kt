@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.model.builder.relation
 
+import com.lpcoder.agile.base.model.builder.BuildContext
 import com.lpcoder.agile.base.open.OpenPair
 import kotlin.reflect.KClass
 
@@ -8,12 +9,13 @@ import kotlin.reflect.KClass
  * Created on 2020-06-04
  */
 
-class MapHolder<out A, out B>(first: A, second: B) : OpenPair<A, B>(first, second)
+class SingleMapPair<out A, out B>(first: A, second: B) : OpenPair<A, B>(first, second)
 
 infix fun <T: Any, F: Any> KClass<T>.singleMap(clazz: KClass<F>) =
-    MapHolder(this, clazz)
+    SingleMapPair(this, clazz)
 
-infix fun <T: Any, F: Any, TI> MapHolder<KClass<T>, KClass<F>>.by(
+infix fun <T: Any, F: Any, TI> SingleMapPair<KClass<T>, KClass<F>>.by(
     mapper: (Collection<TI>) -> Map<TI, F>) {
-    return
+    val map = BuildContext.singleMapHolder.computeIfAbsent(this.first) {mutableMapOf()}
+    map.putIfAbsent(this.second, mapper)
 }

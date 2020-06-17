@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.model.builder.relation
 
+import com.lpcoder.agile.base.model.builder.BuildContext
 import com.lpcoder.agile.base.open.OpenPair
 import kotlin.reflect.KClass
 
@@ -8,12 +9,13 @@ import kotlin.reflect.KClass
  * Created on 2020-06-09
  */
 
-class FlatMapHolder<out A, out B>(first: A, second: B) : OpenPair<A, B>(first, second)
+class FlatMapPair<out T, out MM>(first: T, second: MM) : OpenPair<T, MM>(first, second)
 
-infix fun <T: Any, F: Any> KClass<T>.multiMap(clazz: KClass<F>) =
-    FlatMapHolder(this, clazz)
+infix fun <T: Any, MM: Any> KClass<T>.multiMap(clazz: KClass<MM>) =
+    FlatMapPair(this, clazz)
 
-infix fun <T: Any, F: Any, TI> FlatMapHolder<KClass<T>, KClass<F>>.by(
-    mapper: (Collection<TI>) -> Map<TI, Collection<F>>) {
-    return
+infix fun <T: Any, MM: Any, TI> FlatMapPair<KClass<T>, KClass<MM>>.by(
+    mapper: (Collection<TI>) -> Map<TI, Collection<MM>>) {
+    val map = BuildContext.multiMapHolder.computeIfAbsent(this.first) {mutableMapOf()}
+    map.putIfAbsent(this.second, mapper)
 }

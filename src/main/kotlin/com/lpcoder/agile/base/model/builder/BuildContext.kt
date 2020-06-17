@@ -7,6 +7,10 @@ import kotlin.reflect.KClass
  * Created on 2020-06-17
  */
 object BuildContext {
-    val indexerMap = mutableMapOf<KClass<*>, Any>()
-    val builderMap = mutableMapOf<KClass<*>, Any>()
+    val indexerHolder = mutableMapOf<KClass<*>, Any>()
+    val builderHolder = mutableMapOf<KClass<*>, Any>()
+    val joinHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
+    val outJoinHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
+    val singleMapHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
+    val multiMapHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
 }

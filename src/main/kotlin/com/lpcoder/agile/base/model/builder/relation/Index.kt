@@ -9,5 +9,5 @@ import kotlin.reflect.KClass
  */
 
 infix fun <T: Any, I> KClass<T>.indexBy(indexer: (T) -> I) {
-    BuildContext.indexerMap[this] = indexer
+    BuildContext.indexerHolder[this] = indexer
 }

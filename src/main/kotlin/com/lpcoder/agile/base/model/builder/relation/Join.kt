@@ -1,5 +1,6 @@
 package com.lpcoder.agile.base.model.builder.relation
 
+import com.lpcoder.agile.base.model.builder.BuildContext
 import com.lpcoder.agile.base.open.OpenPair
 import kotlin.reflect.KClass
 
@@ -8,10 +9,11 @@ import kotlin.reflect.KClass
  * Created on 2020-06-04
  */
 
-class JoinHolder<out A, out B>(first: A, second: B) : OpenPair<A, B>(first, second)
+class JoinPair<out T, out J>(first: T, second: J) : OpenPair<T, J>(first, second)
 
-infix fun <T: Any, J: Any> KClass<T>.join(clazz: KClass<J>) = JoinHolder(this, clazz)
+infix fun <T: Any, J: Any> KClass<T>.join(clazz: KClass<J>) = JoinPair(this, clazz)
 
-infix fun <T: Any, J: Any, I> JoinHolder<KClass<T>, KClass<J>>.by(mapper: (T) -> I) {
-    return
+infix fun <T: Any, J: Any, JI> JoinPair<KClass<T>, KClass<J>>.by(mapper: (T) -> JI) {
+    val map = BuildContext.joinHolder.computeIfAbsent(this.first) {mutableMapOf()}
+    map.putIfAbsent(this.second, mapper)
 }
