@@ -1,12 +1,12 @@
 package com.lpcoder.agile.base.model.builder
 
 import com.lpcoder.agile.base.model.builder.CurrentScope.visitor
-import com.lpcoder.agile.base.model.builder.annotation.Accompany
 import com.lpcoder.agile.base.model.builder.annotation.Join
 import com.lpcoder.agile.base.model.builder.annotation.MultiMap
 import com.lpcoder.agile.base.model.builder.annotation.OutJoin
 import com.lpcoder.agile.base.model.builder.annotation.SingleMap
 import com.lpcoder.agile.base.model.builder.annotation.TargetModel
+import com.lpcoder.agile.base.model.builder.relation.accompanyBy
 import com.lpcoder.agile.base.model.builder.relation.buildBy
 import com.lpcoder.agile.base.model.builder.relation.by
 import com.lpcoder.agile.base.model.builder.relation.indexBy
@@ -63,6 +63,9 @@ fun initModelBuilder() {
 
     Source::class indexBy Source::id
     Source::class buildBy ::getSourceByIds
+
+    MovieView::class accompanyBy Movie::class
+    VideoDTO::class accompanyBy Video::class
 }
 
 object CurrentScope{
@@ -75,7 +78,7 @@ fun initScope() {
 }
 
 @TargetModel
-data class MovieView @Accompany constructor(val movie: Movie) {
+data class MovieView (val movie: Movie) {
 
     @MultiMap
     lateinit var videos: Collection<VideoDTO>
@@ -99,8 +102,7 @@ data class MovieView @Accompany constructor(val movie: Movie) {
 }
 
 @TargetModel
-data class VideoDTO @Accompany constructor(val video: Video) {
-
+data class VideoDTO (val video: Video) {
     @SingleMap
     lateinit var source: Source
 }
