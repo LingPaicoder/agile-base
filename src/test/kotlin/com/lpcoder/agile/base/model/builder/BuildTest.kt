@@ -31,8 +31,8 @@ fun main() {
     initScope()
     initModelBuilder()
 
-    val movieView = ModelBuilder buildSingle MovieView::class by movieId
-    val movieViews = ModelBuilder buildMulti MovieView::class by movieIds
+    val movieView = ModelBuilder() buildSingle MovieView::class by movieId
+    val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
     println("movieView:$movieView. movieViews:$movieViews.")
 }
 
