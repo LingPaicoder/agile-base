@@ -18,7 +18,8 @@ import com.lpcoder.agile.base.scope.ScopeKey
  * 2. 全部lazy式构建
  * 3. 语义性强的api
  * 4. 业务代码侵入性低
- * 5. * 支持异步化 回调
+ * 5. 待构建类可嵌套
+ * 6. * 支持异步化 回调
  * @author liurenpeng
  * Created on 2020-05-26
  */
@@ -36,12 +37,14 @@ fun main() {
             "---${movieViews.elementAt(0).viewed}" +
             "---${movieViews.elementAt(0).count}" +
             "---${movieViews.elementAt(0).interaction}" +
-            "---${movieViews.elementAt(0).videos}")
+            "---${movieViews.elementAt(0).videos}" +
+            "---${movieViews.elementAt(0).checkerView}")
     println("---${movieViews.elementAt(1).shared}" +
             "---${movieViews.elementAt(1).viewed}" +
             "---${movieViews.elementAt(1).count}" +
             "---${movieViews.elementAt(1).interaction}" +
-            "---${movieViews.elementAt(1).videos}")
+            "---${movieViews.elementAt(1).videos}" +
+            "---${movieViews.elementAt(1).checkerView}")
 }
 
 const val movieId = 1L
@@ -77,6 +80,7 @@ fun initModelBuilder() {
 
     MovieView::class accompanyBy Movie::class
     VideoDTO::class accompanyBy Video::class
+    UserView::class accompanyBy User::class
 }
 
 object CurrentScope{

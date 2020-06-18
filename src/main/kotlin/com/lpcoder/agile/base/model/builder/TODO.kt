@@ -13,6 +13,9 @@ package com.lpcoder.agile.base.model.builder
  * 3. CacheAccessor,未查到记录也可以记录下来，避免缓存击穿
  * 4. 代理属性不支持set合理么
  * 5. ModelBuilder::accompanyMap有必要存在么，或者说，有必要是map么
+ * 6. error("")，把错误信息描述一下
+ * 7. 循环依赖怎么办？判断是否易注值，注值则停止？或者提前检查禁止循环依赖？
+ * 8. delegate.Join.buildTarget时，构建出来的targets是cache了的么？有办法cache么
  * @author liurenpeng
  * Created on 2020-06-17
  */

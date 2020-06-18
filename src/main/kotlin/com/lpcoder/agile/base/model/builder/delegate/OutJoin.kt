@@ -10,6 +10,7 @@ import kotlin.reflect.KProperty
 class OutJoin<T>(private val outJoinPoint: String) : ModelBuilderDelegate<T> {
 
     override fun buildTarget(thisRef: Any, property: KProperty<*>): T {
+
         return "" as T
     }
 

@@ -11,8 +11,16 @@ import kotlin.reflect.jvm.jvmErasure
  */
 class Join<T>(private val joinFieldName: String) : ModelBuilderDelegate<T> {
 
+    @Suppress("UNCHECKED_CAST")
     override fun buildTarget(thisRef: Any, property: KProperty<*>): T {
-        return "" as T
+        val joinTargetClazz = property.returnType.jvmErasure
+        val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
+        val joinTargetAccessor = thisRef.buildInModelBuilder!!.joinTargetAccessorMap[joinTargetClazz]
+        val accompanies = thisRef.buildInModelBuilder!!.accompanyMap.values
+        val joinAccompanyIndex = accompany.javaClass.kotlin.memberProperties.stream()
+            .filter { joinFieldName == it.name }
+            .findFirst().map { it.get(accompany) }.orElse(null)
+        return (joinTargetAccessor!!.get(accompanies)[accompany] ?: error(""))[joinAccompanyIndex] as T
     }
 
     @Suppress("UNCHECKED_CAST")
