@@ -105,3 +105,6 @@ class ModelBuilderDelegate {
         mutableMap[thisRef]!![property.toString()] = value
     }
 }
+
+fun isBuildTargetClass(clazz: KClass<*>) = BuildContext.accompanyHolder.keys.contains(clazz)
+fun isBuildAccompanyClass(clazz: KClass<*>) = BuildContext.accompanyHolder.values.contains(clazz)

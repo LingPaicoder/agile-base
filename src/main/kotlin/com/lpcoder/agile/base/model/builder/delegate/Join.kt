@@ -9,21 +9,21 @@ import kotlin.reflect.jvm.jvmErasure
  * @author liurenpeng
  * Created on 2020-06-18
  */
+class Join<T>(private val joinFieldName: String) : ModelBuilderDelegate<T> {
 
-class Join<T>(private val joinFieldName: String) {
+    override fun buildTarget(thisRef: Any, property: KProperty<*>): T {
+        return "" as T
+    }
+
     @Suppress("UNCHECKED_CAST")
-    operator fun getValue(thisRef: Any, property: KProperty<*>): T {
-        val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
+    override fun buildAccompany(thisRef: Any, property: KProperty<*>): T {
         val joinClazz = property.returnType.jvmErasure
+        val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
         val joinAccessor = thisRef.buildInModelBuilder!!.joinAccessorMap[joinClazz]
         val accompanies = thisRef.buildInModelBuilder!!.accompanyMap.values
         val joinIndex = accompany.javaClass.kotlin.memberProperties.stream()
             .filter { joinFieldName == it.name }
             .findFirst().map { it.get(accompany) }.orElse(null)
         return (joinAccessor!!.get(accompanies)[accompany] ?: error(""))[joinIndex] as T
-    }
-
-    operator fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-        throw UnsupportedOperationException("model builder delegate field not support set")
     }
 }

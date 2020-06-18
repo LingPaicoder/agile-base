@@ -2,17 +2,13 @@ package com.lpcoder.agile.base.model.builder
 
 import com.lpcoder.agile.base.model.builder.CurrentScope.visitor
 import com.lpcoder.agile.base.model.builder.delegate.Join
-import com.lpcoder.agile.base.model.builder.delegate.MultiMap
 import com.lpcoder.agile.base.model.builder.delegate.OutJoin
-import com.lpcoder.agile.base.model.builder.delegate.SingleMap
 import com.lpcoder.agile.base.model.builder.relation.accompanyBy
 import com.lpcoder.agile.base.model.builder.relation.buildBy
 import com.lpcoder.agile.base.model.builder.relation.by
 import com.lpcoder.agile.base.model.builder.relation.indexBy
 import com.lpcoder.agile.base.model.builder.relation.join
-import com.lpcoder.agile.base.model.builder.relation.multiMap
 import com.lpcoder.agile.base.model.builder.relation.outJoin
-import com.lpcoder.agile.base.model.builder.relation.singleMap
 import com.lpcoder.agile.base.scope.Scope.ScopeUtils.beginScope
 import com.lpcoder.agile.base.scope.ScopeKey
 
@@ -35,8 +31,16 @@ fun main() {
     val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
     println("movieView:$movieView. movieViews:$movieViews.")
     println("---${movieView!!.author}---${movieView.checker}")
-    println("---${movieViews.elementAt(0).shared}---${movieViews.elementAt(0).viewed}")
-    println("---${movieViews.elementAt(1).shared}---${movieViews.elementAt(1).viewed}")
+    println("---${movieViews.elementAt(0).shared}" +
+            "---${movieViews.elementAt(0).viewed}" +
+            "---${movieViews.elementAt(0).count}" +
+            "---${movieViews.elementAt(0).interaction}" +
+            "---${movieViews.elementAt(0).videos}")
+    println("---${movieViews.elementAt(1).shared}" +
+            "---${movieViews.elementAt(1).viewed}" +
+            "---${movieViews.elementAt(1).count}" +
+            "---${movieViews.elementAt(1).interaction}" +
+            "---${movieViews.elementAt(1).videos}")
 }
 
 const val movieId = 1L
@@ -44,6 +48,10 @@ val movieIds = listOf(1L, 2L)
 
 const val SHARED = "shared"
 const val VIEWED = "viewed"
+const val COUNT = "count"
+const val INTERACTION = "interaction"
+const val VIDEOS = "videos"
+const val SOURCE = "source"
 
 fun initModelBuilder() {
     Movie::class indexBy Movie::id
@@ -52,16 +60,17 @@ fun initModelBuilder() {
     Movie::class join User::class by Movie::checkerId
     Movie::class outJoin SHARED by ::isShared
     Movie::class outJoin VIEWED by ::isViewed
-    Movie::class singleMap MovieCount::class by ::getCountsByMovieIds
-    Movie::class singleMap MovieInteraction::class by ::getInteractionsByMovieIds
-    Movie::class multiMap Video::class by ::getVideosByMovieIds
+    Movie::class outJoin COUNT by ::getCountsByMovieIds
+    Movie::class outJoin INTERACTION by ::getInteractionsByMovieIds
+    Movie::class outJoin VIDEOS by ::getVideosByMovieIds
+    //Movie::class multiMap Video::class by ::getVideosByMovieIds
 
     User::class indexBy User::id
     User::class buildBy ::getUserByIds
 
     Video::class indexBy Video::id
     Video::class buildBy ::getVideoByIds
-    Video::class singleMap Source::class by ::getSourcesByVideoIds
+    Video::class outJoin SOURCE by ::getSourcesByVideoIds
 
     Source::class indexBy Source::id
     Source::class buildBy ::getSourceByIds
@@ -82,13 +91,19 @@ fun initScope() {
 
 data class MovieView (val movie: Movie) {
 
-    val videos: Collection<VideoDTO> by MultiMap()
+    val videoDTOs: Collection<VideoDTO> by OutJoin(VIDEOS)
 
-    var count: MovieCount by SingleMap()
+    val videos: Collection<Video> by OutJoin(VIDEOS)
+
+    var count: MovieCount by OutJoin(COUNT)
+
+    val interaction: MovieInteraction by OutJoin(INTERACTION)
 
     var author: User by Join("authorId")
 
     var checker: User? by Join("checkerId")
+
+    var checkerView: UserView? by Join("checkerId")
 
     var shared: Boolean by OutJoin(SHARED)
 
@@ -98,10 +113,12 @@ data class MovieView (val movie: Movie) {
 }
 
 data class VideoDTO (val video: Video) {
-    var source: Source by SingleMap()
+    var source: Source by OutJoin(SOURCE)
 }
 
 data class Movie(val id: Long, val authorId: Long, val checkerId: Long)
+
+data class UserView (val user: User)
 
 data class User(val id: Long)
 
@@ -147,8 +164,8 @@ val allMovies = (1..3L).toList().map { it to Movie(it, it, it + 1) }.toMap()
 val movieIdToVideoIdsMap = (1..3L).toList().map { it to (3 * it - 2 .. 3 * it).toList() }.toMap()
 val movieIdToCountMap = (1..3L).toList().map { it to (MovieCount(MovieCountType.values()
     .toList().map { type -> type to (it * type.value).toInt() }.toMap()))}.toMap()
-val movieIdToInteractionMap = (1..3L).toList().map { it to (MovieInteraction(MovieInteractionType.values()
-    .toList().map { type -> type to if(it != visitor()) 0 else (it * type.value).toInt() }.toMap()))}.toMap()
+val movieIdToInteractionMap = (1..3L).toList().map { id -> id to (MovieInteraction(MovieInteractionType.values()
+    .toList().map { type -> type to if(id != 1L) 0 else (id * type.value).toInt() }.toMap()))}.toMap()
 
 fun getMovieByIds(ids: Collection<Long>): Map<Long, Movie> {
     return allMovies.filter { ids.contains(it.key) }
