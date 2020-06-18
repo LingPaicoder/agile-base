@@ -13,13 +13,14 @@ import kotlin.reflect.KClass
 class JoinAccessor<T: Any, JI, J>(private val joinClazz: KClass<*>) : CacheAccessor<T, Map<JI, J>>() {
     @Suppress("UNCHECKED_CAST")
     override fun realGet(sources: Collection<T>): Map<T, Map<JI, J>> {
-        if (CollectionUtil.isEmpty(sources)) return emptyMap()
-        val joinClazzToMapperMap = BuildContext.joinHolder[sources.elementAt(0)::class]
+        val accompanies = sources.toSet()
+        if (CollectionUtil.isEmpty(accompanies)) return emptyMap()
+        val joinClazzToMapperMap = BuildContext.joinHolder[accompanies.elementAt(0)::class]
         if (MapUtil.isEmpty(joinClazzToMapperMap)) return emptyMap()
-        val mappers = joinClazzToMapperMap!![joinClazz] as MutableList<(T) -> JI>
+        val mapper = joinClazzToMapperMap!![joinClazz] as MutableList<(T) -> JI>
 
-        val targetToJoinIndices : Map<T, Set<JI>> = sources.map { it to
-                mappers.map { mapper -> (mapper.invoke(it)) }.toSet()}.toMap()
+        val targetToJoinIndices : Map<T, Set<JI>> = accompanies.map { it to
+                mapper.map { mapper -> (mapper.invoke(it)) }.toSet()}.toMap()
         val builder = BuildContext.builderHolder[joinClazz] as (Collection<JI>) -> Map<JI, J>
         return targetToJoinIndices.mapValues { builder.invoke(it.value) }
     }

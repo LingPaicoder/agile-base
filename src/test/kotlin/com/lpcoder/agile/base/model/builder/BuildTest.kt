@@ -33,6 +33,7 @@ fun main() {
     val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
     println("movieView:$movieView. movieViews:$movieViews.")
     println("---${movieView!!.author}---${movieView.checker}")
+    println("---${movieView.shared}---${movieView.viewed}")
 }
 
 const val movieId = 1L

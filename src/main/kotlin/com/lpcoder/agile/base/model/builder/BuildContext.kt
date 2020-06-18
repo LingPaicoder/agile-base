@@ -11,7 +11,7 @@ object BuildContext {
 
     val builderHolder = mutableMapOf<KClass<*>, Any>()
     val joinHolder = mutableMapOf<KClass<*>, MutableMap<KClass<*>, MutableList<Any>>>()
-    val outJoinHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
+    val outJoinHolder = mutableMapOf<KClass<*>, MutableMap<String, Any>>()
     val singleMapHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
     val multiMapHolder = mutableMapOf<KClass<*>, MutableMap<Any, Any>>()
 }
