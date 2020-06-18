@@ -29,6 +29,7 @@ fun main() {
 
     val movieView = ModelBuilder() buildSingle MovieView::class by movieId
     val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
+
     println("movieView:$movieView. movieViews:$movieViews.")
     println("---${movieView!!.author}---${movieView.checker}")
     println("---${movieViews.elementAt(0).shared}" +
@@ -63,7 +64,6 @@ fun initModelBuilder() {
     Movie::class outJoin COUNT by ::getCountsByMovieIds
     Movie::class outJoin INTERACTION by ::getInteractionsByMovieIds
     Movie::class outJoin VIDEOS by ::getVideosByMovieIds
-    //Movie::class multiMap Video::class by ::getVideosByMovieIds
 
     User::class indexBy User::id
     User::class buildBy ::getUserByIds
