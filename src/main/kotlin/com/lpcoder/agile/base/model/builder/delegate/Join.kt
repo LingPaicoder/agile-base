@@ -16,7 +16,7 @@ class Join<T>(private val joinFieldName: String) : ModelBuilderDelegate<T> {
         val joinTargetClazz = property.returnType.jvmErasure
         val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
         val joinTargetAccessor = thisRef.buildInModelBuilder!!.joinTargetAccessorMap[joinTargetClazz]
-        val accompanies = thisRef.buildInModelBuilder!!.accompanyMap.values
+        val accompanies = thisRef.buildInModelBuilder!!.indexToAccompanyMap.values
         val joinAccompanyIndex = accompany.javaClass.kotlin.memberProperties.stream()
             .filter { joinFieldName == it.name }
             .findFirst().map { it.get(accompany) }.orElse(null)
@@ -28,7 +28,7 @@ class Join<T>(private val joinFieldName: String) : ModelBuilderDelegate<T> {
         val joinClazz = property.returnType.jvmErasure
         val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
         val joinAccessor = thisRef.buildInModelBuilder!!.joinAccessorMap[joinClazz]
-        val accompanies = thisRef.buildInModelBuilder!!.accompanyMap.values
+        val accompanies = thisRef.buildInModelBuilder!!.indexToAccompanyMap.values
         val joinIndex = accompany.javaClass.kotlin.memberProperties.stream()
             .filter { joinFieldName == it.name }
             .findFirst().map { it.get(accompany) }.orElse(null)

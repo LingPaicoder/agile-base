@@ -38,12 +38,16 @@ fun main() {
             "---${movieViews.elementAt(0).count}" +
             "---${movieViews.elementAt(0).interaction}" +
             "---${movieViews.elementAt(0).videos}" +
+            "---${movieViews.elementAt(0).author}" +
+            "---${movieViews.elementAt(0).checker}" +
             "---${movieViews.elementAt(0).checkerView}")
     println("---${movieViews.elementAt(1).shared}" +
             "---${movieViews.elementAt(1).viewed}" +
             "---${movieViews.elementAt(1).count}" +
             "---${movieViews.elementAt(1).interaction}" +
             "---${movieViews.elementAt(1).videos}" +
+            "---${movieViews.elementAt(1).author}" +
+            "---${movieViews.elementAt(1).checker}" +
             "---${movieViews.elementAt(1).checkerView}")
 }
 

@@ -18,7 +18,7 @@ class OutJoin<T>(private val outJoinPoint: String) : ModelBuilderDelegate<T> {
     override fun buildAccompany(thisRef: Any, property: KProperty<*>): T {
         val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
         val outJoinAccessor = thisRef.buildInModelBuilder!!.outJoinAccessorMap[outJoinPoint]
-        val accompanies = thisRef.buildInModelBuilder!!.accompanyMap.values
+        val accompanies = thisRef.buildInModelBuilder!!.indexToAccompanyMap.values
         return (outJoinAccessor!!.get(accompanies)[accompany] ?: error("")) as T
     }
 }

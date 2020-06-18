@@ -7,6 +7,7 @@ import com.lpcoder.agile.base.model.builder.buildMulti
 import com.lpcoder.agile.base.model.builder.by
 import com.lpcoder.agile.base.util.CollectionUtil
 import com.lpcoder.agile.base.util.MapUtil
+import java.util.stream.Collectors
 import kotlin.reflect.KClass
 
 /**
@@ -26,16 +27,21 @@ class JoinTargetAccessor<A: Any, JTAI, JT: Any>(private val joinTargetClazz: KCl
 
         val accompanyToJoinTargetAccompanyIndices : Map<A, Set<JTAI>> = accompanies.map { it to
                 mapper.map { mapper -> (mapper.invoke(it)) }.toSet()}.toMap()
+        val targets = ModelBuilder() buildMulti joinTargetClazz by (accompanyToJoinTargetAccompanyIndices.values
+            .stream().flatMap { it.stream() }.collect(Collectors.toSet()) as Set<JTAI>)
         return accompanyToJoinTargetAccompanyIndices.mapValues { (_, joinTargetAccompanyIndices) ->
-            val targets = ModelBuilder() buildMulti joinTargetClazz by joinTargetAccompanyIndices
-            targets.map { target -> parseTargetToAccompanyIndex(target) to target }.toMap()
+            val currTargets = targets.filter { joinTargetAccompanyIndices
+                .contains(it.buildInModelBuilder!!.accompanyToIndexMap[
+                        it.buildInModelBuilder!!.targetToAccompanyMap[it]]) }.toList()
+            println("currTargets-----$currTargets")
+            currTargets.map { target -> parseTargetToAccompanyIndex(target) to target }.toMap()
         } as Map<A, Map<JTAI, JT>>
     }
 
     @Suppress("UNCHECKED_CAST")
     fun parseTargetToAccompanyIndex(target : Any) : Any {
         val modelBuilder = target.buildInModelBuilder
-        val accompanyToIndexMap = modelBuilder!!.accompanyMap.map { (k, v) -> v to k}.toMap()
+        val accompanyToIndexMap = modelBuilder!!.indexToAccompanyMap.map { (k, v) -> v to k}.toMap()
         return modelBuilder.targetToAccompanyMap.mapValues { accompanyToIndexMap[it.value] }[target] ?: error("")
     }
 }

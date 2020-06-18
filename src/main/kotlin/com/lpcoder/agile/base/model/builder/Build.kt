@@ -17,7 +17,9 @@ import kotlin.reflect.full.createType
 
 class ModelBuilder {
     val targetToAccompanyMap: MutableMap<Any, Any> = mutableMapOf()
-    val accompanyMap: MutableMap<Any, Any> = mutableMapOf()
+    val indexToAccompanyMap: MutableMap<Any, Any> = mutableMapOf()
+    val accompanyToIndexMap: MutableMap<Any, Any> = mutableMapOf()
+
     val joinAccessorMap : MutableMap<KClass<*>, JoinAccessor<Any, Any, Any>> = mutableMapOf()
     val joinTargetAccessorMap : MutableMap<KClass<*>, JoinTargetAccessor<Any, Any, Any>> = mutableMapOf()
     val outJoinAccessorMap : MutableMap<String, OutJoinAccessor<Any, Any, Any>> = mutableMapOf()
@@ -53,7 +55,8 @@ private fun <I, T : Any> buildTargets(
     val accompanyClazz = BuildContext.accompanyHolder[buildMultiPair.targetClazz]
     val accompanyBuilder = BuildContext.builderHolder[accompanyClazz] as (Collection<I>) -> Map<Any, Any>
     val accompanyMap = accompanyBuilder.invoke(indies)
-    buildMultiPair.modelBuilder.accompanyMap.putAll(accompanyMap)
+    buildMultiPair.modelBuilder.indexToAccompanyMap.putAll(accompanyMap)
+    buildMultiPair.modelBuilder.accompanyToIndexMap.putAll(accompanyMap.map { (k, v) -> v to k })
     return accompanyMap.values.map { accompany ->
         val target = buildMultiPair.targetClazz.constructors.stream()
             .filter { it.parameters.size == 1 }
@@ -79,7 +82,7 @@ private fun <T : Any> injectJoinAccessor(targets: Set<T>) {
 }
 
 private fun <T : Any> injectSingleTargetJoinAccessor(target: T) {
-    val accompanyClazz = target.buildInModelBuilder!!.accompanyMap.values.elementAt(0)::class
+    val accompanyClazz = target.buildInModelBuilder!!.indexToAccompanyMap.values.elementAt(0)::class
     val joinAccessorMap = target.buildInModelBuilder?.joinAccessorMap
     BuildContext.joinHolder[accompanyClazz]?.forEach { (joinClazz, _) ->
         joinAccessorMap!![joinClazz] = JoinAccessor(joinClazz)
@@ -92,7 +95,7 @@ private fun <T : Any> injectJoinTargetAccessor(targets: Set<T>) {
 
 @Suppress("UNCHECKED_CAST")
 private fun <T : Any> injectSingleTargetJoinTargetAccessor(target: T) {
-    val accompanyClazz = target.buildInModelBuilder!!.accompanyMap.values.elementAt(0)::class
+    val accompanyClazz = target.buildInModelBuilder!!.indexToAccompanyMap.values.elementAt(0)::class
     val joinTargetAccessorMap = target.buildInModelBuilder?.joinTargetAccessorMap
     BuildContext.joinHolder[accompanyClazz]?.forEach { (joinClazz, _) ->
         var joinTargetClazz: KClass<*>? = BuildContext.accompanyHolder
@@ -107,7 +110,7 @@ private fun <T : Any> injectOutJoinAccessor(targets: Set<T>) {
 }
 
 private fun <T : Any> injectSingleTargetOutJoinAccessor(target: T) {
-    val accompanyClazz = target.buildInModelBuilder!!.accompanyMap.values.elementAt(0)::class
+    val accompanyClazz = target.buildInModelBuilder!!.indexToAccompanyMap.values.elementAt(0)::class
     val outJoinAccessorMap = target.buildInModelBuilder?.outJoinAccessorMap
     BuildContext.outJoinHolder[accompanyClazz]?.forEach { (outJoinPoint, _) ->
         outJoinAccessorMap!![outJoinPoint] = OutJoinAccessor(outJoinPoint) }
