@@ -9,16 +9,16 @@ import java.util.concurrent.ConcurrentHashMap
  */
 
 interface IAccessor<K, V> {
-    fun get(keys: Collection<K>): Map<K, V>
+    fun get(sources: Collection<K>): Map<K, V>
     fun set(dataMap: Map<K, V>) {}
 }
 
-abstract class CacheableAccessor<K, V> : IAccessor<K, V> {
+abstract class CacheAccessor<K, V> : IAccessor<K, V> {
     private val cache = ConcurrentHashMap<K, V>()
 
-    override fun get(keys: Collection<K>): Map<K, V> {
-        val cached = cache.filter { keys.contains(it.key) }
-        val unCachedKeys = keys.filter { !cached.keys.contains(it) }
+    override fun get(sources: Collection<K>): Map<K, V> {
+        val cached = cache.filter { sources.contains(it.key) }
+        val unCachedKeys = sources.filter { !cached.keys.contains(it) }
         return cached + realGet(unCachedKeys)
     }
 
@@ -26,7 +26,7 @@ abstract class CacheableAccessor<K, V> : IAccessor<K, V> {
         cache.putAll(dataMap)
     }
 
-    abstract fun realGet(keys: Collection<K>): Map<K, V>
+    abstract fun realGet(sources: Collection<K>): Map<K, V>
 }
 
 

@@ -9,7 +9,7 @@ package com.lpcoder.agile.base.model.builder
  *      2). accompanyClazz与targetClazz单参构造函数参数类型是否匹配
  *      3). accompanyClazz是否非待构建类型(例如View)，是否为可build类型(例如DbModel)
  *      4). ...
- * 3. CacheableAccessor,未查到记录也可以记录下来，避免缓存击穿
+ * 3. CacheAccessor,未查到记录也可以记录下来，避免缓存击穿
  * @author liurenpeng
  * Created on 2020-06-17
  */
