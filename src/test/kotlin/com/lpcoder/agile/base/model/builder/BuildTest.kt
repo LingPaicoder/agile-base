@@ -8,10 +8,12 @@ import com.lpcoder.agile.base.model.builder.delegate.SingleMap
 import com.lpcoder.agile.base.model.builder.relation.accompanyBy
 import com.lpcoder.agile.base.model.builder.relation.buildBy
 import com.lpcoder.agile.base.model.builder.relation.by
+import com.lpcoder.agile.base.model.builder.relation.indexBy
 import com.lpcoder.agile.base.model.builder.relation.join
 import com.lpcoder.agile.base.model.builder.relation.multiMap
 import com.lpcoder.agile.base.model.builder.relation.outJoin
 import com.lpcoder.agile.base.model.builder.relation.singleMap
+import com.lpcoder.agile.base.scope.Scope.ScopeUtils.beginScope
 import com.lpcoder.agile.base.scope.ScopeKey
 
 /**
@@ -33,7 +35,8 @@ fun main() {
     val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
     println("movieView:$movieView. movieViews:$movieViews.")
     println("---${movieView!!.author}---${movieView.checker}")
-    println("---${movieView.shared}---${movieView.viewed}")
+    println("---${movieViews.elementAt(0).shared}---${movieViews.elementAt(0).viewed}")
+    println("---${movieViews.elementAt(1).shared}---${movieViews.elementAt(1).viewed}")
 }
 
 const val movieId = 1L
@@ -43,6 +46,7 @@ const val SHARED = "shared"
 const val VIEWED = "viewed"
 
 fun initModelBuilder() {
+    Movie::class indexBy Movie::id
     Movie::class buildBy ::getMovieByIds
     Movie::class join User::class by Movie::authorId
     Movie::class join User::class by Movie::checkerId
@@ -52,11 +56,14 @@ fun initModelBuilder() {
     Movie::class singleMap MovieInteraction::class by ::getInteractionsByMovieIds
     Movie::class multiMap Video::class by ::getVideosByMovieIds
 
+    User::class indexBy User::id
     User::class buildBy ::getUserByIds
 
+    Video::class indexBy Video::id
     Video::class buildBy ::getVideoByIds
     Video::class singleMap Source::class by ::getSourcesByVideoIds
 
+    Source::class indexBy Source::id
     Source::class buildBy ::getSourceByIds
 
     MovieView::class accompanyBy Movie::class
@@ -69,6 +76,7 @@ object CurrentScope{
 }
 
 fun initScope() {
+    beginScope()
     visitor.set(1)
 }
 

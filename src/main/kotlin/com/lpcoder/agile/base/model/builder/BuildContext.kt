@@ -9,6 +9,7 @@ import kotlin.reflect.KClass
 object BuildContext {
     val accompanyHolder = mutableMapOf<KClass<*>, KClass<*>>()
 
+    val indexerHolder = mutableMapOf<KClass<*>, Any>()
     val builderHolder = mutableMapOf<KClass<*>, Any>()
     val joinHolder = mutableMapOf<KClass<*>, MutableMap<KClass<*>, MutableList<Any>>>()
     val outJoinHolder = mutableMapOf<KClass<*>, MutableMap<String, Any>>()
