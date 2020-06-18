@@ -11,7 +11,6 @@ import kotlin.reflect.KClass
  * Created on 2020-06-18
  */
 class JoinAccessor<T: Any, JI, J>(private val joinClazz: KClass<*>) : CacheAccessor<T, Map<JI, J>>() {
-
     @Suppress("UNCHECKED_CAST")
     override fun realGet(sources: Collection<T>): Map<T, Map<JI, J>> {
         if (CollectionUtil.isEmpty(sources)) return emptyMap()

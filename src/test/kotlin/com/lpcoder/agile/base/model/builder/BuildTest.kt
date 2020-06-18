@@ -1,11 +1,10 @@
 package com.lpcoder.agile.base.model.builder
 
 import com.lpcoder.agile.base.model.builder.CurrentScope.visitor
-import com.lpcoder.agile.base.model.builder.annotation.Join
-import com.lpcoder.agile.base.model.builder.annotation.MultiMap
-import com.lpcoder.agile.base.model.builder.annotation.OutJoin
-import com.lpcoder.agile.base.model.builder.annotation.SingleMap
-import com.lpcoder.agile.base.model.builder.annotation.TargetModel
+import com.lpcoder.agile.base.model.builder.delegate.Join
+import com.lpcoder.agile.base.model.builder.delegate.MultiMap
+import com.lpcoder.agile.base.model.builder.delegate.OutJoin
+import com.lpcoder.agile.base.model.builder.delegate.SingleMap
 import com.lpcoder.agile.base.model.builder.relation.accompanyBy
 import com.lpcoder.agile.base.model.builder.relation.buildBy
 import com.lpcoder.agile.base.model.builder.relation.by
@@ -33,6 +32,7 @@ fun main() {
     val movieView = ModelBuilder() buildSingle MovieView::class by movieId
     val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
     println("movieView:$movieView. movieViews:$movieViews.")
+    println("---${movieView!!.author}---${movieView.checker}")
 }
 
 const val movieId = 1L
@@ -71,34 +71,25 @@ fun initScope() {
     visitor.set(1)
 }
 
-@TargetModel
 data class MovieView (val movie: Movie) {
 
-    @MultiMap
-    lateinit var videos: Collection<VideoDTO>
+    val videos: Collection<VideoDTO> by MultiMap()
 
-    @SingleMap
-    lateinit var count: MovieCount
+    var count: MovieCount by SingleMap()
 
-    @Join("authorId")
-    lateinit var author: User
+    var author: User by Join("authorId")
 
-    @Join("checkerId")
-    var checker: User? = null
+    var checker: User? by Join("checkerId")
 
-    @OutJoin(SHARED)
-    var shared: Boolean = false
+    var shared: Boolean by OutJoin(SHARED)
 
-    @OutJoin(VIEWED)
-    var viewed: Boolean = false
+    var viewed: Boolean by OutJoin(VIEWED)
 
     var groupId: String = ""
 }
 
-@TargetModel
 data class VideoDTO (val video: Video) {
-    @SingleMap
-    lateinit var source: Source
+    var source: Source by SingleMap()
 }
 
 data class Movie(val id: Long, val authorId: Long, val checkerId: Long)
@@ -143,7 +134,7 @@ val allUsers = (1..9L).toList().map { it to User(it) }.toMap()
 val allSources = (1..9L).toList().map { it to Source(it) }.toMap()
 val allVideos = (1..9L).toList().map { it to Video(it) }.toMap()
 val videoIdToSourceIdMap = (1..9L).toList().map { it to it }.toMap()
-val allMovies = (1..3L).toList().map { it to Movie(it, it, it) }.toMap()
+val allMovies = (1..3L).toList().map { it to Movie(it, it, it + 1) }.toMap()
 val movieIdToVideoIdsMap = (1..3L).toList().map { it to (3 * it - 2 .. 3 * it).toList() }.toMap()
 val movieIdToCountMap = (1..3L).toList().map { it to (MovieCount(MovieCountType.values()
     .toList().map { type -> type to (it * type.value).toInt() }.toMap()))}.toMap()

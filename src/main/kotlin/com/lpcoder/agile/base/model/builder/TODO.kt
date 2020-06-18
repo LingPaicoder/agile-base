@@ -10,6 +10,8 @@ package com.lpcoder.agile.base.model.builder
  *      3). accompanyClazz是否非待构建类型(例如View)，是否为可build类型(例如DbModel)
  *      4). ...
  * 3. CacheAccessor,未查到记录也可以记录下来，避免缓存击穿
+ * 4. 代理属性不支持set合理么
+ * 5. ModelBuilder::accompanyMap有必要存在么，或者说，有必要是map么
  * @author liurenpeng
  * Created on 2020-06-17
  */
