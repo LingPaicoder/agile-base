@@ -9,7 +9,6 @@ import com.lpcoder.agile.base.model.builder.annotation.TargetModel
 import com.lpcoder.agile.base.model.builder.relation.accompanyBy
 import com.lpcoder.agile.base.model.builder.relation.buildBy
 import com.lpcoder.agile.base.model.builder.relation.by
-import com.lpcoder.agile.base.model.builder.relation.indexBy
 import com.lpcoder.agile.base.model.builder.relation.join
 import com.lpcoder.agile.base.model.builder.relation.multiMap
 import com.lpcoder.agile.base.model.builder.relation.outJoin
@@ -43,9 +42,7 @@ const val SHARED = "shared"
 const val VIEWED = "viewed"
 
 fun initModelBuilder() {
-    Movie::class indexBy Movie::id
     Movie::class buildBy ::getMovieByIds
-
     Movie::class join User::class by Movie::authorId
     Movie::class join User::class by Movie::checkerId
     Movie::class outJoin SHARED by ::isShared
@@ -54,14 +51,11 @@ fun initModelBuilder() {
     Movie::class singleMap MovieInteraction::class by ::getInteractionsByMovieIds
     Movie::class multiMap Video::class by ::getVideosByMovieIds
 
-    User::class indexBy User::id
     User::class buildBy ::getUserByIds
 
-    Video::class indexBy Video::id
     Video::class buildBy ::getVideoByIds
     Video::class singleMap Source::class by ::getSourcesByVideoIds
 
-    Source::class indexBy Source::id
     Source::class buildBy ::getSourceByIds
 
     MovieView::class accompanyBy Movie::class
