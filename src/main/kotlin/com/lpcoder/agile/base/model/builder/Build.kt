@@ -147,7 +147,6 @@ class ModelBuilderDelegate {
     }
 }
 
-// property: KProperty<*>
 fun isBuildTargetClass(property: KProperty<*>) : Boolean {
     val isCollection = Collection::class.java.isAssignableFrom(property.returnType.jvmErasure.java)
     if (!isCollection) {
@@ -161,53 +160,11 @@ fun isBuildTargetClass(property: KProperty<*>) : Boolean {
         return false
     }
     val actualTypeArgumentType = actualTypeArguments[0]
-    println("actualTypeArgumentType---$actualTypeArgumentType")
-    val isTarget = BuildContext.accompanyHolder.keys.map { it.java }.contains(actualTypeArgumentType)
-    println("isTarget---$isTarget")
-    return isTarget
+    return BuildContext.accompanyHolder.keys.map { it.java }.contains(actualTypeArgumentType)
 }
 
 
 fun isBuildTargetClass(clazz: KClass<*>) : Boolean {
-    /*if (Collection::class.java.isAssignableFrom(clazz.java)) {
-        val collClazz = clazz as KClass<Collection<T>>
-        clazz == T::class
-    }*/
     return BuildContext.accompanyHolder.keys.contains(clazz)
 }
 
-fun main() {
-
-}
-
-fun doGenericSuperclass() {
-    val intClazz = Integer::class.java
-    println("intClazz---$intClazz")
-    val coll = listOf(1, 2)
-    val clazz = coll::class
-    println("clazz---$clazz")
-    val type = clazz.java.genericSuperclass
-    println("type---$type")
-    val parameterizedType = type as ParameterizedType
-    println("parameterizedType---$parameterizedType")
-    val actualTypes = parameterizedType.actualTypeArguments
-    println("actualTypes---$actualTypes")
-    val actualType = actualTypes[0]
-    println("actualType---$actualType")
-}
-
-fun doGenericInterfaces() {
-    val intClazz = Integer::class.java
-    println("intClazz---$intClazz")
-    val coll = listOf(1, 2)
-    val clazz = coll::class
-    println("clazz---$clazz")
-    val type = clazz.java.genericInterfaces
-    println("type---$type")
-    val parameterizedType = type[0] as ParameterizedType
-    println("parameterizedType---$parameterizedType")
-    val actualTypes = parameterizedType.actualTypeArguments
-    println("actualTypes---$actualTypes")
-    val actualType = actualTypes[0]
-    println("actualType---$actualType")
-}
