@@ -24,6 +24,9 @@ import com.lpcoder.agile.base.scope.ScopeKey
  * Created on 2020-05-26
  */
 
+const val movieId = 1L
+val movieIds = listOf(1L, 2L)
+
 fun main() {
     initScope()
     initModelBuilder()
@@ -57,9 +60,6 @@ fun main() {
     movieViews.elementAt(0).videoDTOs.forEach{dto -> println(dto.source)}
     movieViews.elementAt(1).videoDTOs.forEach{dto -> println(dto.source)}
 }
-
-const val movieId = 1L
-val movieIds = listOf(1L, 2L)
 
 const val SHARED = "shared"
 const val VIEWED = "viewed"
@@ -172,15 +172,27 @@ enum class MovieInteractionType(val value: Int) {
 
 // mock
 val allUsers = (1..9L).toList().map { it to User(it) }.toMap()
+
 val allSources = (1..9L).toList().map { it to Source(it) }.toMap()
+
 val allVideos = (1..9L).toList().map { it to Video(it) }.toMap()
+
 val videoIdToSourceIdMap = (1..9L).toList().map { it to it }.toMap()
-val allMovies = (1..3L).toList().map { it to Movie(it, it, it + 1) }.toMap()
-val movieIdToVideoIdsMap = (1..3L).toList().map { it to (3 * it - 2 .. 3 * it).toList() }.toMap()
-val movieIdToCountMap = (1..3L).toList().map { it to (MovieCount(MovieCountType.values()
+
+val allMovies = (1..3L).toList().map { it to
+        Movie(it, it, it + 1) }.toMap()
+
+val movieIdToVideoIdsMap = (1..3L).toList().map { it to
+        (3 * it - 2 .. 3 * it).toList() }.toMap()
+
+val movieIdToCountMap = (1..3L).toList().map { it to
+        (MovieCount(MovieCountType.values()
     .toList().map { type -> type to (it * type.value).toInt() }.toMap()))}.toMap()
-val movieIdToInteractionMap = (1..3L).toList().map { id -> id to (MovieInteraction(MovieInteractionType.values()
-    .toList().map { type -> type to if(id != 1L) 0 else (id * type.value).toInt() }.toMap()))}.toMap()
+
+val movieIdToInteractionMap = (1..3L).toList().map { id -> id to
+        (MovieInteraction(MovieInteractionType.values()
+    .toList().map { type -> type to if(id != 1L) 0
+            else (id * type.value).toInt() }.toMap()))}.toMap()
 
 fun getMovieByIds(ids: Collection<Long>): Map<Long, Movie> {
     return allMovies.filter { ids.contains(it.key) }
