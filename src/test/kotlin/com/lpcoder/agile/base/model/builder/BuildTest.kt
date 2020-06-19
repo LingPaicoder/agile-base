@@ -34,29 +34,40 @@ fun main() {
     val movieView = ModelBuilder() buildSingle MovieView::class by movieId
     val movieViews = ModelBuilder() buildMulti MovieView::class by movieIds
 
-    println("movieView:$movieView. movieViews:$movieViews.")
-    println("---${movieView!!.author}---${movieView.checker}")
-    println("---${movieViews.elementAt(0).shared}" +
-            "---${movieViews.elementAt(0).viewed}" +
-            "---${movieViews.elementAt(0).count}" +
-            "---${movieViews.elementAt(0).interaction}" +
-            "---${movieViews.elementAt(0).videos}" +
-            "---${movieViews.elementAt(0).author}" +
-            "---${movieViews.elementAt(0).checker}" +
-            "---${movieViews.elementAt(0).checkerView}" +
-            "---${movieViews.elementAt(0).videoDTOs}")
-    println("---${movieViews.elementAt(1).shared}" +
-            "---${movieViews.elementAt(1).viewed}" +
-            "---${movieViews.elementAt(1).count}" +
-            "---${movieViews.elementAt(1).interaction}" +
-            "---${movieViews.elementAt(1).videos}" +
-            "---${movieViews.elementAt(1).author}" +
-            "---${movieViews.elementAt(1).checker}" +
-            "---${movieViews.elementAt(1).checkerView}" +
-            "---${movieViews.elementAt(1).videoDTOs}")
+    println()
+    println("---movieView:$movieView")
+    println()
 
-    println("---${movieViews.elementAt(0).videoDTOs}")
-    println("---${movieViews.elementAt(1).videoDTOs}")
+    println("---author:${movieView!!.author}")
+    println("---author:${movieView.author}")
+    println("---checker:${movieView.checker}")
+    println()
+
+    println("---movieViews:$movieViews.")
+    println()
+
+    println("---0.shared:${movieViews.elementAt(0).shared}")
+    println("---0.viewed:${movieViews.elementAt(0).viewed}")
+    println("---0.count:${movieViews.elementAt(0).count}")
+    println("---0.interaction:${movieViews.elementAt(0).interaction}")
+    println("---0.videos:${movieViews.elementAt(0).videos}")
+    println("---0.author:${movieViews.elementAt(0).author}")
+    println("---0.checker:${movieViews.elementAt(0).checker}")
+    println("---0.checkerView:${movieViews.elementAt(0).checkerView}")
+    println("---0.videoDTOs:${movieViews.elementAt(0).videoDTOs}")
+    println()
+
+    println("---1.shared:${movieViews.elementAt(1).shared}")
+    println("---1.viewed:${movieViews.elementAt(1).viewed}")
+    println("---1.count:${movieViews.elementAt(1).count}")
+    println("---1.interaction:${movieViews.elementAt(1).interaction}")
+    println("---1.videos:${movieViews.elementAt(1).videos}")
+    println("---1.author:${movieViews.elementAt(1).author}")
+    println("---1.checker:${movieViews.elementAt(1).checker}")
+    println("---1.checkerView:${movieViews.elementAt(1).checkerView}")
+    println("---1.videoDTOs:${movieViews.elementAt(1).videoDTOs}")
+    println()
+
     movieViews.elementAt(0).videoDTOs.forEach{dto -> println(dto.source)}
     movieViews.elementAt(1).videoDTOs.forEach{dto -> println(dto.source)}
 }
@@ -195,23 +206,28 @@ val movieIdToInteractionMap = (1..3L).toList().map { id -> id to
             else (id * type.value).toInt() }.toMap()))}.toMap()
 
 fun getMovieByIds(ids: Collection<Long>): Map<Long, Movie> {
+    println("===getMovieByIds")
     return allMovies.filter { ids.contains(it.key) }
 }
 
 fun getVideosByMovieIds(ids: Collection<Long>): Map<Long, Collection<Video>> {
+    println("===getVideosByMovieIds")
     return movieIdToVideoIdsMap.filter { ids.contains(it.key) }
         .mapValues { getVideoByIds(it.value).values }
 }
 
 fun getCountsByMovieIds(ids: Collection<Long>): Map<Long, MovieCount> {
+    println("===getCountsByMovieIds")
     return movieIdToCountMap.filter { ids.contains(it.key) }
 }
 
 fun getInteractionsByMovieIds(ids: Collection<Long>): Map<Long, MovieInteraction> {
+    println("===getInteractionsByMovieIds")
     return movieIdToInteractionMap.filter { ids.contains(it.key) }
 }
 
 fun getSourcesByVideoIds(ids: Collection<Long>): Map<Long, Source> {
+    println("===getSourcesByVideoIds")
     val idMap = videoIdToSourceIdMap.filter { ids.contains(it.key) }
     val sourceMap = getSourceByIds(idMap.values)
     return idMap.mapValues { sourceMap[it.value] }
@@ -219,14 +235,17 @@ fun getSourcesByVideoIds(ids: Collection<Long>): Map<Long, Source> {
 }
 
 fun getVideoByIds(ids: Collection<Long>): Map<Long, Video> {
+    println("===getVideoByIds")
     return allVideos.filter { ids.contains(it.key) }
 }
 
 fun getSourceByIds(ids: Collection<Long>): Map<Long, Source> {
+    println("===getSourceByIds")
     return allSources.filter { ids.contains(it.key) }
 }
 
 fun getUserByIds(ids: Collection<Long>): Map<Long, User> {
+    println("===getUserByIds")
     return allUsers.filter { ids.contains(it.key) }
 }
 
@@ -234,6 +253,7 @@ fun getUserByIds(ids: Collection<Long>): Map<Long, User> {
  * 这里mock的逻辑是：id相同时为true
  */
 fun isShared(ids: Collection<Long>): Map<Long, Boolean> {
+    println("===isShared")
     val userId = visitor()
     return ids.toSet().map { it to (userId == it) }.toMap()
 }
@@ -242,6 +262,7 @@ fun isShared(ids: Collection<Long>): Map<Long, Boolean> {
  * 这里mock的逻辑是：id相同时为true
  */
 fun isViewed(ids: Collection<Long>): Map<Long, Boolean> {
+    println("===isViewed")
     val userId = visitor()
     return ids.toSet().map { it to (userId == it) }.toMap()
 }

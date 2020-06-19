@@ -1,6 +1,9 @@
 package com.lpcoder.agile.base.model.builder.delegate
 
+import com.lpcoder.agile.base.access.IAccessor
+import com.lpcoder.agile.base.access.access
 import com.lpcoder.agile.base.model.builder.buildInModelBuilder
+import java.util.Collections.singleton
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
@@ -20,7 +23,8 @@ class Join<T>(private val joinFieldName: String) : ModelBuilderDelegate<T> {
         val joinAccompanyIndex = accompany.javaClass.kotlin.memberProperties.stream()
             .filter { joinFieldName == it.name }
             .findFirst().map { it.get(accompany) }.orElse(null)
-        return (joinTargetAccessor!!.get(accompanies)[accompany] ?: error(""))[joinAccompanyIndex] as T
+        return (access(accompanies, singleton(joinTargetAccessor as
+                IAccessor<Any, Map<Any, Any>>))[accompany] ?: error(""))[joinAccompanyIndex] as T
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -32,6 +36,7 @@ class Join<T>(private val joinFieldName: String) : ModelBuilderDelegate<T> {
         val joinIndex = accompany.javaClass.kotlin.memberProperties.stream()
             .filter { joinFieldName == it.name }
             .findFirst().map { it.get(accompany) }.orElse(null)
-        return (joinAccessor!!.get(accompanies)[accompany] ?: error(""))[joinIndex] as T
+        return (access(accompanies, singleton(joinAccessor as
+                IAccessor<Any, Map<Any, Any>>))[accompany] ?: error(""))[joinIndex] as T
     }
 }

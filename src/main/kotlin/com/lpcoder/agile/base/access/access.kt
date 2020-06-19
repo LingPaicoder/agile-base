@@ -54,8 +54,8 @@ private fun <K, V> accessByIterator(keys: Collection<K>, iterator: Iterator<IAcc
 
     val lowerResult = accessByIterator(leftKeys, iterator)
     if (lowerResult.isNotEmpty()) {
-        currentAccessor.set(lowerResult)
         result.putAll(lowerResult)
     }
+    currentAccessor.set(result)
     return result
 }
