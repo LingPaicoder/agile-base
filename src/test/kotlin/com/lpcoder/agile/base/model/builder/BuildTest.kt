@@ -69,6 +69,7 @@ fun main() {
     println()
 
     movieViews.elementAt(0).videoDTOs.forEach{dto -> println(dto.source)}
+    println()
     movieViews.elementAt(1).videoDTOs.forEach{dto -> println(dto.source)}
 }
 
