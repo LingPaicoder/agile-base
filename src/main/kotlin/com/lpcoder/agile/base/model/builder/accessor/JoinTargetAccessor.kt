@@ -33,7 +33,6 @@ class JoinTargetAccessor<A: Any, JTAI, JT: Any>(private val joinTargetClazz: KCl
             val currTargets = targets.filter { joinTargetAccompanyIndices
                 .contains(it.buildInModelBuilder!!.accompanyToIndexMap[
                         it.buildInModelBuilder!!.targetToAccompanyMap[it]]) }.toList()
-            println("currTargets-----$currTargets")
             currTargets.map { target -> parseTargetToAccompanyIndex(target) to target }.toMap()
         } as Map<A, Map<JTAI, JT>>
     }

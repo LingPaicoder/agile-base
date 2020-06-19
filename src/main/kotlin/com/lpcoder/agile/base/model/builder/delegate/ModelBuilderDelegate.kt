@@ -9,10 +9,9 @@ import kotlin.reflect.jvm.jvmErasure
  * Created on 2020-06-18
  */
 interface ModelBuilderDelegate<T>{
-
     operator fun getValue(thisRef: Any, property: KProperty<*>): T =
-            if (isBuildTargetClass(property.returnType.jvmErasure)) buildTarget(thisRef, property)
-            else buildAccompany(thisRef, property)
+        if (isBuildTargetClass(property.returnType.jvmErasure)) buildTarget(thisRef, property)
+        else buildAccompany(thisRef, property)
 
     fun buildTarget(thisRef: Any, property: KProperty<*>): T
 

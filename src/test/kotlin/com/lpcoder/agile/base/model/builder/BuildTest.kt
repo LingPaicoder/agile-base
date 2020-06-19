@@ -40,7 +40,8 @@ fun main() {
             "---${movieViews.elementAt(0).videos}" +
             "---${movieViews.elementAt(0).author}" +
             "---${movieViews.elementAt(0).checker}" +
-            "---${movieViews.elementAt(0).checkerView}")
+            "---${movieViews.elementAt(0).checkerView}" +
+            "---${movieViews.elementAt(0).videoDTOs}")
     println("---${movieViews.elementAt(1).shared}" +
             "---${movieViews.elementAt(1).viewed}" +
             "---${movieViews.elementAt(1).count}" +
@@ -48,7 +49,13 @@ fun main() {
             "---${movieViews.elementAt(1).videos}" +
             "---${movieViews.elementAt(1).author}" +
             "---${movieViews.elementAt(1).checker}" +
-            "---${movieViews.elementAt(1).checkerView}")
+            "---${movieViews.elementAt(1).checkerView}" +
+            "---${movieViews.elementAt(1).videoDTOs}")
+
+    println("---${movieViews.elementAt(0).videoDTOs}")
+    println("---${movieViews.elementAt(1).videoDTOs}")
+    /*movieViews.elementAt(0).videoDTOs.forEach{dto -> println(dto.source)}
+    movieViews.elementAt(1).videoDTOs.forEach{dto -> println(dto.source)}*/
 }
 
 const val movieId = 1L

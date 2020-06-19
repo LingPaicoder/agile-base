@@ -9,9 +9,12 @@ import kotlin.reflect.KProperty
  */
 class OutJoin<T>(private val outJoinPoint: String) : ModelBuilderDelegate<T> {
 
+    @Suppress("UNCHECKED_CAST")
     override fun buildTarget(thisRef: Any, property: KProperty<*>): T {
-
-        return "" as T
+        val accompany = thisRef.buildInModelBuilder!!.targetToAccompanyMap[thisRef]!!
+        val outJoinTargetAccessor = thisRef.buildInModelBuilder!!.outJoinTargetAccessorMap[outJoinPoint]
+        val accompanies = thisRef.buildInModelBuilder!!.indexToAccompanyMap.values
+        return (outJoinTargetAccessor!!.get(accompanies)[accompany] ?: error("")) as T
     }
 
     @Suppress("UNCHECKED_CAST")

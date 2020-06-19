@@ -3,8 +3,10 @@ package com.lpcoder.agile.base.model.builder
 import com.lpcoder.agile.base.model.builder.accessor.JoinAccessor
 import com.lpcoder.agile.base.model.builder.accessor.JoinTargetAccessor
 import com.lpcoder.agile.base.model.builder.accessor.OutJoinAccessor
+import com.lpcoder.agile.base.model.builder.accessor.OutJoinTargetAccessor
 import com.lpcoder.agile.base.open.OpenPair
 import com.lpcoder.agile.base.util.CollectionUtil
+import java.lang.reflect.ParameterizedType
 import java.util.Collections.singleton
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -23,6 +25,7 @@ class ModelBuilder {
     val joinAccessorMap : MutableMap<KClass<*>, JoinAccessor<Any, Any, Any>> = mutableMapOf()
     val joinTargetAccessorMap : MutableMap<KClass<*>, JoinTargetAccessor<Any, Any, Any>> = mutableMapOf()
     val outJoinAccessorMap : MutableMap<String, OutJoinAccessor<Any, Any, Any>> = mutableMapOf()
+    val outJoinTargetAccessorMap : MutableMap<String, OutJoinTargetAccessor<Any, Any, Any>> = mutableMapOf()
 }
 
 class BuildSinglePair<out T>(modelBuilder: ModelBuilder, value: T) : OpenPair<ModelBuilder, T>(modelBuilder, value)
@@ -75,6 +78,7 @@ private fun <T : Any> injectRelation(targets: Set<T>) {
     injectJoinAccessor(targets)
     injectJoinTargetAccessor(targets)
     injectOutJoinAccessor(targets)
+    injectOutJoinTargetAccessor(targets)
 }
 
 private fun <T : Any> injectJoinAccessor(targets: Set<T>) {
@@ -116,6 +120,17 @@ private fun <T : Any> injectSingleTargetOutJoinAccessor(target: T) {
         outJoinAccessorMap!![outJoinPoint] = OutJoinAccessor(outJoinPoint) }
 }
 
+private fun <T : Any> injectOutJoinTargetAccessor(targets: Set<T>) {
+    targets.forEach (::injectSingleTargetOutJoinTargetAccessor )
+}
+
+private fun <T : Any> injectSingleTargetOutJoinTargetAccessor(target: T) {
+    val accompanyClazz = target.buildInModelBuilder!!.indexToAccompanyMap.values.elementAt(0)::class
+    val outJoinTargetAccessorMap = target.buildInModelBuilder?.outJoinTargetAccessorMap
+    BuildContext.outJoinHolder[accompanyClazz]?.forEach { (outJoinPoint, _) ->
+        outJoinTargetAccessorMap!![outJoinPoint] = OutJoinTargetAccessor(outJoinPoint) }
+}
+
 var Any.buildInModelBuilder : ModelBuilder? by ModelBuilderDelegate()
 
 class ModelBuilderDelegate {
@@ -129,4 +144,46 @@ class ModelBuilderDelegate {
     }
 }
 
-fun isBuildTargetClass(clazz: KClass<*>) = BuildContext.accompanyHolder.keys.contains(clazz)
+fun isBuildTargetClass(clazz: KClass<*>) : Boolean {
+    /*if (Collection::class.java.isAssignableFrom(clazz.java)) {
+        val collClazz = clazz as KClass<Collection<T>>
+        clazz == T::class
+    }*/
+    return BuildContext.accompanyHolder.keys.contains(clazz)
+}
+
+fun main() {
+
+}
+
+fun doGenericSuperclass() {
+    val intClazz = Integer::class.java
+    println("intClazz---$intClazz")
+    val coll = listOf(1, 2)
+    val clazz = coll::class
+    println("clazz---$clazz")
+    val type = clazz.java.genericSuperclass
+    println("type---$type")
+    val parameterizedType = type as ParameterizedType
+    println("parameterizedType---$parameterizedType")
+    val actualTypes = parameterizedType.actualTypeArguments
+    println("actualTypes---$actualTypes")
+    val actualType = actualTypes[0]
+    println("actualType---$actualType")
+}
+
+fun doGenericInterfaces() {
+    val intClazz = Integer::class.java
+    println("intClazz---$intClazz")
+    val coll = listOf(1, 2)
+    val clazz = coll::class
+    println("clazz---$clazz")
+    val type = clazz.java.genericInterfaces
+    println("type---$type")
+    val parameterizedType = type[0] as ParameterizedType
+    println("parameterizedType---$parameterizedType")
+    val actualTypes = parameterizedType.actualTypeArguments
+    println("actualTypes---$actualTypes")
+    val actualType = actualTypes[0]
+    println("actualType---$actualType")
+}
