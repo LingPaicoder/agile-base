@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ArrayUtils
  * @date: Created in 18-7-12
  */
 object ArrayUtil {
+    fun isEmpty(target: Array<*>?) = ArrayUtils.isEmpty(target)
     fun isNotEmpty(target: Array<*>?) = ArrayUtils.isNotEmpty(target)
     fun isLengthEq(target: Array<*>?, norm: Int) =
             if (null == target) false else target.size == norm

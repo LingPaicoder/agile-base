@@ -2,7 +2,6 @@ package com.lpcoder.agile.base.model.builder.delegate
 
 import com.lpcoder.agile.base.model.builder.isBuildTargetClass
 import kotlin.reflect.KProperty
-import kotlin.reflect.jvm.jvmErasure
 
 /**
  * @author liurenpeng
@@ -10,7 +9,7 @@ import kotlin.reflect.jvm.jvmErasure
  */
 interface ModelBuilderDelegate<T>{
     operator fun getValue(thisRef: Any, property: KProperty<*>): T =
-        if (isBuildTargetClass(property.returnType.jvmErasure)) buildTarget(thisRef, property)
+        if (isBuildTargetClass(property)) buildTarget(thisRef, property)
         else buildAccompany(thisRef, property)
 
     fun buildTarget(thisRef: Any, property: KProperty<*>): T

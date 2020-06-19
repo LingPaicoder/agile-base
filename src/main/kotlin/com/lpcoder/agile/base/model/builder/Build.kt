@@ -5,12 +5,15 @@ import com.lpcoder.agile.base.model.builder.accessor.JoinTargetAccessor
 import com.lpcoder.agile.base.model.builder.accessor.OutJoinAccessor
 import com.lpcoder.agile.base.model.builder.accessor.OutJoinTargetAccessor
 import com.lpcoder.agile.base.open.OpenPair
+import com.lpcoder.agile.base.util.ArrayUtil
 import com.lpcoder.agile.base.util.CollectionUtil
 import java.lang.reflect.ParameterizedType
 import java.util.Collections.singleton
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.full.createType
+import kotlin.reflect.jvm.javaGetter
+import kotlin.reflect.jvm.jvmErasure
 
 /**
  * @author liurenpeng
@@ -143,6 +146,27 @@ class ModelBuilderDelegate {
         mutableMap[thisRef]!![property.toString()] = value
     }
 }
+
+// property: KProperty<*>
+fun isBuildTargetClass(property: KProperty<*>) : Boolean {
+    val isCollection = Collection::class.java.isAssignableFrom(property.returnType.jvmErasure.java)
+    if (!isCollection) {
+        return BuildContext.accompanyHolder.keys.contains(property.returnType.jvmErasure)
+    }
+
+    val type = property.javaGetter!!.genericReturnType as? ParameterizedType
+        ?: return isBuildTargetClass(property.returnType.jvmErasure)
+    val actualTypeArguments = type.actualTypeArguments
+    if (ArrayUtil.isEmpty(actualTypeArguments)) {
+        return false
+    }
+    val actualTypeArgumentType = actualTypeArguments[0]
+    println("actualTypeArgumentType---$actualTypeArgumentType")
+    val isTarget = BuildContext.accompanyHolder.keys.map { it.java }.contains(actualTypeArgumentType)
+    println("isTarget---$isTarget")
+    return isTarget
+}
+
 
 fun isBuildTargetClass(clazz: KClass<*>) : Boolean {
     /*if (Collection::class.java.isAssignableFrom(clazz.java)) {

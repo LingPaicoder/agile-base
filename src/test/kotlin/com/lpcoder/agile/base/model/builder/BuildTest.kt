@@ -54,8 +54,8 @@ fun main() {
 
     println("---${movieViews.elementAt(0).videoDTOs}")
     println("---${movieViews.elementAt(1).videoDTOs}")
-    /*movieViews.elementAt(0).videoDTOs.forEach{dto -> println(dto.source)}
-    movieViews.elementAt(1).videoDTOs.forEach{dto -> println(dto.source)}*/
+    movieViews.elementAt(0).videoDTOs.forEach{dto -> println(dto.source)}
+    movieViews.elementAt(1).videoDTOs.forEach{dto -> println(dto.source)}
 }
 
 const val movieId = 1L
