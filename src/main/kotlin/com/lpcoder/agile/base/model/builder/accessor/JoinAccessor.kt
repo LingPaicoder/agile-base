@@ -5,6 +5,7 @@ import com.lpcoder.agile.base.model.builder.BuildContext
 import com.lpcoder.agile.base.util.CollectionUtil
 import com.lpcoder.agile.base.util.MapUtil
 import kotlin.reflect.KClass
+import kotlin.streams.toList
 
 /**
  * @author liurenpeng
@@ -22,6 +23,7 @@ class JoinAccessor<A: Any, JI, J>(private val joinClazz: KClass<*>) : CacheAcces
         val targetToJoinIndices : Map<A, Set<JI>> = accompanies.map { it to
                 mapper.map { mapper -> (mapper.invoke(it)) }.toSet()}.toMap()
         val builder = BuildContext.builderHolder[joinClazz] as (Collection<JI>) -> Map<JI, J>
-        return targetToJoinIndices.mapValues { builder.invoke(it.value) }
+        val valueMap = builder.invoke(targetToJoinIndices.values.stream().flatMap { it.stream() }.toList())
+        return targetToJoinIndices.mapValues { i -> valueMap.filter { i.value.contains(it.key) } }
     }
 }
