@@ -214,7 +214,7 @@ fun getMovieByIds(ids: Collection<Long>): Map<Long, Movie> {
 fun getVideosByMovieIds(ids: Collection<Long>): Map<Long, Collection<Video>> {
     println("===getVideosByMovieIds")
     return movieIdToVideoIdsMap.filter { ids.contains(it.key) }
-        .mapValues { getVideoByIds(it.value).values }
+        .mapValues { allVideos.filter { ids.contains(it.key) }.values }
 }
 
 fun getCountsByMovieIds(ids: Collection<Long>): Map<Long, MovieCount> {
@@ -230,7 +230,7 @@ fun getInteractionsByMovieIds(ids: Collection<Long>): Map<Long, MovieInteraction
 fun getSourcesByVideoIds(ids: Collection<Long>): Map<Long, Source> {
     println("===getSourcesByVideoIds")
     val idMap = videoIdToSourceIdMap.filter { ids.contains(it.key) }
-    val sourceMap = getSourceByIds(idMap.values)
+    val sourceMap = allSources.filter { idMap.values.contains(it.key) }
     return idMap.mapValues { sourceMap[it.value] }
         .filter { it.value != null }.mapValues { it.value!! }
 }

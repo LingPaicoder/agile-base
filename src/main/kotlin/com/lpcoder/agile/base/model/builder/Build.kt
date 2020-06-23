@@ -55,6 +55,32 @@ infix fun <T : Any, I> BuildMultiPair<KClass<T>>.by(indies: Collection<I>) : Col
     return targets
 }
 
+fun <T : Any, A : Any> buildAndInjectTargetsByAccompanies(
+    pair: BuildMultiPair<KClass<T>>, accompanies: Collection<A>) : Collection<T> {
+    val targets = buildTargetsByAccompanies(pair, accompanies)
+    injectModelBuilder(pair, targets)
+    injectRelation(targets)
+    return targets
+}
+
+@Suppress("UNCHECKED_CAST")
+private fun <T : Any, A : Any> buildTargetsByAccompanies(
+    buildMultiPair: BuildMultiPair<KClass<T>>, accompanies: Collection<A>): Set<T> {
+    val accompanyClazz = BuildContext.accompanyHolder[buildMultiPair.targetClazz]
+    val accompanyIndexer = BuildContext.indexerHolder[accompanyClazz] as (A) -> Any
+    val accompanyMap = accompanies.map { accompanyIndexer.invoke(it) to it }.toMap() as Map<out Any, Any>
+    buildMultiPair.modelBuilder.indexToAccompanyMap.putAll(accompanyMap)
+    buildMultiPair.modelBuilder.accompanyToIndexMap.putAll(accompanyMap.map { (k, v) -> v to k })
+    return accompanyMap.values.map { accompany ->
+        val target = buildMultiPair.targetClazz.constructors.stream()
+            .filter { it.parameters.size == 1 }
+            .filter { it.parameters[0].type == accompanyClazz!!.createType() }
+            .findFirst().map { it.call(accompany) }.orElse(null)
+        target?.let { buildMultiPair.modelBuilder.targetToAccompanyMap.put(it, accompany) }
+        target
+    }.toSet()
+}
+
 @Suppress("UNCHECKED_CAST")
 private fun <I, T : Any> buildTargets(
     buildMultiPair: BuildMultiPair<KClass<T>>, indies: Collection<I>): Set<T> {

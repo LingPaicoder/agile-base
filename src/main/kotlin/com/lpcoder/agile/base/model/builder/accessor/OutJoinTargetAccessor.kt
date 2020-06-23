@@ -3,9 +3,9 @@ package com.lpcoder.agile.base.model.builder.accessor
 import com.lpcoder.agile.base.access.CacheAccessor
 import com.lpcoder.agile.base.model.builder.BuildContext
 import com.lpcoder.agile.base.model.builder.ModelBuilder
+import com.lpcoder.agile.base.model.builder.buildAndInjectTargetsByAccompanies
 import com.lpcoder.agile.base.model.builder.buildInModelBuilder
 import com.lpcoder.agile.base.model.builder.buildMulti
-import com.lpcoder.agile.base.model.builder.by
 import com.lpcoder.agile.base.util.CollectionUtil
 import com.lpcoder.agile.base.util.MapUtil
 import java.util.stream.Collectors
@@ -41,16 +41,16 @@ class OutJoinTargetAccessor<A : Any, AI, OJT>(private val outJoinTargetPoint: St
         val accompanyToTargetMap = BuildContext.accompanyHolder.map { (k, v) -> v to k }.toMap()
         val outJoinTargetClazz = accompanyToTargetMap[outJoinAccompanyClazz] as KClass<Any>
 
-        val outJoinAccompanyIndexer = BuildContext.indexerHolder[outJoinAccompanyClazz] as (Any) -> Any
-        val outJoinAccompanyIndices = if (!isCollection) {
-            accompanyIndexToOutJoinAccompanyMap.values.map { outJoinAccompanyIndexer.invoke(it) }
+        val outJoinAccompanies = if (!isCollection) {
+            accompanyIndexToOutJoinAccompanyMap.values
         } else {
             accompanyIndexToOutJoinAccompanyMap.values.stream().flatMap {
                 it as Collection<Any>
                 it.stream()
-            }.map { outJoinAccompanyIndexer.invoke(it) }.collect(Collectors.toList())
+            }.collect(Collectors.toList())
         }
-        val outJoinTargets = ModelBuilder() buildMulti outJoinTargetClazz by outJoinAccompanyIndices
+        val outJoinTargets = buildAndInjectTargetsByAccompanies(
+            ModelBuilder() buildMulti outJoinTargetClazz, outJoinAccompanies)
 
         return accompanyToAccompanyIndexMap.mapValues { (_, accompanyIndex) ->
             val outJoinAccompany = accompanyIndexToOutJoinAccompanyMap[accompanyIndex]
